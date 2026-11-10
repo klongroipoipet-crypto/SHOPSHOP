@@ -33,12 +33,12 @@
 <body class="min-h-screen flex flex-col">
 
   <!-- =========================================================
-       1. หน้าร้านค้าออนไลน์ (STOREFRONT - หน้าแรกที่ลูกค้าเห็น)
+       1. หน้าร้านค้าออนไลน์ (STOREFRONT + ระบบยูสเซอร์และกระเป๋าเงินลูกค้า)
   ========================================================== -->
   <div id="storeView" class="flex-1 flex flex-col min-h-screen">
     <!-- แถบเมนูร้านค้า (#12242A) -->
-    <header class="bg-tier-1 text-white px-4 md:px-8 py-4 flex flex-wrap items-center justify-between border-b border-[#0D3F46] sticky top-0 z-40">
-      <div class="flex items-center gap-3">
+    <header class="bg-tier-1 text-white px-4 md:px-8 py-3.5 flex flex-wrap items-center justify-between border-b border-[#0D3F46] sticky top-0 z-40">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="closeCustomerWalletDrawer()">
         <div class="w-10 h-10 rounded-lg bg-tier-5 flex items-center justify-center font-bold text-xl text-[#12242A]">e</div>
         <div>
           <h1 class="font-bold text-base md:text-lg tracking-wide">ecommobi.shop</h1>
@@ -46,53 +46,112 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-2.5 mt-3 sm:mt-0">
-        <button onclick="openCustomerModal('register')" class="px-3.5 py-2 rounded-lg bg-tier-3 text-xs font-medium hover:opacity-90 transition">
-          <i class="fa-solid fa-user-plus mr-1 text-gold"></i> สมัครสมาชิก / Affiliate
+      <!-- ส่วนแสดงสถานะยูสเซอร์ลูกค้า & กระเป๋าเงิน -->
+      <div class="flex flex-wrap items-center gap-2 mt-2 sm:mt-0">
+        <!-- กรณีลูกค้ายังไม่ได้ล็อกอิน -->
+        <div id="guestHeaderArea" class="flex items-center gap-2">
+          <button onclick="openAuthModal('login')" class="px-3.5 py-2 rounded-lg bg-tier-3 text-xs font-medium hover:opacity-90 transition">
+            <i class="fa-solid fa-right-to-bracket mr-1 text-gold"></i> เข้าสู่ระบบลูกค้า
+          </button>
+          <button onclick="openAuthModal('register')" class="px-3.5 py-2 rounded-lg bg-tier-4 text-xs font-medium hover:opacity-90 transition">
+            <i class="fa-solid fa-user-plus mr-1 text-gold"></i> สมัครสมาชิก
+          </button>
+        </div>
+
+        <!-- กรณีลูกค้าล็อกอินแล้ว: แสดงเบอร์ยูสเซอร์ + ยอดเงินคงเหลือ + ปุ่มกระเป๋าเงิน -->
+        <div id="userHeaderArea" class="hidden flex items-center gap-2">
+          <button onclick="openWalletModal()" class="px-3.5 py-1.5 rounded-lg bg-tier-2 border border-[#B49767]/50 flex items-center gap-2.5 hover:bg-[#0E5157] transition">
+            <i class="fa-solid fa-wallet text-gold text-sm"></i>
+            <div class="text-left">
+              <p class="text-[10px] text-gray-300 leading-none">ยูสเซอร์: <span id="hdrUserPhone" class="text-white font-semibold">-</span></p>
+              <p class="text-xs font-bold text-[#B49767] leading-tight mt-0.5">คงเหลือ: ฿<span id="hdrUserBalance">0.00</span></p>
+            </div>
+          </button>
+          <button onclick="openWalletModal()" class="px-3 py-2 rounded-lg bg-tier-3 text-white text-xs font-medium hover:opacity-90">
+            <i class="fa-solid fa-coins mr-1 text-gold"></i> กระเป๋าเงิน / ฝาก-ถอน
+          </button>
+          <button onclick="logoutCustomer()" class="px-2.5 py-2 rounded-lg bg-red-900/70 hover:bg-red-800 text-white text-xs" title="ออกจากระบบ">
+            <i class="fa-solid fa-power-off"></i>
+          </button>
+        </div>
+
+        <!-- ปุ่มตะกร้าสินค้า -->
+        <button onclick="openCartModal()" class="px-3.5 py-2 rounded-lg bg-tier-5 text-[#12242A] text-xs font-bold shadow hover:opacity-95 transition">
+          <i class="fa-solid fa-bag-shopping mr-1"></i> ตะกร้า (<span id="cartCount">0</span>)
         </button>
-        <button onclick="openCustomerModal('cart')" class="px-4 py-2 rounded-lg bg-tier-5 text-[#12242A] text-xs font-bold shadow hover:opacity-95 transition">
-          <i class="fa-solid fa-bag-shopping mr-1"></i> ตะกร้าสินค้า (<span id="cartCount">0</span>)
-        </button>
-        <button onclick="openAdminLoginModal()" class="px-3 py-2 rounded-lg bg-tier-2 text-gray-300 hover:text-white text-xs border border-[#0E5157]" title="เข้าสู่ระบบแอดมิน">
+
+        <!-- ปุ่มเข้าหลังบ้านแอดมิน -->
+        <button onclick="openAdminLoginModal()" class="px-2.5 py-2 rounded-lg bg-tier-2 text-gray-300 hover:text-white text-xs border border-[#0E5157]" title="สำหรับแอดมิน">
           <i class="fa-solid fa-lock"></i>
         </button>
       </div>
     </header>
 
     <!-- แบนเนอร์หน้าร้าน (#0D3F46) -->
-    <section class="bg-tier-2 text-white py-10 px-6 text-center border-b border-[#0E5157]">
+    <section class="bg-tier-2 text-white py-8 px-6 text-center border-b border-[#0E5157]">
       <span class="px-3 py-1 rounded-md bg-tier-5 text-[#12242A] text-xs font-bold tracking-wider">AUTHENTIC VINTAGE SELECTION</span>
       <h2 class="text-2xl md:text-3xl font-bold mt-3">เสื้อผ้ามือสอง & วินเทจคัดเกรดพรีเมียม</h2>
-      <p class="text-xs md:text-sm text-gray-300 mt-2 max-w-xl mx-auto">
-        คัดหัวผ้าเกรด A วัดขนาดจริงทุกตัว มีเพียงแบบละ 1 ชิ้น พร้อมระบบตัวแทนจำหน่าย Affiliate แชร์ลิงก์รับค่าคอมมิชชันทันที
+      <p class="text-xs md:text-sm text-gray-300 mt-1.5 max-w-xl mx-auto">
+        ชำระเงินผ่านกระเป๋าเครดิตในเว็บหรือแนบสลิปโอนเงินได้ทันที พร้อมระบบตัวแทน Affiliate แชร์ลิงก์รับค่าคอมมิชชันเข้ากระเป๋าอัตโนมัติ
       </p>
     </section>
 
-    <!-- รายการสินค้า -->
+    <!-- แผงกระเป๋าเงินลูกค้าแบบเต็มบนหน้าเว็บ (แสดงเมื่อลูกค้าล็อกอินแล้ว) -->
+    <section id="customerDashboardStrip" class="hidden max-w-6xl w-full mx-auto px-6 pt-6">
+      <div class="bg-tier-3 rounded-2xl p-5 text-white shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-tier-1 flex items-center justify-center text-gold text-xl">
+            <i class="fa-solid fa-user-check"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-bold text-base">บัญชีลูกค้า: <span id="stripPhone">-</span></h3>
+              <span id="stripAffBadge" class="px-2 py-0.5 rounded bg-tier-5 text-[#12242A] text-[10px] font-bold">สมาชิกทั่วไป</span>
+            </div>
+            <p class="text-xs text-gray-200 mt-0.5">สามารถเติมเงินเข้ากระเป๋าเพื่อซื้อสินค้าแบบตัดยอดทันที หรือถอนค่าคอมมิชชันเข้าบัญชีธนาคารได้</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full lg:w-auto">
+          <div class="bg-tier-4 rounded-xl px-4 py-2.5">
+            <p class="text-[11px] text-gray-200">ยอดเงินคงเหลือ (Wallet)</p>
+            <p class="text-lg font-bold text-white">฿<span id="stripBalance">0.00</span></p>
+          </div>
+          <div class="bg-tier-4 rounded-xl px-4 py-2.5">
+            <p class="text-[11px] text-gray-200">ค่าคอมมิชชันสะสม</p>
+            <p class="text-lg font-bold text-[#B49767]">฿<span id="stripComm">0.00</span></p>
+          </div>
+          <div class="col-span-2 sm:col-span-1 flex flex-col justify-center gap-1.5">
+            <button onclick="openWalletModal('deposit')" class="w-full py-1.5 px-3 rounded-lg bg-tier-5 text-[#12242A] text-xs font-bold hover:opacity-90">
+              + เติมเงินเข้ากระเป๋า
+            </button>
+            <button onclick="openWalletModal('withdraw')" class="w-full py-1.5 px-3 rounded-lg bg-tier-1 text-white text-xs font-medium hover:opacity-90">
+              แจ้งถอนเงิน / ดูประวัติ
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- รายการสินค้าเสื้อผ้ามือสอง -->
     <main class="max-w-6xl w-full mx-auto p-6 flex-1">
       <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
         <div>
           <h3 class="font-bold text-base text-[#12242A]">สินค้าพร้อมส่งทั้งหมด (<span id="productCountLabel">0</span> ชิ้น)</h3>
-          <p class="text-xs text-gray-500">สินค้าทุกชิ้นผ่านการซักอบฆ่าเชื้อและตรวจสอบสภาพเรียบร้อยแล้ว</p>
-        </div>
-        <div class="flex items-center gap-2 text-xs">
-          <span class="px-3 py-1.5 rounded-lg bg-tier-4 text-white">ส่งด่วนทั่วประเทศ</span>
+          <p class="text-xs text-gray-500">คัดหัวผ้าเกรด A วัดขนาดจริงทุกตัว มีอย่างละ 1 ชิ้นเท่านั้น</p>
         </div>
       </div>
 
-      <div id="storeProductGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- แสดงการ์ดสินค้าเสื้อผ้ามือสอง -->
-      </div>
+      <div id="storeProductGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
 
-    <!-- Footer ร้านค้า -->
     <footer class="bg-tier-1 text-gray-400 text-xs py-6 px-6 text-center border-t border-[#0D3F46]">
-      <p>© 2026 ecommobi.shop — ระบบร้านค้าเสื้อผ้ามือสองออนไลน์และตัวแทนจำหน่ายครบวงจร</p>
+      <p>© 2026 ecommobi.shop — ระบบร้านค้าเสื้อผ้ามือสองออนไลน์ กระเป๋าเงินลูกค้า และตัวแทนจำหน่ายครบวงจร</p>
     </footer>
   </div>
 
   <!-- =========================================================
-       2. ระบบหลังบ้านแอดมิน (ADMIN PANEL - ต้องใส่รหัสผ่านก่อนเข้า)
+       2. ระบบหลังบ้านแอดมิน (ADMIN PANEL)
        เรียงชุดสีทึบจากบนลงล่าง: #12242A -> #0D3F46 -> #0E5157 -> #17636A -> #B49767
   ========================================================== -->
   <div id="adminView" class="hidden flex-1 min-h-screen flex">
@@ -107,27 +166,27 @@
         </div>
 
         <nav class="p-3 space-y-1.5 text-xs">
-          <button onclick="switchAdminSection('secDashboard')" id="navDashboard" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg bg-tier-2 text-white font-medium border-l-4 border-[#B49767]">
+          <button onclick="switchAdminSection('secDashboard')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg bg-tier-2 text-white font-medium border-l-4 border-[#B49767]">
             <span class="flex items-center gap-3"><i class="fa-solid fa-gauge-high text-gold"></i> หน้าหลัก</span>
           </button>
-          <button onclick="switchAdminSection('secMembers')" id="navMembers" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
-            <span class="flex items-center gap-3"><i class="fa-solid fa-users text-gold"></i> สมาชิก / สิทธิ์</span>
+          <button onclick="switchAdminSection('secMembers')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
+            <span class="flex items-center gap-3"><i class="fa-solid fa-users text-gold"></i> สมาชิก / ยอดคงเหลือ</span>
             <i class="fa-solid fa-chevron-down text-[10px] opacity-60"></i>
           </button>
-          <button onclick="switchAdminSection('secFinance')" id="navFinance" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
-            <span class="flex items-center gap-3"><i class="fa-solid fa-wallet text-gold"></i> การเงิน / ฝาก-ถอน</span>
-            <i class="fa-solid fa-chevron-down text-[10px] opacity-60"></i>
+          <button onclick="switchAdminSection('secFinance')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
+            <span class="flex items-center gap-3"><i class="fa-solid fa-wallet text-gold"></i> การเงิน / อนุมัติฝาก-ถอน</span>
+            <span id="badgeFinanceCount" class="px-1.5 py-0.5 rounded bg-tier-5 text-[#12242A] font-bold text-[10px]">0</span>
           </button>
-          <button onclick="switchAdminSection('secOrders')" id="navOrders" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
-            <span class="flex items-center gap-3"><i class="fa-solid fa-box-open text-gold"></i> ระบบรับออเดอร์ (ตรวจสลิป)</span>
+          <button onclick="switchAdminSection('secOrders')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
+            <span class="flex items-center gap-3"><i class="fa-solid fa-box-open text-gold"></i> ระบบรับออเดอร์</span>
             <span id="badgeOrderCount" class="px-1.5 py-0.5 rounded bg-tier-5 text-[#12242A] font-bold text-[10px]">0</span>
           </button>
-          <button onclick="switchAdminSection('secProducts')" id="navProducts" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
+          <button onclick="switchAdminSection('secProducts')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
             <span class="flex items-center gap-3"><i class="fa-solid fa-shirt text-gold"></i> ร้านค้า / Affiliate</span>
             <i class="fa-solid fa-chevron-down text-[10px] opacity-60"></i>
           </button>
-          <button onclick="switchAdminSection('secSettings')" id="navSettings" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
-            <span class="flex items-center gap-3"><i class="fa-solid fa-gear text-gold"></i> ตั้งค่าบัญชีรับเงิน / รหัสผ่าน</span>
+          <button onclick="switchAdminSection('secSettings')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
+            <span class="flex items-center gap-3"><i class="fa-solid fa-gear text-gold"></i> ตั้งค่าระบบ</span>
             <i class="fa-solid fa-chevron-down text-[10px] opacity-60"></i>
           </button>
         </nav>
@@ -160,7 +219,7 @@
         </div>
       </header>
 
-      <!-- แท็บที่ 1: หน้าหลักแดชบอร์ด (เรียงสีทึบจากบนลงล่างตามภาพ) -->
+      <!-- แท็บที่ 1: หน้าหลักแดชบอร์ด -->
       <main id="secDashboard" class="p-6 space-y-6 flex-1">
         <!-- ลำดับที่ 2: แบนเนอร์ผู้ดูแลระบบ (#0D3F46 สีทึบ) -->
         <section class="bg-tier-2 rounded-2xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between shadow-sm">
@@ -177,7 +236,7 @@
 
         <!-- ลำดับที่ 3: การ์ดสรุป 4 ใบ (#0E5157 สีทึบ) -->
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div class="bg-tier-3 rounded-xl p-5 flex items-center justify-between shadow-sm">
+          <div onclick="switchAdminSection('secMembers')" class="bg-tier-3 rounded-xl p-5 flex items-center justify-between shadow-sm cursor-pointer">
             <div>
               <p class="text-xs text-gray-200">ผู้ใช้งานทั้งหมด</p>
               <p id="statTotalUsers" class="text-2xl font-bold text-white my-1">0</p>
@@ -188,7 +247,7 @@
             </div>
           </div>
 
-          <div class="bg-tier-3 rounded-xl p-5 flex items-center justify-between shadow-sm">
+          <div onclick="switchAdminSection('secMembers')" class="bg-tier-3 rounded-xl p-5 flex items-center justify-between shadow-sm cursor-pointer">
             <div>
               <p class="text-xs text-gray-200">Affiliate อนุมัติแล้ว</p>
               <p id="statApprovedAff" class="text-2xl font-bold text-white my-1">0</p>
@@ -199,22 +258,22 @@
             </div>
           </div>
 
-          <div class="bg-tier-3 rounded-xl p-5 flex items-center justify-between shadow-sm cursor-pointer" onclick="switchAdminSection('secMembers')">
+          <div onclick="switchAdminSection('secMembers')" class="bg-tier-3 rounded-xl p-5 flex items-center justify-between shadow-sm cursor-pointer">
             <div>
               <p class="text-xs text-gray-200">สมัคร Affiliate รอตรวจ</p>
               <p id="statPendingAff" class="text-2xl font-bold text-white my-1">0</p>
-              <p class="text-[11px] text-[#B49767] underline">คลิกเพื่อตรวจสอบใบสมัคร</p>
+              <p class="text-[11px] text-[#B49767] underline">ใบสมัครที่ต้องตรวจสอบ</p>
             </div>
             <div class="w-11 h-11 rounded-lg bg-tier-1 flex items-center justify-center text-gold text-lg">
               <i class="fa-solid fa-user-clock"></i>
             </div>
           </div>
 
-          <div class="bg-tier-3 rounded-xl p-5 flex items-center justify-between shadow-sm">
+          <div onclick="switchAdminSection('secFinance')" class="bg-tier-3 rounded-xl p-5 flex items-center justify-between shadow-sm cursor-pointer">
             <div>
               <p class="text-xs text-gray-200">ถอน Affiliate รออนุมัติ</p>
               <p id="statPendingWithdraw" class="text-2xl font-bold text-white my-1">0</p>
-              <p class="text-[11px] text-gray-300">รายการถอนค่าคอมที่ค้างอยู่</p>
+              <p class="text-[11px] text-[#B49767] underline">รายการถอนค่าคอมที่ค้างอยู่</p>
             </div>
             <div class="w-11 h-11 rounded-lg bg-tier-1 flex items-center justify-center text-gold text-lg">
               <i class="fa-solid fa-money-bill-transfer"></i>
@@ -230,22 +289,10 @@
               <span class="text-xs text-gray-400">วัน / สัปดาห์ / เดือน / ปี</span>
             </div>
             <div class="grid grid-cols-4 gap-3 text-center">
-              <div class="bg-tier-4 rounded-xl py-3 px-2">
-                <p class="text-xs text-gray-200">วันนี้</p>
-                <p id="regDay" class="text-lg font-bold text-white mt-1">0</p>
-              </div>
-              <div class="bg-tier-4 rounded-xl py-3 px-2">
-                <p class="text-xs text-gray-200">สัปดาห์นี้</p>
-                <p id="regWeek" class="text-lg font-bold text-white mt-1">0</p>
-              </div>
-              <div class="bg-tier-4 rounded-xl py-3 px-2">
-                <p class="text-xs text-gray-200">เดือนนี้</p>
-                <p id="regMonth" class="text-lg font-bold text-white mt-1">0</p>
-              </div>
-              <div class="bg-tier-4 rounded-xl py-3 px-2">
-                <p class="text-xs text-gray-200">ปีนี้</p>
-                <p id="regYear" class="text-lg font-bold text-white mt-1">0</p>
-              </div>
+              <div class="bg-tier-4 rounded-xl py-3 px-2"><p class="text-xs text-gray-200">วันนี้</p><p id="regDay" class="text-lg font-bold text-white mt-1">0</p></div>
+              <div class="bg-tier-4 rounded-xl py-3 px-2"><p class="text-xs text-gray-200">สัปดาห์นี้</p><p id="regWeek" class="text-lg font-bold text-white mt-1">0</p></div>
+              <div class="bg-tier-4 rounded-xl py-3 px-2"><p class="text-xs text-gray-200">เดือนนี้</p><p id="regMonth" class="text-lg font-bold text-white mt-1">0</p></div>
+              <div class="bg-tier-4 rounded-xl py-3 px-2"><p class="text-xs text-gray-200">ปีนี้</p><p id="regYear" class="text-lg font-bold text-white mt-1">0</p></div>
             </div>
           </div>
 
@@ -255,22 +302,10 @@
               <span class="text-xs text-gray-400">อัปเดตอัตโนมัติ</span>
             </div>
             <div class="grid grid-cols-4 gap-3 text-center">
-              <div class="bg-tier-4 rounded-xl py-3 px-2">
-                <p class="text-xs text-gray-200">วันนี้</p>
-                <p id="affDay" class="text-lg font-bold text-white mt-1">0</p>
-              </div>
-              <div class="bg-tier-4 rounded-xl py-3 px-2">
-                <p class="text-xs text-gray-200">สัปดาห์นี้</p>
-                <p id="affWeek" class="text-lg font-bold text-white mt-1">0</p>
-              </div>
-              <div class="bg-tier-4 rounded-xl py-3 px-2">
-                <p class="text-xs text-gray-200">เดือนนี้</p>
-                <p id="affMonth" class="text-lg font-bold text-white mt-1">0</p>
-              </div>
-              <div class="bg-tier-4 rounded-xl py-3 px-2">
-                <p class="text-xs text-gray-200">ปีนี้</p>
-                <p id="affYear" class="text-lg font-bold text-white mt-1">0</p>
-              </div>
+              <div class="bg-tier-4 rounded-xl py-3 px-2"><p class="text-xs text-gray-200">วันนี้</p><p id="affDay" class="text-lg font-bold text-white mt-1">0</p></div>
+              <div class="bg-tier-4 rounded-xl py-3 px-2"><p class="text-xs text-gray-200">สัปดาห์นี้</p><p id="affWeek" class="text-lg font-bold text-white mt-1">0</p></div>
+              <div class="bg-tier-4 rounded-xl py-3 px-2"><p class="text-xs text-gray-200">เดือนนี้</p><p id="affMonth" class="text-lg font-bold text-white mt-1">0</p></div>
+              <div class="bg-tier-4 rounded-xl py-3 px-2"><p class="text-xs text-gray-200">ปีนี้</p><p id="affYear" class="text-lg font-bold text-white mt-1">0</p></div>
             </div>
           </div>
         </section>
@@ -280,7 +315,7 @@
           <div class="lg:col-span-2 bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
             <div class="flex items-center justify-between mb-4">
               <h3 class="font-bold text-sm text-[#12242A]"><i class="fa-solid fa-receipt text-[#B49767] mr-1.5"></i> รายการฝาก-ถอนล่าสุด</h3>
-              <button onclick="switchAdminSection('secFinance')" class="text-xs font-semibold text-[#0E5157] hover:underline">ดูทั้งหมด / เพิ่ม-หักเงิน</button>
+              <button onclick="switchAdminSection('secFinance')" class="text-xs font-semibold text-[#0E5157] hover:underline">ดูทั้งหมด</button>
             </div>
             <div class="overflow-x-auto">
               <table class="w-full text-left text-xs">
@@ -313,7 +348,7 @@
                 <p class="text-xs font-medium text-[#12242A]">คำสั่งซื้อรอตรวจ</p>
                 <p id="statPendingOrders" class="text-lg font-bold text-[#12242A] mt-1">0</p>
               </div>
-              <div class="bg-tier-5 rounded-xl p-3">
+              <div onclick="switchAdminSection('secFinance')" class="bg-tier-5 rounded-xl p-3 cursor-pointer hover:opacity-90">
                 <p class="text-xs font-medium text-[#12242A]">ฝากเงินรอตรวจ</p>
                 <p id="statPendingDeposits" class="text-lg font-bold text-[#12242A] mt-1">0</p>
               </div>
@@ -322,48 +357,59 @@
         </section>
       </main>
 
-      <!-- แท็บที่ 2: ระบบรับออเดอร์ & ตรวจสอบสลิปโอนเงิน -->
-      <main id="secOrders" class="hidden p-6 space-y-4 flex-1">
-        <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
-          <h2 class="font-bold text-base text-[#12242A] mb-1">รายการคำสั่งซื้อเสื้อผ้ามือสอง & ตรวจสอบสลิปโอนเงิน</h2>
-          <p class="text-xs text-gray-500 mb-4">ตรวจสอบรูปสลิปโอนเงินของลูกค้าและกดอนุมัติเพื่อตัดสต็อกสินค้า</p>
-          <div id="adminOrderList" class="space-y-3"></div>
-        </div>
-      </main>
-
-      <!-- แท็บที่ 3: จัดการสมาชิก & อนุมัติตัวแทน Affiliate -->
+      <!-- แท็บที่ 2: สมาชิก & ยอดเงินคงเหลือของลูกค้าแต่ละคน -->
       <main id="secMembers" class="hidden p-6 space-y-4 flex-1">
         <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
-          <h2 class="font-bold text-base text-[#12242A] mb-1">รายชื่อสมาชิก & อนุมัติตัวแทน Affiliate</h2>
-          <p class="text-xs text-gray-500 mb-4">กดอนุมัติผู้สมัครตัวแทนจำหน่ายเพื่อให้สามารถแชร์ลิงก์รับค่าคอมมิชชันได้</p>
-          <div id="adminMemberList" class="space-y-2"></div>
+          <h2 class="font-bold text-base text-[#12242A] mb-1">รายชื่อสมาชิก ยอดเงินในกระเป๋า & การอนุมัติ Affiliate</h2>
+          <p class="text-xs text-gray-500 mb-4">ดูยอดเงินคงเหลือของลูกค้าแต่ละคน และกดอนุมัติสิทธิ์ตัวแทนจำหน่าย</p>
+          <div id="adminMemberList" class="space-y-2.5"></div>
         </div>
       </main>
 
-      <!-- แท็บที่ 4: การเงิน (เพิ่มเงิน / หักเงินโดยแอดมิน) -->
-      <main id="secFinance" class="hidden p-6 space-y-4 flex-1">
-        <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm max-w-xl">
-          <h2 class="font-bold text-base text-[#12242A] mb-3">ทำรายการเพิ่มเงิน / หักเงินโดยแอดมิน</h2>
-          <div class="space-y-3 text-xs">
-            <div>
-              <label class="block font-medium mb-1">ประเภทรายการ</label>
-              <select id="finType" class="w-full border rounded-lg px-3 py-2">
-                <option value="เพิ่มเงินโดยแอดมิน">เพิ่มเงินโดยแอดมิน (+)</option>
-                <option value="หักเงินโดยแอดมิน">หักเงินโดยแอดมิน (-)</option>
-              </select>
+      <!-- แท็บที่ 3: การเงิน (อนุมัติรายการฝากเงินลูกค้า / อนุมัติถอนเงิน / เพิ่ม-หักเงินโดยแอดมิน) -->
+      <main id="secFinance" class="hidden p-6 space-y-6 flex-1">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- ฟอร์มเพิ่มเงิน / หักเงินเข้ากระเป๋าลูกค้าโดยตรง -->
+          <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+            <h2 class="font-bold text-base text-[#12242A] mb-1">เพิ่มเงิน / หักเงินกระเป๋าลูกค้าโดยแอดมิน</h2>
+            <p class="text-xs text-gray-500 mb-4">ปรับยอดเงินคงเหลือของเบอร์ลูกค้าโดยตรงและแสดงในตารางหน้าแรกทันที</p>
+            <div class="space-y-3 text-xs">
+              <div>
+                <label class="block font-medium mb-1">ประเภทรายการ</label>
+                <select id="finType" class="w-full border rounded-lg px-3 py-2">
+                  <option value="เพิ่มเงินโดยแอดมิน">เพิ่มเงินโดยแอดมิน (+)</option>
+                  <option value="หักเงินโดยแอดมิน">หักเงินโดยแอดมิน (-)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block font-medium mb-1">เบอร์โทรศัพท์ผู้ใช้</label>
+                <input id="finPhone" type="text" placeholder="0812345678" class="w-full border rounded-lg px-3 py-2" />
+              </div>
+              <div>
+                <label class="block font-medium mb-1">จำนวนเงิน (บาท)</label>
+                <input id="finAmount" type="number" placeholder="500" class="w-full border rounded-lg px-3 py-2" />
+              </div>
+              <button onclick="adminAdjustBalance()" class="w-full py-2.5 rounded-xl bg-tier-1 text-white font-bold">
+                ยืนยันปรับยอดเงินลูกค้า
+              </button>
             </div>
-            <div>
-              <label class="block font-medium mb-1">เบอร์โทรศัพท์สมาชิก</label>
-              <input id="finPhone" type="text" placeholder="0812345678" class="w-full border rounded-lg px-3 py-2" />
-            </div>
-            <div>
-              <label class="block font-medium mb-1">จำนวนเงิน (บาท)</label>
-              <input id="finAmount" type="number" placeholder="1000" class="w-full border rounded-lg px-3 py-2" />
-            </div>
-            <button onclick="adminAdjustBalance()" class="w-full py-2.5 rounded-xl bg-tier-1 text-white font-bold">
-              บันทึกรายการการเงิน
-            </button>
           </div>
+
+          <!-- รายการแจ้งฝากเงิน & แจ้งถอนเงินจากลูกค้าที่รออนุมัติ -->
+          <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+            <h2 class="font-bold text-base text-[#12242A] mb-1">รายการแจ้งฝากเงิน & ถอนเงินรออนุมัติ</h2>
+            <p class="text-xs text-gray-500 mb-4">เมื่อกดอนุมัติ ยอดเงินจะเข้าหรือหักจากกระเป๋าของลูกค้าอัตโนมัติ</p>
+            <div id="adminPendingFinanceList" class="space-y-3"></div>
+          </div>
+        </div>
+      </main>
+
+      <!-- แท็บที่ 4: ระบบรับออเดอร์ -->
+      <main id="secOrders" class="hidden p-6 space-y-4 flex-1">
+        <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+          <h2 class="font-bold text-base text-[#12242A] mb-1">รายการคำสั่งซื้อเสื้อผ้ามือสองทั้งหมด</h2>
+          <p class="text-xs text-gray-500 mb-4">ตรวจสอบคำสั่งซื้อที่ตัดผ่านกระเป๋าเงินและคำสั่งซื้อแบบแนบสลิป</p>
+          <div id="adminOrderList" class="space-y-3"></div>
         </div>
       </main>
 
@@ -378,20 +424,20 @@
         </div>
       </main>
 
-      <!-- แท็บที่ 6: ตั้งค่าบัญชีธนาคารและรหัสผ่านแอดมิน -->
+      <!-- แท็บที่ 6: ตั้งค่าระบบ -->
       <main id="secSettings" class="hidden p-6 space-y-4 flex-1">
         <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm max-w-xl space-y-4 text-xs">
           <h2 class="font-bold text-base text-[#12242A]">ตั้งค่าบัญชีธนาคารร้านค้า & รหัสผ่านแอดมิน</h2>
           <div>
-            <label class="block font-medium mb-1">ชื่อธนาคารและเลขบัญชีสำหรับรับโอนเงินค่าเสื้อผ้า</label>
+            <label class="block font-medium mb-1">ชื่อธนาคารและเลขบัญชีสำหรับรับโอนเงิน</label>
             <input id="setBankInfo" type="text" class="w-full border rounded-lg px-3 py-2" />
           </div>
           <div>
-            <label class="block font-medium mb-1">รหัสผ่านเข้าหลังบ้านแอดมิน (Admin Password)</label>
+            <label class="block font-medium mb-1">รหัสผ่านเข้าหลังบ้านแอดมิน</label>
             <input id="setAdminPin" type="text" class="w-full border rounded-lg px-3 py-2" />
           </div>
           <button onclick="saveShopSettings()" class="w-full py-2.5 rounded-xl bg-tier-1 text-white font-bold">
-            บันทึกการตั้งค่าร้านค้า
+            บันทึกการตั้งค่า
           </button>
         </div>
       </main>
@@ -399,24 +445,172 @@
   </div>
 
   <!-- =========================================================
-       MODALS (ล็อกอินแอดมิน / เพิ่มสินค้า / ตะกร้า+แนบสลิป)
+       MODALS สำหรับลูกค้า (เข้าสู่ระบบ / กระเป๋าเงิน / ตะกร้าสินค้า)
   ========================================================== -->
-  <!-- Modal ล็อกอินแอดมิน -->
+  <!-- 1. Modal เข้าสู่ระบบ / สมัครสมาชิกลูกค้า -->
+  <div id="authModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 space-y-4">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 id="authModalTitle" class="font-bold text-base text-[#12242A]">เข้าสู่ระบบลูกค้า</h3>
+        <button onclick="closeModal('authModal')" class="text-gray-400 hover:text-black"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- แท็บสลับ ล็อกอิน / สมัครสมาชิก -->
+      <div class="grid grid-cols-2 gap-2 bg-gray-100 p-1 rounded-xl text-xs font-bold">
+        <button id="tabBtnLogin" onclick="openAuthModal('login')" class="py-2 rounded-lg bg-tier-1 text-white">เข้าสู่ระบบ</button>
+        <button id="tabBtnReg" onclick="openAuthModal('register')" class="py-2 rounded-lg text-gray-600">สมัครสมาชิกใหม่</button>
+      </div>
+
+      <!-- ฟอร์มเข้าสู่ระบบ -->
+      <div id="formLoginBox" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-medium mb-1">เบอร์โทรศัพท์ผู้ใช้</label>
+          <input id="loginPhone" type="text" placeholder="0812345678" class="w-full border rounded-lg px-3 py-2" />
+        </div>
+        <div>
+          <label class="block font-medium mb-1">รหัสผ่าน</label>
+          <input id="loginPass" type="password" placeholder="••••••" class="w-full border rounded-lg px-3 py-2" />
+        </div>
+        <button onclick="handleCustomerLogin()" class="w-full py-2.5 rounded-xl bg-tier-1 text-white font-bold">
+          เข้าสู่ระบบ
+        </button>
+      </div>
+
+      <!-- ฟอร์มสมัครสมาชิกใหม่ -->
+      <div id="formRegBox" class="hidden space-y-3 text-xs">
+        <div>
+          <label class="block font-medium mb-1">เบอร์โทรศัพท์ (ใช้เป็นไอดีเข้าสู่ระบบ)</label>
+          <input id="regPhone" type="text" placeholder="0812345678" class="w-full border rounded-lg px-3 py-2" />
+        </div>
+        <div>
+          <label class="block font-medium mb-1">ตั้งรหัสผ่าน</label>
+          <input id="regPass" type="password" placeholder="ตั้งรหัสผ่านอย่างน้อย 4 ตัว" class="w-full border rounded-lg px-3 py-2" />
+        </div>
+        <div>
+          <label class="block font-medium mb-1">บัญชีธนาคารสำหรับรับเงินถอน (ระบุหรือไม่ก็ได้)</label>
+          <input id="regBank" type="text" placeholder="เช่น กสิกร 123-4-56789-0 ชื่อ..." class="w-full border rounded-lg px-3 py-2" />
+        </div>
+        <div>
+          <label class="block font-medium mb-1">ประเภทบัญชีที่ต้องการสมัคร</label>
+          <select id="regRole" class="w-full border rounded-lg px-3 py-2">
+            <option value="member">สมาชิกลูกค้าทั่วไป (ซื้อสินค้า + กระเป๋าเงิน)</option>
+            <option value="affiliate">สมัครตัวแทน Affiliate (แชร์ลิงก์รับค่าคอมมิชชัน)</option>
+          </select>
+        </div>
+        <button onclick="handleCustomerRegister()" class="w-full py-2.5 rounded-xl bg-tier-5 text-[#12242A] font-bold">
+          ยืนยันการสมัครสมาชิก
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Modal กระเป๋าเงินลูกค้า (Wallet: ยอดคงเหลือ / แจ้งฝากเงิน / ถอนเงิน / ประวัติของฉัน) -->
+  <div id="walletModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b pb-3">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-wallet text-[#0E5157] text-lg"></i>
+          <h3 class="font-bold text-base text-[#12242A]">กระเป๋าเงินของฉัน (My Wallet)</h3>
+        </div>
+        <button onclick="closeModal('walletModal')" class="text-gray-400 hover:text-black"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- การ์ดแสดงยอดเงินคงเหลือและค่าคอม -->
+      <div class="bg-tier-1 rounded-2xl p-5 text-white grid grid-cols-2 gap-4">
+        <div>
+          <p class="text-[11px] text-gray-300">ยอดเงินคงเหลือใช้ซื้อสินค้าได้</p>
+          <p class="text-2xl font-bold text-white mt-1">฿<span id="walModalBalance">0.00</span></p>
+          <p class="text-[11px] text-[#B49767] mt-1">เบอร์ผู้ใช้: <span id="walModalPhone">-</span></p>
+        </div>
+        <div class="border-l border-[#0D3F46] pl-4">
+          <p class="text-[11px] text-gray-300">รายได้ค่าคอม Affiliate</p>
+          <p class="text-2xl font-bold text-[#B49767] mt-1">฿<span id="walModalComm">0.00</span></p>
+          <p id="walModalAffStatus" class="text-[11px] text-gray-300 mt-1">สถานะ: สมาชิกทั่วไป</p>
+        </div>
+      </div>
+
+      <!-- ปุ่มสลับเมนูในกระเป๋าเงิน -->
+      <div class="grid grid-cols-3 gap-2 text-xs font-bold">
+        <button onclick="switchWalletTab('deposit')" id="wTabDeposit" class="py-2 rounded-xl bg-tier-3 text-white">เติมเงินเข้ากระเป๋า</button>
+        <button onclick="switchWalletTab('withdraw')" id="wTabWithdraw" class="py-2 rounded-xl bg-gray-100 text-gray-700">ถอนเงินเข้าธนาคาร</button>
+        <button onclick="switchWalletTab('history')" id="wTabHistory" class="py-2 rounded-xl bg-gray-100 text-gray-700">ประวัติธุรกรรม</button>
+      </div>
+
+      <!-- แท็บย่อย 1: เติมเงินเข้ากระเป๋า -->
+      <div id="wBoxDeposit" class="space-y-3 text-xs pt-1">
+        <div class="bg-tier-2 text-white p-3.5 rounded-xl">
+          <p class="text-[11px] text-[#B49767] font-bold">โอนเงินเข้าบัญชีร้านค้า:</p>
+          <p id="walBankInfo" class="font-semibold mt-0.5">-</p>
+        </div>
+        <div>
+          <label class="block font-medium mb-1">จำนวนเงินที่โอนฝาก (บาท)</label>
+          <input id="inpDepAmount" type="number" placeholder="500" class="w-full border rounded-lg px-3 py-2" />
+        </div>
+        <div>
+          <label class="block font-medium mb-1">แนบรูปสลิปโอนเงิน *</label>
+          <input id="inpDepSlip" type="file" accept="image/*" class="w-full border rounded-lg px-2 py-1.5" />
+        </div>
+        <button onclick="submitCustomerDeposit()" class="w-full py-2.5 rounded-xl bg-tier-5 text-[#12242A] font-bold">
+          แจ้งฝากเงินเข้ากระเป๋า
+        </button>
+      </div>
+
+      <!-- แท็บย่อย 2: แจ้งถอนเงิน / ถอนค่าคอมมิชชัน -->
+      <div id="wBoxWithdraw" class="hidden space-y-3 text-xs pt-1">
+        <div>
+          <label class="block font-medium mb-1">เลือกกระเป๋าที่ต้องการถอน</label>
+          <select id="inpWithSource" class="w-full border rounded-lg px-3 py-2">
+            <option value="wallet">ถอนจากยอดเงินคงเหลือหลัก (Wallet)</option>
+            <option value="commission">ถอนจากรายได้ค่าคอมมิชชัน (Affiliate)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-medium mb-1">จำนวนเงินที่ต้องการถอน (บาท)</label>
+          <input id="inpWithAmount" type="number" placeholder="300" class="w-full border rounded-lg px-3 py-2" />
+        </div>
+        <div>
+          <label class="block font-medium mb-1">เลขบัญชีธนาคารและชื่อผู้รับเงิน</label>
+          <input id="inpWithBank" type="text" placeholder="ระบุธนาคาร เลขบัญชี และชื่อ-นามสกุล" class="w-full border rounded-lg px-3 py-2" />
+        </div>
+        <button onclick="submitCustomerWithdraw()" class="w-full py-2.5 rounded-xl bg-tier-1 text-white font-bold">
+          ยืนยันแจ้งถอนเงิน
+        </button>
+      </div>
+
+      <!-- แท็บย่อย 3: ประวัติการฝาก-ถอนและคำสั่งซื้อของลูกค้า -->
+      <div id="wBoxHistory" class="hidden space-y-2 text-xs pt-1">
+        <div id="userHistoryList" class="space-y-2 max-h-60 overflow-y-auto"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Modal ตะกร้าสินค้า (เลือกจ่ายด้วยยอดคงเหลือในกระเป๋า หรือ โอนแนบสลิป) -->
+  <div id="cartModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-bold text-base text-[#12242A]">ตะกร้าสินค้า & ชำระเงิน</h3>
+        <button onclick="closeModal('cartModal')" class="text-gray-400 hover:text-black"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="cartModalBody" class="space-y-3 text-xs"></div>
+    </div>
+  </div>
+
+  <!-- 4. Modal ล็อกอินแอดมิน -->
   <div id="adminLoginModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-sm w-full p-6 space-y-4">
       <div class="flex items-center justify-between border-b pb-3">
-        <h3 class="font-bold text-base text-[#12242A]"><i class="fa-solid fa-shield-halved text-[#0E5157] mr-1.5"></i> เข้าสู่ระบบหลังบ้านแอดมิน</h3>
+        <h3 class="font-bold text-base text-[#12242A]">เข้าสู่ระบบหลังบ้านแอดมิน</h3>
         <button onclick="closeModal('adminLoginModal')" class="text-gray-400 hover:text-black"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="space-y-3 text-xs">
-        <p class="text-gray-500">กรุณากรอกรหัสผ่านผู้ดูแลระบบ (ค่าเริ่มต้นคือ <b>1688</b> เปลี่ยนได้ในเมนูตั้งค่า)</p>
+        <p class="text-gray-500">รหัสผ่านผู้ดูแลระบบ (ค่าเริ่มต้น: <b>1688</b>)</p>
         <input id="inpAdminPass" type="password" placeholder="รหัสผ่านแอดมิน" class="w-full border rounded-lg px-3 py-2.5 text-center text-base tracking-widest font-bold" />
         <button onclick="verifyAdminLogin()" class="w-full py-2.5 rounded-xl bg-tier-1 text-white font-bold">เข้าสู่แผงควบคุม</button>
       </div>
     </div>
   </div>
 
-  <!-- Modal เพิ่มสินค้าเสื้อผ้ามือสอง -->
+  <!-- 5. Modal เพิ่มสินค้าเสื้อผ้ามือสอง -->
   <div id="productModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4">
       <div class="flex items-center justify-between border-b pb-3">
@@ -449,7 +643,7 @@
           </div>
         </div>
         <div>
-          <label class="block font-medium mb-1">อัปโหลดรูปเสื้อผ้าจริงจากมือถือ/คอม</label>
+          <label class="block font-medium mb-1">อัปโหลดรูปเสื้อผ้าจริง</label>
           <input id="inpProdFile" type="file" accept="image/*" class="w-full border rounded-lg px-2 py-1.5" />
         </div>
       </div>
@@ -459,24 +653,14 @@
     </div>
   </div>
 
-  <!-- Modal ลูกค้า (สมัครสมาชิก / ตะกร้าสินค้า + แนบสลิปโอนเงิน) -->
-  <div id="customerModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b pb-3">
-        <h3 id="custModalTitle" class="font-bold text-base text-[#12242A]">ทำรายการ</h3>
-        <button onclick="closeModal('customerModal')" class="text-gray-400 hover:text-black"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div id="custModalBody" class="space-y-3 text-xs"></div>
-    </div>
-  </div>
-
   <script>
-    const STORAGE_KEY = 'ECOMMOBI_PRODUCTION_READY_ZERO_V2';
+    const STORAGE_KEY = 'ECOMMOBI_FULL_WALLET_SYSTEM_V3';
 
     function getInitialZeroState() {
       return {
         adminPin: '1688',
         bankInfo: 'กสิกรไทย 123-4-56789-0 (บจก. อีคอมโมบิ วินเทจ)',
+        currentUserPhone: null, // เก็บเบอร์ลูกค้าที่กำลังล็อกอินอยู่
         totalUsers: 0,
         approvedAff: 0,
         pendingAff: 0,
@@ -487,7 +671,8 @@
         taxToday: 0,
         pendingOrders: 0,
         pendingDeposits: 0,
-        members: [],
+        members: [],       // เก็บ { id, phone, password, bank, role, status, balance, commBalance, time }
+        financeRequests: [], // เก็บคำขอฝากเงิน/ถอนเงินจากลูกค้า
         orders: [],
         transactions: [],
         products: [],
@@ -502,14 +687,18 @@
       renderAll();
     }
 
+    function getCurrentUser() {
+      if (!state.currentUserPhone) return null;
+      return state.members.find(m => m.phone === state.currentUserPhone) || null;
+    }
+
     function resetAllDataToZero() {
-      if (confirm('ยืนยันล้างข้อมูลทั้งหมดกลับเป็น 0 เพื่อเริ่มนับหนึ่งใหม่หรือไม่?')) {
+      if (confirm('ยืนยันล้างข้อมูลทั้งหมดกลับเป็น 0 หรือไม่?')) {
         state = getInitialZeroState();
         saveState();
       }
     }
 
-    // เวลาเรียลไทม์
     function updateClock() {
       const now = new Date();
       const str = now.toLocaleDateString('th-TH', {
@@ -521,163 +710,46 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // ระบบล็อกอินแอดมิน
-    function openAdminLoginModal() {
-      document.getElementById('inpAdminPass').value = '';
-      document.getElementById('adminLoginModal').classList.remove('hidden');
-    }
-
-    function verifyAdminLogin() {
-      const pass = document.getElementById('inpAdminPass').value.trim();
-      if (pass === state.adminPin) {
-        closeModal('adminLoginModal');
-        document.getElementById('storeView').classList.add('hidden');
-        document.getElementById('adminView').classList.remove('hidden');
-        renderAll();
-      } else {
-        alert('รหัสผ่านผู้ดูแลระบบไม่ถูกต้อง!');
-      }
-    }
-
-    function exitAdminToStore() {
-      document.getElementById('adminView').classList.add('hidden');
-      document.getElementById('storeView').classList.remove('hidden');
-    }
-
-    function switchAdminSection(secId) {
-      ['secDashboard', 'secOrders', 'secMembers', 'secFinance', 'secProducts', 'secSettings'].forEach(id => {
-        document.getElementById(id).classList.add('hidden');
-      });
-      document.getElementById(secId).classList.remove('hidden');
-    }
-
     function closeModal(id) {
       document.getElementById(id).classList.add('hidden');
     }
 
-    function openAddProductModal() {
-      document.getElementById('productModal').classList.remove('hidden');
+    // ==========================================
+    // ระบบเข้าสู่ระบบ & สมัครสมาชิกฝั่งลูกค้า
+    // ==========================================
+    function openAuthModal(mode) {
+      document.getElementById('authModal').classList.remove('hidden');
+      const isLogin = mode === 'login';
+      document.getElementById('authModalTitle').textContent = isLogin ? 'เข้าสู่ระบบลูกค้า' : 'สมัครสมาชิกใหม่';
+      document.getElementById('formLoginBox').classList.toggle('hidden', !isLogin);
+      document.getElementById('formRegBox').classList.toggle('hidden', isLogin);
+      document.getElementById('tabBtnLogin').className = isLogin ? 'py-2 rounded-lg bg-tier-1 text-white' : 'py-2 rounded-lg text-gray-600';
+      document.getElementById('tabBtnReg').className = !isLogin ? 'py-2 rounded-lg bg-tier-1 text-white' : 'py-2 rounded-lg text-gray-600';
     }
 
-    // แปลงไฟล์รูปภาพเป็น Base64 เพื่อเก็บในระบบและแสดงผลได้จริง
-    function fileToBase64(file) {
-      return new Promise((resolve) => {
-        if (!file) return resolve(null);
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.readAsDataURL(file);
-      });
-    }
+    function handleCustomerRegister() {
+      const phone = document.getElementById('regPhone').value.trim();
+      const pass = document.getElementById('regPass').value.trim();
+      const bank = document.getElementById('regBank').value.trim();
+      const role = document.getElementById('regRole').value;
 
-    async function saveNewProduct() {
-      const name = document.getElementById('inpProdName').value.trim();
-      const size = document.getElementById('inpProdSize').value.trim() || 'ฟรีไซส์';
-      const cond = document.getElementById('inpProdCond').value.trim() || 'คัดเกรด A';
-      const price = Number(document.getElementById('inpProdPrice').value) || 0;
-      const comm = Number(document.getElementById('inpProdComm').value) || 0;
-      const fileInput = document.getElementById('inpProdFile');
+      if (!phone || !pass) return alert('กรุณากรอกเบอร์โทรศัพท์และตั้งรหัสผ่าน');
+      if (state.members.some(m => m.phone === phone)) return alert('เบอร์โทรศัพท์นี้เป็นสมาชิกอยู่แล้ว กรุณาเข้าสู่ระบบ');
 
-      if (!name || price <= 0) return alert('กรุณากรอกชื่อสินค้าและราคาขาย');
-
-      const uploadedImg = await fileToBase64(fileInput.files[0]);
-      const img = uploadedImg || 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600';
-
-      state.products.unshift({
+      const newUser = {
         id: Date.now(),
-        name, size, cond, price, comm, img,
-        sold: false
-      });
+        phone,
+        password: pass,
+        bank: bank || '',
+        role,
+        status: role === 'affiliate' ? 'pending' : 'member',
+        balance: 0,
+        commBalance: 0,
+        time: new Date().toLocaleString('th-TH')
+      };
 
-      document.getElementById('inpProdName').value = '';
-      document.getElementById('inpProdPrice').value = '';
-      fileInput.value = '';
-      saveState();
-      closeModal('productModal');
-    }
-
-    function deleteProduct(id) {
-      state.products = state.products.filter(p => p.id !== id);
-      saveState();
-    }
-
-    function addToCart(productId) {
-      const prod = state.products.find(p => p.id === productId);
-      if (!prod || prod.sold) return alert('สินค้าชิ้นนี้ขายแล้ว');
-      if (state.cart.some(c => c.id === productId)) return alert('สินค้าชิ้นนี้อยู่ในตะกร้าแล้ว (เสื้อผ้ามือสองมีชิ้นเดียว)');
-      state.cart.push(prod);
-      saveState();
-      openCustomerModal('cart');
-    }
-
-    function openCustomerModal(type) {
-      const modal = document.getElementById('customerModal');
-      const title = document.getElementById('custModalTitle');
-      const body = document.getElementById('custModalBody');
-      modal.classList.remove('hidden');
-
-      if (type === 'register') {
-        title.textContent = 'สมัครสมาชิก / สมัครตัวแทน Affiliate';
-        body.innerHTML = `
-          <div>
-            <label class="block font-medium mb-1">เบอร์โทรศัพท์</label>
-            <input id="inpCustPhone" type="text" placeholder="0812345678" class="w-full border rounded-lg px-3 py-2" />
-          </div>
-          <div>
-            <label class="block font-medium mb-1">รูปแบบสมาชิก</label>
-            <select id="inpCustType" class="w-full border rounded-lg px-3 py-2">
-              <option value="member">สมาชิกซื้อสินค้าทั่วไป</option>
-              <option value="affiliate">ตัวแทนจำหน่าย Affiliate (รับค่าคอมมิชชัน)</option>
-            </select>
-          </div>
-          <button onclick="submitCustomerRegister()" class="w-full py-2.5 rounded-xl bg-tier-1 text-white font-bold">ยืนยันการสมัคร</button>
-        `;
-      } else {
-        title.textContent = 'ตะกร้าสินค้า & แจ้งโอนเงินแนบสลิป';
-        const total = state.cart.reduce((s, item) => s + Number(item.price), 0);
-        if (state.cart.length === 0) {
-          body.innerHTML = `<p class="py-6 text-center text-gray-400">ยังไม่มีสินค้าในตะกร้า (0 ชิ้น)</p>`;
-          return;
-        }
-        body.innerHTML = `
-          <div class="space-y-2 border-b pb-3">
-            ${state.cart.map(item => `
-              <div class="flex justify-between items-center">
-                <span class="font-medium">${item.name}</span>
-                <span class="font-bold">฿${Number(item.price).toLocaleString()}</span>
-              </div>
-            `).join('')}
-            <div class="flex justify-between items-center pt-2 border-t font-bold text-sm text-[#0E5157]">
-              <span>ยอดโอนชำระทั้งสิ้น</span>
-              <span>฿${total.toLocaleString()}</span>
-            </div>
-          </div>
-          <div class="bg-tier-1 text-white p-3 rounded-xl space-y-1">
-            <p class="text-[11px] text-[#B49767] font-bold">บัญชีธนาคารสำหรับโอนเงิน:</p>
-            <p class="text-xs font-semibold">${state.bankInfo}</p>
-          </div>
-          <div>
-            <label class="block font-medium mb-1">ชื่อและที่อยู่จัดส่ง / เบอร์โทรติดต่อ</label>
-            <textarea id="inpOrderAddress" rows="2" placeholder="ชื่อผู้รับ เบอร์โทร และที่อยู่จัดส่ง" class="w-full border rounded-lg px-3 py-2"></textarea>
-          </div>
-          <div>
-            <label class="block font-medium mb-1">เบอร์โทรผู้แนะนำ Affiliate (ถ้ามี)</label>
-            <input id="inpOrderAffPhone" type="text" placeholder="ระบุเบอร์ตัวแทนเพื่อรับค่าคอม" class="w-full border rounded-lg px-3 py-2" />
-          </div>
-          <div>
-            <label class="block font-medium mb-1">แนบรูปสลิปโอนเงิน *</label>
-            <input id="inpOrderSlip" type="file" accept="image/*" class="w-full border rounded-lg px-2 py-1.5" />
-          </div>
-          <button onclick="submitCustomerOrder()" class="w-full py-2.5 rounded-xl bg-tier-5 text-[#12242A] font-bold">
-            ส่งหลักฐานการโอนเงินและยืนยันคำสั่งซื้อ
-          </button>
-        `;
-      }
-    }
-
-    function submitCustomerRegister() {
-      const phone = document.getElementById('inpCustPhone').value.trim();
-      const role = document.getElementById('inpCustType').value;
-      if (!phone) return alert('กรุณากรอกเบอร์โทรศัพท์');
+      state.members.unshift(newUser);
+      state.currentUserPhone = phone;
 
       state.totalUsers += 1;
       state.regStats.day += 1;
@@ -693,82 +765,439 @@
         state.affStats.year += 1;
       }
 
-      state.members.unshift({
+      saveState();
+      closeModal('authModal');
+      alert('สมัครสมาชิกและเข้าสู่ระบบสำเร็จ!');
+    }
+
+    function handleCustomerLogin() {
+      const phone = document.getElementById('loginPhone').value.trim();
+      const pass = document.getElementById('loginPass').value.trim();
+      const user = state.members.find(m => m.phone === phone && m.password === pass);
+      if (!user) return alert('เบอร์โทรศัพท์หรือรหัสผ่านไม่ถูกต้อง');
+
+      state.currentUserPhone = user.phone;
+      saveState();
+      closeModal('authModal');
+    }
+
+    function logoutCustomer() {
+      state.currentUserPhone = null;
+      saveState();
+    }
+
+    // ==========================================
+    // ระบบกระเป๋าเงินลูกค้า (ฝากเงิน / ถอนเงิน / ประวัติ)
+    // ==========================================
+    function openWalletModal(defaultTab = 'deposit') {
+      const user = getCurrentUser();
+      if (!user) return openAuthModal('login');
+      document.getElementById('walletModal').classList.remove('hidden');
+      switchWalletTab(defaultTab);
+      renderAll();
+    }
+
+    function switchWalletTab(tab) {
+      ['deposit', 'withdraw', 'history'].forEach(t => {
+        document.getElementById('wBox' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('hidden', t !== tab);
+        document.getElementById('wTab' + t.charAt(0).toUpperCase() + t.slice(1)).className =
+          t === tab ? 'py-2 rounded-xl bg-tier-3 text-white' : 'py-2 rounded-xl bg-gray-100 text-gray-700';
+      });
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve) => {
+        if (!file) return resolve(null);
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function submitCustomerDeposit() {
+      const user = getCurrentUser();
+      if (!user) return;
+      const amount = Number(document.getElementById('inpDepAmount').value) || 0;
+      const slipFile = document.getElementById('inpDepSlip').files[0];
+
+      if (amount <= 0) return alert('กรุณาระบุจำนวนเงินที่ต้องการฝาก');
+      if (!slipFile) return alert('กรุณาแนบรูปสลิปโอนเงิน');
+
+      const slip = await fileToBase64(slipFile);
+      state.pendingDeposits += 1;
+      state.financeRequests.unshift({
         id: Date.now(),
-        phone,
-        role,
-        status: role === 'affiliate' ? 'pending' : 'member',
+        reqType: 'deposit',
+        phone: user.phone,
+        amount,
+        slip,
+        status: 'รอตรวจสอบ',
         time: new Date().toLocaleString('th-TH')
       });
 
+      document.getElementById('inpDepAmount').value = '';
+      document.getElementById('inpDepSlip').value = '';
       saveState();
-      closeModal('customerModal');
-      alert('สมัครสมาชิกเรียบร้อยแล้ว!');
+      switchWalletTab('history');
+      alert('ส่งรายการแจ้งฝากเงินเรียบร้อย! รอแอดมินตรวจสอบและเติมยอดเข้ากระเป๋าครับ');
+    }
+
+    function submitCustomerWithdraw() {
+      const user = getCurrentUser();
+      if (!user) return;
+      const source = document.getElementById('inpWithSource').value;
+      const amount = Number(document.getElementById('inpWithAmount').value) || 0;
+      const bank = document.getElementById('inpWithBank').value.trim() || user.bank;
+
+      if (amount <= 0) return alert('กรุณาระบุจำนวนเงินที่ต้องการถอน');
+      if (!bank) return alert('กรุณาระบุเลขบัญชีธนาคารสำหรับรับเงินโอน');
+
+      if (source === 'wallet' && user.balance < amount) {
+        return alert('ยอดเงินคงเหลือในกระเป๋าไม่เพียงพอ');
+      }
+      if (source === 'commission' && user.commBalance < amount) {
+        return alert('ยอดค่าคอมมิชชันสะสมไม่เพียงพอ');
+      }
+
+      // หักยอดพักไว้รออนุมัติโอน
+      if (source === 'wallet') user.balance -= amount;
+      else user.commBalance -= amount;
+
+      state.pendingWithdraw += 1;
+      state.financeRequests.unshift({
+        id: Date.now(),
+        reqType: 'withdraw',
+        source,
+        phone: user.phone,
+        amount,
+        bank,
+        status: 'รออนุมัติโอน',
+        time: new Date().toLocaleString('th-TH')
+      });
+
+      document.getElementById('inpWithAmount').value = '';
+      saveState();
+      switchWalletTab('history');
+      alert('ส่งคำขอถอนเงินเรียบร้อยแล้ว! รอแอดมินอนุมัติโอนเข้าบัญชีธนาคารครับ');
+    }
+
+    // แอดมินกดอนุมัติรายการฝากเงิน / ถอนเงินของลูกค้า
+    function approveFinanceRequest(reqId) {
+      const req = state.financeRequests.find(r => r.id === reqId);
+      if (!req || req.status === 'สำเร็จ') return;
+
+      const member = state.members.find(m => m.phone === req.phone);
+      req.status = 'สำเร็จ';
+
+      if (req.reqType === 'deposit') {
+        state.pendingDeposits = Math.max(0, state.pendingDeposits - 1);
+        if (member) member.balance += Number(req.amount);
+        state.transactions.unshift({
+          type: 'ฝากเงินเข้ากระเป๋า',
+          phone: req.phone,
+          amount: req.amount,
+          sign: '+',
+          status: 'สำเร็จ',
+          time: new Date().toLocaleString('th-TH')
+        });
+      } else {
+        state.pendingWithdraw = Math.max(0, state.pendingWithdraw - 1);
+        state.transactions.unshift({
+          type: 'ถอนเงินสำเร็จ',
+          phone: req.phone,
+          amount: req.amount,
+          sign: '-',
+          status: 'สำเร็จ',
+          time: new Date().toLocaleString('th-TH')
+        });
+      }
+      saveState();
+    }
+
+    // แอดมินเพิ่ม/หักเงินเข้ากระเป๋าลูกค้าโดยตรง
+    function adminAdjustBalance() {
+      const type = document.getElementById('finType').value;
+      const phone = document.getElementById('finPhone').value.trim();
+      const amount = Number(document.getElementById('finAmount').value) || 0;
+      if (!phone || amount <= 0) return alert('กรุณากรอกเบอร์ผู้ใช้และจำนวนเงิน');
+
+      let member = state.members.find(m => m.phone === phone);
+      if (!member) {
+        // หากยังไม่มีเบอร์นี้ในระบบ ให้สร้างยูสเซอร์ให้อัตโนมัติ (รหัสเริ่มต้น 1234)
+        member = {
+          id: Date.now(),
+          phone,
+          password: '1234',
+          bank: '',
+          role: 'member',
+          status: 'member',
+          balance: 0,
+          commBalance: 0,
+          time: new Date().toLocaleString('th-TH')
+        };
+        state.members.unshift(member);
+        state.totalUsers += 1;
+      }
+
+      const isDeduct = type.includes('หัก');
+      if (isDeduct) {
+        member.balance = Math.max(0, member.balance - amount);
+      } else {
+        member.balance += amount;
+      }
+
+      state.transactions.unshift({
+        type,
+        phone,
+        amount,
+        sign: isDeduct ? '-' : '+',
+        status: 'สำเร็จ',
+        time: new Date().toLocaleString('th-TH')
+      });
+
+      document.getElementById('finPhone').value = '';
+      document.getElementById('finAmount').value = '';
+      saveState();
+      alert(`ปรับยอดกระเป๋าของเบอร์ ${phone} เรียบร้อยแล้ว (ยอดคงเหลือใหม่: ฿${member.balance.toLocaleString()})`);
+    }
+
+    // ==========================================
+    // ระบบตะกร้าสินค้า & เลือกตัดเงินจากกระเป๋าลูกค้าทันที
+    // ==========================================
+    function addToCart(productId) {
+      const prod = state.products.find(p => p.id === productId);
+      if (!prod || prod.sold) return alert('สินค้าชิ้นนี้ขายแล้ว');
+      if (state.cart.some(c => c.id === productId)) return alert('สินค้าชิ้นนี้อยู่ในตะกร้าแล้ว');
+      state.cart.push(prod);
+      saveState();
+      openCartModal();
+    }
+
+    function openCartModal() {
+      const modal = document.getElementById('cartModal');
+      const body = document.getElementById('cartModalBody');
+      modal.classList.remove('hidden');
+
+      if (state.cart.length === 0) {
+        body.innerHTML = `<p class="py-8 text-center text-gray-400">ยังไม่มีสินค้าในตะกร้า (0 ชิ้น)</p>`;
+        return;
+      }
+
+      const user = getCurrentUser();
+      const total = state.cart.reduce((s, item) => s + Number(item.price), 0);
+      const userBal = user ? user.balance : 0;
+
+      body.innerHTML = `
+        <div class="space-y-2 border-b pb-3">
+          ${state.cart.map(item => `
+            <div class="flex justify-between items-center">
+              <span class="font-medium">${item.name}</span>
+              <span class="font-bold">฿${Number(item.price).toLocaleString()}</span>
+            </div>
+          `).join('')}
+          <div class="flex justify-between items-center pt-2 border-t font-bold text-sm text-[#0E5157]">
+            <span>ยอดชำระทั้งสิ้น</span>
+            <span>฿${total.toLocaleString()}</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1">ชื่อ-ที่อยู่จัดส่ง และเบอร์โทรติดต่อ *</label>
+          <textarea id="inpOrderAddress" rows="2" placeholder="ระบุชื่อ เบอร์โทร และที่อยู่จัดส่ง" class="w-full border rounded-lg px-3 py-2">${user ? 'เบอร์โทร: ' + user.phone + ' ' : ''}</textarea>
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1">เบอร์โทรตัวแทน Affiliate ผู้แนะนำ (ถ้ามี)</label>
+          <input id="inpOrderAffPhone" type="text" placeholder="ระบุเบอร์ตัวแทนเพื่อรับค่าคอม" class="w-full border rounded-lg px-3 py-2" />
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1">เลือกวิธีชำระเงิน</label>
+          <select id="inpPayMethod" onchange="toggleSlipUploadBox()" class="w-full border rounded-lg px-3 py-2 font-semibold">
+            <option value="wallet">ตัดจากยอดเงินคงเหลือในกระเป๋า (คงเหลือ ฿${userBal.toLocaleString()})</option>
+            <option value="slip">โอนเงินเข้าบัญชีธนาคารแล้วแนบสลิป</option>
+          </select>
+        </div>
+
+        <div id="slipUploadSection" class="hidden space-y-2 bg-gray-50 p-3 rounded-xl border">
+          <p class="text-[11px] font-bold text-[#0E5157]">บัญชีร้าน: ${state.bankInfo}</p>
+          <input id="inpOrderSlip" type="file" accept="image/*" class="w-full border rounded-lg px-2 py-1.5 bg-white" />
+        </div>
+
+        <button onclick="submitCustomerOrder()" class="w-full py-2.5 rounded-xl bg-tier-5 text-[#12242A] font-bold">
+          ยืนยันการสั่งซื้อเสื้อผ้ามือสอง
+        </button>
+      `;
+    }
+
+    function toggleSlipUploadBox() {
+      const method = document.getElementById('inpPayMethod').value;
+      document.getElementById('slipUploadSection').classList.toggle('hidden', method !== 'slip');
     }
 
     async function submitCustomerOrder() {
       const address = document.getElementById('inpOrderAddress').value.trim();
       const affPhone = document.getElementById('inpOrderAffPhone').value.trim();
-      const slipFile = document.getElementById('inpOrderSlip').files[0];
+      const method = document.getElementById('inpPayMethod').value;
+      if (!address) return alert('กรุณากรอกที่อยู่จัดส่ง');
 
-      if (!address) return alert('กรุณากรอกชื่อ เบอร์โทร และที่อยู่จัดส่ง');
-      if (!slipFile) return alert('กรุณาแนบรูปสลิปโอนเงินก่อนยืนยันคำสั่งซื้อ');
-
-      const slipBase64 = await fileToBase64(slipFile);
       const total = state.cart.reduce((s, item) => s + Number(item.price), 0);
       const totalComm = state.cart.reduce((s, item) => s + Number(item.comm || 0), 0);
+      const user = getCurrentUser();
 
-      state.pendingOrders += 1;
-      state.orders.unshift({
-        id: Date.now(),
-        address,
-        affPhone,
-        items: [...state.cart],
-        total,
-        totalComm,
-        slip: slipBase64,
-        status: 'รอตรวจสอบสลิป',
-        time: new Date().toLocaleString('th-TH')
-      });
+      if (method === 'wallet') {
+        if (!user) return alert('กรุณาเข้าสู่ระบบก่อนชำระด้วยกระเป๋าเงิน');
+        if (user.balance < total) return alert('ยอดเงินคงเหลือในกระเป๋าไม่พอ กรุณาเติมเงินเข้ากระเป๋าก่อนครับ');
 
-      state.cart = [];
-      saveState();
-      closeModal('customerModal');
-      alert('ส่งคำสั่งซื้อและสลิปโอนเงินเรียบร้อย! แอดมินกำลังตรวจสอบยอดเงินครับ');
+        // หักเงินจากกระเป๋าลูกค้าทันที + ตัดสต็อก SOLD OUT ทันที
+        user.balance -= total;
+        state.cart.forEach(item => {
+          const prod = state.products.find(p => p.id === item.id);
+          if (prod) prod.sold = true;
+        });
+
+        // จ่ายค่าคอมให้ตัวแทนทันที (ถ้ามีระบุเบอร์ตัวแทน)
+        if (affPhone) {
+          const affUser = state.members.find(m => m.phone === affPhone);
+          if (affUser) affUser.commBalance += totalComm;
+        }
+        state.commToday += totalComm;
+        state.taxToday += +(totalComm * 0.03).toFixed(2);
+
+        state.orders.unshift({
+          id: Date.now(),
+          phone: user.phone,
+          address,
+          affPhone,
+          items: [...state.cart],
+          total,
+          totalComm,
+          slip: null,
+          status: 'ชำระด้วยกระเป๋าเงินแล้ว (รอจัดส่ง)',
+          time: new Date().toLocaleString('th-TH')
+        });
+
+        state.transactions.unshift({
+          type: 'ซื้อสินค้าด้วยกระเป๋าเงิน',
+          phone: user.phone,
+          amount: total,
+          sign: '-',
+          status: 'สำเร็จ',
+          time: new Date().toLocaleString('th-TH')
+        });
+
+        state.cart = [];
+        saveState();
+        closeModal('cartModal');
+        alert('ตัดเงินจากกระเป๋าและสั่งซื้อสำเร็จ!');
+      } else {
+        const slipFile = document.getElementById('inpOrderSlip').files[0];
+        if (!slipFile) return alert('กรุณาแนบรูปสลิปโอนเงิน');
+        const slip = await fileToBase64(slipFile);
+
+        state.pendingOrders += 1;
+        state.orders.unshift({
+          id: Date.now(),
+          phone: user ? user.phone : 'ลูกค้าทั่วไป',
+          address,
+          affPhone,
+          items: [...state.cart],
+          total,
+          totalComm,
+          slip,
+          status: 'รอตรวจสอบสลิป',
+          time: new Date().toLocaleString('th-TH')
+        });
+
+        state.cart = [];
+        saveState();
+        closeModal('cartModal');
+        alert('ส่งคำสั่งซื้อและสลิปเรียบร้อย! รอแอดมินอนุมัติครับ');
+      }
     }
 
-    // แอดมินกดอนุมัติสลิปคำสั่งซื้อ
+    // แอดมินอนุมัติออเดอร์ที่แนบสลิป
     function approveOrder(orderId) {
       const order = state.orders.find(o => o.id === orderId);
-      if (!order || order.status === 'อนุมัติจัดส่งแล้ว') return;
+      if (!order || order.status.includes('อนุมัติ')) return;
 
       order.status = 'อนุมัติจัดส่งแล้ว';
       state.pendingOrders = Math.max(0, state.pendingOrders - 1);
 
-      // ตัดสต็อกเสื้อผ้ามือสองเป็น SOLD OUT
       order.items.forEach(item => {
         const prod = state.products.find(p => p.id === item.id);
         if (prod) prod.sold = true;
       });
 
-      // คิดค่าคอมมิชชันและภาษี
+      if (order.affPhone) {
+        const affUser = state.members.find(m => m.phone === order.affPhone);
+        if (affUser) affUser.commBalance += order.totalComm;
+      }
+
       state.commToday += order.totalComm;
       state.taxToday += +(order.totalComm * 0.03).toFixed(2);
 
-      // บันทึกลงตารางธุรกรรมหน้าแดชบอร์ด
       state.transactions.unshift({
         type: 'รับชำระค่าสินค้า',
-        phone: order.address.split(' ')[0] || 'ลูกค้า',
+        phone: order.phone,
         amount: order.total,
         sign: '+',
         status: 'สำเร็จ',
         time: new Date().toLocaleString('th-TH')
       });
-
       saveState();
     }
 
-    // แอดมินกดอนุมัติตัวแทน Affiliate
+    // แอดมิน & สินค้า
+    function openAdminLoginModal() {
+      document.getElementById('inpAdminPass').value = '';
+      document.getElementById('adminLoginModal').classList.remove('hidden');
+    }
+    function verifyAdminLogin() {
+      if (document.getElementById('inpAdminPass').value.trim() === state.adminPin) {
+        closeModal('adminLoginModal');
+        document.getElementById('storeView').classList.add('hidden');
+        document.getElementById('adminView').classList.remove('hidden');
+        renderAll();
+      } else {
+        alert('รหัสผ่านแอดมินไม่ถูกต้อง');
+      }
+    }
+    function exitAdminToStore() {
+      document.getElementById('adminView').classList.add('hidden');
+      document.getElementById('storeView').classList.remove('hidden');
+    }
+    function switchAdminSection(secId) {
+      ['secDashboard', 'secOrders', 'secMembers', 'secFinance', 'secProducts', 'secSettings'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+      document.getElementById(secId).classList.remove('hidden');
+    }
+    function openAddProductModal() {
+      document.getElementById('productModal').classList.remove('hidden');
+    }
+    async function saveNewProduct() {
+      const name = document.getElementById('inpProdName').value.trim();
+      const size = document.getElementById('inpProdSize').value.trim() || 'ฟรีไซส์';
+      const cond = document.getElementById('inpProdCond').value.trim() || 'คัดเกรด A';
+      const price = Number(document.getElementById('inpProdPrice').value) || 0;
+      const comm = Number(document.getElementById('inpProdComm').value) || 0;
+      const fileInput = document.getElementById('inpProdFile');
+      if (!name || price <= 0) return alert('กรุณากรอกชื่อสินค้าและราคา');
+      const uploadedImg = await fileToBase64(fileInput.files[0]);
+      state.products.unshift({
+        id: Date.now(),
+        name, size, cond, price, comm,
+        img: uploadedImg || 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600',
+        sold: false
+      });
+      saveState();
+      closeModal('productModal');
+    }
+    function deleteProduct(id) {
+      state.products = state.products.filter(p => p.id !== id);
+      saveState();
+    }
     function approveAffiliate(memberId) {
       const m = state.members.find(x => x.id === memberId);
       if (!m || m.status !== 'pending') return;
@@ -777,29 +1206,6 @@
       state.approvedAff += 1;
       saveState();
     }
-
-    // แอดมินเพิ่ม/หักเงินเหมือนในภาพต้นฉบับ
-    function adminAdjustBalance() {
-      const type = document.getElementById('finType').value;
-      const phone = document.getElementById('finPhone').value.trim();
-      const amount = Number(document.getElementById('finAmount').value) || 0;
-      if (!phone || amount <= 0) return alert('กรุณากรอกเบอร์ผู้ใช้และจำนวนเงิน');
-
-      const sign = type.includes('หัก') ? '-' : '+';
-      state.transactions.unshift({
-        type,
-        phone,
-        amount,
-        sign,
-        status: 'สำเร็จ',
-        time: new Date().toLocaleString('th-TH')
-      });
-      document.getElementById('finPhone').value = '';
-      document.getElementById('finAmount').value = '';
-      saveState();
-      switchAdminSection('secDashboard');
-    }
-
     function saveShopSettings() {
       state.bankInfo = document.getElementById('setBankInfo').value.trim() || state.bankInfo;
       state.adminPin = document.getElementById('setAdminPin').value.trim() || '1688';
@@ -807,8 +1213,53 @@
       alert('บันทึกการตั้งค่าเรียบร้อยแล้ว');
     }
 
+    // ==========================================
+    // ฟังก์ชันอัปเดตหน้าจอทั้งหมด (Render)
+    // ==========================================
     function renderAll() {
-      // สถิติแดชบอร์ด
+      const user = getCurrentUser();
+
+      // 1. แสดงผลแถบยูสเซอร์ลูกค้าและกระเป๋าเงินหน้าบ้าน
+      document.getElementById('guestHeaderArea').classList.toggle('hidden', !!user);
+      document.getElementById('userHeaderArea').classList.toggle('hidden', !user);
+      document.getElementById('customerDashboardStrip').classList.toggle('hidden', !user);
+
+      if (user) {
+        const balStr = user.balance.toLocaleString('th-TH', { minimumFractionDigits: 2 });
+        const commStr = user.commBalance.toLocaleString('th-TH', { minimumFractionDigits: 2 });
+        document.getElementById('hdrUserPhone').textContent = user.phone;
+        document.getElementById('hdrUserBalance').textContent = balStr;
+        document.getElementById('stripPhone').textContent = user.phone;
+        document.getElementById('stripBalance').textContent = balStr;
+        document.getElementById('stripComm').textContent = commStr;
+        document.getElementById('stripAffBadge').textContent =
+          user.status === 'approved' ? 'ตัวแทน Affiliate อนุมัติแล้ว' : (user.status === 'pending' ? 'รอตรวจสิทธิ์ Affiliate' : 'สมาชิกทั่วไป');
+
+        document.getElementById('walModalPhone').textContent = user.phone;
+        document.getElementById('walModalBalance').textContent = balStr;
+        document.getElementById('walModalComm').textContent = commStr;
+        document.getElementById('walModalAffStatus').textContent = 'สถานะ: ' + document.getElementById('stripAffBadge').textContent;
+        document.getElementById('walBankInfo').textContent = state.bankInfo;
+
+        // ประวัติธุรกรรมของลูกค้าคนนี้
+        const myHist = state.transactions.filter(t => t.phone === user.phone);
+        const histEl = document.getElementById('userHistoryList');
+        if (myHist.length === 0) {
+          histEl.innerHTML = `<p class="text-center text-gray-400 py-4">ยังไม่มีประวัติธุรกรรม</p>`;
+        } else {
+          histEl.innerHTML = myHist.map(t => `
+            <div class="border rounded-xl p-2.5 flex justify-between items-center">
+              <div>
+                <p class="font-bold text-[#12242A]">${t.type}</p>
+                <p class="text-[10px] text-gray-400">${t.time}</p>
+              </div>
+              <span class="font-bold ${t.sign === '-' ? 'text-red-600' : 'text-emerald-700'}">${t.sign}฿${Number(t.amount).toLocaleString()}</span>
+            </div>
+          `).join('');
+        }
+      }
+
+      // 2. สถิติหลังบ้านแอดมิน
       document.getElementById('statTotalUsers').textContent = state.totalUsers;
       document.getElementById('statApprovedAff').textContent = state.approvedAff;
       document.getElementById('statPendingAff').textContent = state.pendingAff;
@@ -827,14 +1278,14 @@
       document.getElementById('statCommToday').textContent = '฿' + state.commToday.toLocaleString('th-TH', { minimumFractionDigits: 2 });
       document.getElementById('statTaxToday').textContent = '฿' + state.taxToday.toLocaleString('th-TH', { minimumFractionDigits: 2 });
       document.getElementById('statPendingOrders').textContent = state.pendingOrders;
-      document.getElementById('badgeOrderCount').textContent = state.pendingOrders;
       document.getElementById('statPendingDeposits').textContent = state.pendingDeposits;
+      document.getElementById('badgeOrderCount').textContent = state.pendingOrders;
+      document.getElementById('badgeFinanceCount').textContent = state.pendingDeposits + state.pendingWithdraw;
 
-      // ตั้งค่า
       document.getElementById('setBankInfo').value = state.bankInfo;
       document.getElementById('setAdminPin').value = state.adminPin;
 
-      // ตารางฝาก-ถอนหน้าแรก
+      // ตารางรายการฝาก-ถอนล่าสุดในหน้าแรกแอดมิน
       const tbody = document.getElementById('txTableBody');
       if (state.transactions.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-gray-400">ยังไม่มีรายการธุรกรรม (เริ่มต้นเป็น 0)</td></tr>`;
@@ -850,54 +1301,74 @@
         `).join('');
       }
 
-      // รายการตรวจสลิปออเดอร์
-      const orderList = document.getElementById('adminOrderList');
-      if (state.orders.length === 0) {
-        orderList.innerHTML = `<p class="text-xs text-gray-400 py-6 text-center">ยังไม่มีคำสั่งซื้อเข้ามา (0 รายการ)</p>`;
+      // รายการรออนุมัติฝาก-ถอนในหน้าการเงินแอดมิน
+      const finList = document.getElementById('adminPendingFinanceList');
+      if (state.financeRequests.length === 0) {
+        finList.innerHTML = `<p class="text-xs text-gray-400 py-6 text-center">ยังไม่มีคำขอฝาก-ถอนเงินจากลูกค้า</p>`;
       } else {
-        orderList.innerHTML = state.orders.map(o => `
-          <div class="border rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div class="space-y-1 text-xs">
-              <span class="px-2 py-0.5 rounded font-bold ${o.status === 'อนุมัติจัดส่งแล้ว' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${o.status}</span>
-              <p class="font-bold text-sm text-[#12242A] mt-1">ยอดโอน: ฿${o.total.toLocaleString()} (ค่าคอม Affiliate: ฿${o.totalComm})</p>
-              <p class="text-gray-600">สินค้า: ${o.items.map(i => i.name).join(', ')}</p>
-              <p class="text-gray-500">จัดส่งที่: ${o.address}</p>
+        finList.innerHTML = state.financeRequests.map(r => `
+          <div class="border rounded-xl p-3 flex items-center justify-between gap-3 text-xs">
+            <div>
+              <span class="px-2 py-0.5 rounded font-bold ${r.reqType === 'deposit' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                ${r.reqType === 'deposit' ? 'แจ้งฝากเงิน' : 'แจ้งถอนเงิน'}
+              </span>
+              <p class="font-bold text-[#12242A] mt-1">เบอร์ผู้ใช้: ${r.phone} | จำนวน: ฿${Number(r.amount).toLocaleString()}</p>
+              ${r.bank ? `<p class="text-gray-500">โอนเข้า: ${r.bank}</p>` : ''}
             </div>
-            <div class="flex items-center gap-3">
-              <img src="${o.slip}" alt="สลิปโอนเงิน" class="w-20 h-24 object-cover rounded-lg border cursor-pointer" onclick="window.open('${o.slip}')" title="คลิกเพื่อดูรูปสลิปขนาดใหญ่" />
-              ${o.status !== 'อนุมัติจัดส่งแล้ว' ? `
-                <button onclick="approveOrder(${o.id})" class="px-4 py-2 rounded-xl bg-tier-1 text-white text-xs font-bold hover:opacity-90">
-                  อนุมัติสลิป & ตัดสต็อก
-                </button>
-              ` : `<span class="text-xs font-bold text-emerald-700"><i class="fa-solid fa-circle-check"></i> อนุมัติแล้ว</span>`}
+            <div class="flex items-center gap-2">
+              ${r.slip ? `<img src="${r.slip}" class="w-12 h-14 object-cover rounded border cursor-pointer" onclick="window.open('${r.slip}')" />` : ''}
+              ${r.status !== 'สำเร็จ' ? `
+                <button onclick="approveFinanceRequest(${r.id})" class="px-3 py-1.5 rounded-lg bg-tier-1 text-white font-bold">อนุมัติ</button>
+              ` : `<span class="text-emerald-700 font-bold">สำเร็จ</span>`}
             </div>
           </div>
         `).join('');
       }
 
-      // รายชื่อสมาชิก & อนุมัติ Affiliate
+      // รายชื่อสมาชิกพร้อมยอดเงินคงเหลือในหน้าแอดมิน
       const memberList = document.getElementById('adminMemberList');
       if (state.members.length === 0) {
-        memberList.innerHTML = `<p class="text-xs text-gray-400 py-6 text-center">ยังไม่มีสมาชิกสมัครเข้ามา (0 คน)</p>`;
+        memberList.innerHTML = `<p class="text-xs text-gray-400 py-6 text-center">ยังไม่มีสมาชิกในระบบ (0 คน)</p>`;
       } else {
         memberList.innerHTML = state.members.map(m => `
-          <div class="border rounded-xl p-3 flex items-center justify-between text-xs">
+          <div class="border rounded-xl p-3.5 flex flex-wrap items-center justify-between gap-3 text-xs">
             <div>
-              <p class="font-bold text-[#12242A]">เบอร์โทร: ${m.phone}</p>
-              <p class="text-gray-400">ประเภท: ${m.role} | สมัครเมื่อ: ${m.time}</p>
+              <p class="font-bold text-sm text-[#12242A]">เบอร์ผู้ใช้: ${m.phone}</p>
+              <p class="text-gray-500">คงเหลือในกระเป๋า: <b class="text-[#0E5157]">฿${m.balance.toLocaleString()}</b> | ค่าคอมสะสม: <b class="text-[#B49767]">฿${m.commBalance.toLocaleString()}</b></p>
             </div>
-            <div>
+            <div class="flex items-center gap-2">
               ${m.status === 'pending' ? `
-                <button onclick="approveAffiliate(${m.id})" class="px-3 py-1.5 rounded-lg bg-tier-5 text-[#12242A] font-bold">
-                  กดอนุมัติ Affiliate
-                </button>
+                <button onclick="approveAffiliate(${m.id})" class="px-3 py-1.5 rounded-lg bg-tier-5 text-[#12242A] font-bold">อนุมัติ Affiliate</button>
               ` : `<span class="px-2.5 py-1 rounded bg-gray-100 text-gray-700 font-semibold">${m.status}</span>`}
             </div>
           </div>
         `).join('');
       }
 
-      // สินค้าในหน้าแอดมิน
+      // รายการออเดอร์ในแอดมิน
+      const orderList = document.getElementById('adminOrderList');
+      if (state.orders.length === 0) {
+        orderList.innerHTML = `<p class="text-xs text-gray-400 py-6 text-center">ยังไม่มีคำสั่งซื้อ (0 รายการ)</p>`;
+      } else {
+        orderList.innerHTML = state.orders.map(o => `
+          <div class="border rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs">
+            <div class="space-y-1">
+              <span class="px-2 py-0.5 rounded font-bold bg-amber-100 text-amber-900">${o.status}</span>
+              <p class="font-bold text-sm text-[#12242A] mt-1">ผู้สั่ง: ${o.phone} | ยอดรวม: ฿${o.total.toLocaleString()}</p>
+              <p class="text-gray-600">สินค้า: ${o.items.map(i => i.name).join(', ')}</p>
+              <p class="text-gray-500">จัดส่งที่: ${o.address}</p>
+            </div>
+            <div class="flex items-center gap-3">
+              ${o.slip ? `<img src="${o.slip}" class="w-16 h-20 object-cover rounded border cursor-pointer" onclick="window.open('${o.slip}')" />` : ''}
+              ${o.status === 'รอตรวจสอบสลิป' ? `
+                <button onclick="approveOrder(${o.id})" class="px-3.5 py-2 rounded-xl bg-tier-1 text-white font-bold">อนุมัติสลิป & ตัดสต็อก</button>
+              ` : `<span class="text-emerald-700 font-bold"><i class="fa-solid fa-circle-check"></i> ชำระแล้ว</span>`}
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // สินค้าในแอดมิน & หน้าร้าน
       const adminProdList = document.getElementById('adminProductList');
       if (state.products.length === 0) {
         adminProdList.innerHTML = `<p class="text-xs text-gray-400 py-4">ยังไม่มีสินค้าในคลัง (0 ชิ้น)</p>`;
@@ -916,7 +1387,6 @@
         `).join('');
       }
 
-      // หน้าร้านค้าสำหรับลูกค้า
       const availableProducts = state.products.filter(p => !p.sold);
       document.getElementById('cartCount').textContent = state.cart.length;
       document.getElementById('productCountLabel').textContent = availableProducts.length;
@@ -926,7 +1396,7 @@
         grid.innerHTML = `
           <div class="col-span-full bg-white rounded-2xl p-12 text-center border border-gray-200">
             <p class="text-base font-bold text-[#12242A]">กำลังเตรียมลงสินค้าคอลเลกชันใหม่ (0 ชิ้น)</p>
-            <p class="text-xs text-gray-500 mt-1">เจ้าของร้านสามารถคลิกปุ่มรูปแม่กุญแจมุมขวาบน (รหัสเริ่มต้น 1688) เพื่อเข้าหลังบ้านไปลงสินค้าเสื้อผ้ามือสองได้เลย</p>
+            <p class="text-xs text-gray-500 mt-1">คลิกปุ่มรูปแม่กุญแจมุมขวาบน (รหัส 1688) เพื่อเข้าหลังบ้านไปลงสินค้าเสื้อผ้ามือสองชิ้นแรกได้เลย</p>
           </div>
         `;
       } else {
@@ -943,7 +1413,7 @@
                 <p class="text-xs text-gray-500 mt-1">ขนาดวัดจริง: ${p.size}</p>
                 <div class="flex items-center justify-between mt-3">
                   <span class="text-lg font-bold text-[#12242A]">฿${Number(p.price).toLocaleString()}</span>
-                  <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-tier-5 text-[#12242A]">ค่าคอมตัวแทน ฿${p.comm}</span>
+                  <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-tier-5 text-[#12242A]">ค่าคอม ฿${p.comm}</span>
                 </div>
               </div>
             </div>
