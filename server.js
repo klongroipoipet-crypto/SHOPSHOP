@@ -13,7 +13,7 @@ const supabase = createClient(
 
 let memorySettings = {
   bank_info: 'กสิกรไทย 123-4-56789-0 (บจก. อีคอมโมบิ วินเทจ)',
-  admin_pin: '1688'
+  admin_pin: '200822'
 };
 
 // ดึงข้อมูลแดชบอร์ดและรายการทั้งหมด
@@ -170,7 +170,6 @@ app.post('/api/finance-request', async (req, res) => {
     if (source === 'wallet' && Number(member.balance) < Number(amount)) {
       return res.status(400).json({ error: 'เครดิตคงเหลือในกระเป๋าไม่เพียงพอ' });
     }
-    // หักยอดทันทีที่แจ้งถอน เพื่อป้องกันการกดถอนซ้ำ
     if (source === 'commission') {
       await supabase.from('members').update({ comm_balance: Number(member.comm_balance) - Number(amount) }).eq('phone', phone);
     } else {
