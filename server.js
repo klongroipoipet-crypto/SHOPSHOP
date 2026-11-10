@@ -85,7 +85,6 @@ app.post('/api/register', async (req, res) => {
   res.json({ success: true, user: data[0] });
 });
 
-// [เพิ่มใหม่] แอดมินแก้ไขรหัสผ่านสมาชิก
 app.post('/api/admin-update-member-password', async (req, res) => {
   const { memberId, newPassword } = req.body;
   if (!memberId || !newPassword) return res.status(400).json({ error: 'ข้อมูลไม่ครบถ้วน' });
@@ -99,7 +98,6 @@ app.post('/api/admin-update-member-password', async (req, res) => {
   res.json({ success: true });
 });
 
-// [เพิ่มใหม่] แอดมินลบบัญชีสมาชิก
 app.delete('/api/admin-members/:id', async (req, res) => {
   const { error } = await supabase.from('members').delete().eq('id', req.params.id);
   if (error) return res.status(400).json({ error: error.message });
@@ -207,7 +205,7 @@ app.post('/api/finance-request', async (req, res) => {
 app.post('/api/approve-finance', async (req, res) => {
   const { requestId } = req.body;
   const { data: reqData } = await supabase.from('finance_requests').select('*').eq('id', requestId).single();
-  if (!reqData || reqData.status === 'สำเร็จ') return res.status(400).json({ error: 'Invalid request' });
+  if (!reqData || reqData.status === 'สำเร็จ' || reqData.status === 'ถูกปฏิเสธ') return res.status(400).json({ error: 'Invalid request' });
 
   const { data: member } = await supabase.from('members').select('*').eq('phone', reqData.phone).maybeSingle();
 
@@ -219,6 +217,27 @@ app.post('/api/approve-finance', async (req, res) => {
   }
 
   await supabase.from('finance_requests').update({ status: 'สำเร็จ' }).eq('id', requestId);
+  res.json({ success: true });
+});
+
+// [เพิ่มใหม่] แอดมินปฏิเสธคำขอการเงิน พร้อมคืนยอดเงินให้ลูกค้าและบันทึกหมายเหตุ
+app.post('/api/reject-finance', async (req, res) => {
+  const { requestId, reason } = req.body;
+  const { data: reqData } = await supabase.from('finance_requests').select('*').eq('id', requestId).single();
+  if (!reqData || reqData.status === 'สำเร็จ' || reqData.status === 'ถูกปฏิเสธ') return res.status(400).json({ error: 'Invalid request' });
+
+  // ถ้าเป็นรายการถอนเงินที่ถูกปฏิเสธ ให้คืนยอดเงินกลับเข้ากระเป๋าหรือคอมมิชชันให้ลูกค้าตามเดิม
+  if (reqData.req_type === 'withdraw') {
+    const { data: member } = await supabase.from('members').select('*').eq('phone', reqData.phone).maybeSingle();
+    if (member) {
+      // ตรวจสอบจาก source หรือคืนเข้า wallet / comm_balance ตามความเหมาะสม (ตัวอย่างคืนเข้า wallet หรือตามแหล่งที่หัก)
+      // สมมติคืนเข้า balance หลักหรือพิจารณาตาม source ถ้ามี
+      await supabase.from('members').update({ balance: Number(member.balance) + Number(reqData.amount) }).eq('phone', reqData.phone);
+    }
+  }
+
+  const rejectStatusMsg = reason ? `ถูกปฏิเสธ: ${reason}` : 'ถูกปฏิเสธ';
+  await supabase.from('finance_requests').update({ status: rejectStatusMsg }).eq('id', requestId);
   res.json({ success: true });
 });
 

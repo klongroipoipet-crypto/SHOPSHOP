@@ -58,7 +58,6 @@
         </div>
 
         <div class="flex items-center gap-2">
-          <!-- บัญชีลูกค้า / ข้อมูลสมาชิก หรือปุ่มเข้าสู่ระบบ -->
           <div id="userAccountSection" onclick="handleUserAccountClick()" class="bg-tier-2 text-white px-3.5 py-1.5 rounded-xl flex items-center gap-2.5 cursor-pointer hover:opacity-95 transition">
             <i class="fa-solid fa-circle-user text-[#B49767] text-base"></i>
             <div class="text-left">
@@ -81,7 +80,6 @@
             <span id="cartCount" class="px-1.5 py-0.5 rounded bg-tier-5 text-[#12242A] text-[10px] font-extrabold">0</span>
           </button>
 
-          <!-- ปุ่มออกจากระบบ (แสดงเฉพาะตอนเข้าสู่ระบบแล้ว) -->
           <button id="btnLogoutTop" onclick="handleLogout()" class="hidden px-3 py-2.5 bg-red-600 text-white text-xs font-bold rounded-xl hover:bg-red-700 transition" title="ออกจากระบบ">
             <i class="fa-solid fa-right-from-bracket"></i>
           </button>
@@ -223,6 +221,7 @@
         </div>
       </main>
 
+      <!-- ส่วนการเงิน: เพิ่มปุ่มปฏิเสธพร้อมช่องใส่หมายเหตุ -->
       <main id="secFinance" class="hidden p-6 space-y-6 flex-1">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div class="bg-white rounded-xl p-5 border space-y-3 text-xs">
@@ -237,7 +236,7 @@
           </div>
           <div class="bg-white rounded-xl p-5 border space-y-3">
             <h3 class="font-bold text-base text-[#12242A]">รายการแจ้งฝาก & แจ้งถอนเงินของลูกค้า</h3>
-            <div id="adminPendingFinanceList" class="space-y-2.5"></div>
+            <div id="adminPendingFinanceList" class="space-y-3"></div>
           </div>
         </div>
       </main>
@@ -293,18 +292,13 @@
     </div>
   </div>
 
-  <!-- Modal ข้อมูลสมาชิก / ประวัติการถอนเงิน และปุ่มออกจากระบบ -->
   <div id="profileModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 text-xs max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between border-b pb-2 items-center">
         <h3 class="font-bold text-base text-[#12242A]"><i class="fa-solid fa-user-circle text-[#B49767] mr-1.5"></i> ข้อมูลสมาชิก & ประวัติการถอนเงิน</h3>
         <button onclick="closeModal('profileModal')"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
-
-      <div id="profileModalBody" class="space-y-4">
-        <!-- ข้อมูลโปรไฟล์จะถูกเรนเดอร์ที่นี่ -->
-      </div>
-
+      <div id="profileModalBody" class="space-y-4"></div>
       <div class="pt-2 border-t flex gap-2">
         <button onclick="handleLogout()" class="w-full py-2.5 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 transition flex items-center justify-center gap-2">
           <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ (Logout)
@@ -468,7 +462,6 @@
       alert('ส่งคำขอสมัครตัวแทน Affiliate เรียบร้อย');
     }
 
-    // จัดการคลิกที่กล่องบัญชีลูกค้า (ถ้าล็อกอินแล้ว เปิดหน้าโปรไฟล์/ประวัติการถอน ถ้ายังให้เปิด Modal ล็อกอิน)
     function handleUserAccountClick() {
       const user = getCurrentUser();
       if (!user) {
@@ -485,7 +478,6 @@
       const body = document.getElementById('profileModalBody');
       modal.classList.remove('hidden');
 
-      // กรองประวัติการถอนเงินเฉพาะของยูสเซอร์นี้
       const myWithdraws = state.financeRequests.filter(f => f.phone === user.phone && f.req_type === 'withdraw');
 
       body.innerHTML = `
@@ -510,22 +502,26 @@
             <div class="bg-gray-50 border rounded-xl p-4 text-center text-gray-400">ยังไม่มีประวัติการถอนเงิน</div>
           ` : `
             <div class="space-y-2 max-h-48 overflow-y-auto">
-              ${myWithdraws.map(w => `
-                <div class="border rounded-xl p-3 flex justify-between items-center bg-gray-50 text-xs">
-                  <div>
-                    <p class="font-bold text-sm text-[#12242A]">ถอน ฿${Number(w.amount).toLocaleString()}</p>
-                    <p class="text-[10px] text-gray-500">บัญชีรับ: ${w.bank || 'ไม่ระบุ'}</p>
+              ${myWithdraws.map(w => {
+                const isRejected = w.status.startsWith('ถูกปฏิเสธ');
+                const isSuccess = w.status === 'สำเร็จ';
+                return `
+                  <div class="border rounded-xl p-3 flex justify-between items-center bg-gray-50 text-xs">
+                    <div>
+                      <p class="font-bold text-sm text-[#12242A]">ถอน ฿${Number(w.amount).toLocaleString()}</p>
+                      <p class="text-[10px] text-gray-500">บัญชีรับ: ${w.bank || 'ไม่ระบุ'}</p>
+                      ${isRejected ? `<p class="text-[10px] text-red-600 font-bold mt-0.5">หมายเหตุจากแอดมิน: ${w.status}</p>` : ''}
+                    </div>
+                    <span class="px-2.5 py-1 rounded font-bold ${isSuccess ? 'bg-emerald-100 text-emerald-800' : (isRejected ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800')}">${w.status}</span>
                   </div>
-                  <span class="px-2.5 py-1 rounded font-bold ${w.status === 'สำเร็จ' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${w.status}</span>
-                </div>
-              `).join('')}
+                `;
+              }).join('')}
             </div>
           `}
         </div>
       `;
     }
 
-    // ฟังก์ชันออกจากระบบ (Logout)
     function handleLogout() {
       if (!confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) return;
       state.currentUserPhone = null;
@@ -637,7 +633,7 @@
 
       closeModal('walletModal');
       await loadDashboardData();
-      alert('แจ้งถอนเงินสำเร็จ รอแอดมินโอนเงินครับ');
+      alert('แจ้งถอนเงินสำเร็จ รอแอดมินตรวจสอบครับ');
     }
 
     function addToCart(prodId) {
@@ -796,106 +792,29 @@
       loadDashboardData();
     }
 
+    // [เพิ่มใหม่] ฟังก์ชันแอดมินปฏิเสธคำขอ พร้อมรับหมายเหตุ
+    async function rejectFinance(id) {
+      const reason = prompt('กรุณาระบุหมายเหตุหรือเหตุผลในการปฏิเสธรายการนี้:');
+      if (reason === null) return; // กด Cancel
+
+      const res = await fetch('/api/reject-finance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ requestId: id, reason: reason.trim() })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('ปฏิเสธรายการเรียบร้อยแล้ว');
+        loadDashboardData();
+      } else {
+        alert(data.error || 'เกิดข้อผิดพลาด');
+      }
+    }
+
     async function approveOrder(id) {
       await fetch('/api/approve-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ orderId: id }) });
       loadDashboardData();
     }
 
     async function approveAffiliate(memberId) {
-      await fetch('/api/approve-affiliate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ memberId }) });
-      loadDashboardData();
-    }
-
-    async function saveSettings() {
-      const bankInfo = document.getElementById('setBank').value.trim();
-      const adminPin = document.getElementById('setPin').value.trim();
-      await fetch('/api/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ bankInfo, adminPin }) });
-      loadDashboardData();
-      alert('บันทึกตั้งค่าเรียบร้อย');
-    }
-
-    function renderAll() {
-      const user = getCurrentUser();
-      const pendingOrdersCount = state.orders.filter(o => o.status !== 'อนุมัติจัดส่งแล้ว').length;
-      const pendingFinCount = state.financeRequests.filter(f => f.status !== 'สำเร็จ').length;
-
-      // จัดการแสดงผลข้อมูลสมาชิกเมื่อเข้าสู่ระบบแล้ว
-      if (user) {
-        document.getElementById('hdrUserDisplay').textContent = `${user.phone}${user.name ? ' ('+user.name+')' : ''}`;
-        document.getElementById('btnLogoutTop').classList.remove('hidden');
-      } else {
-        document.getElementById('hdrUserDisplay').textContent = 'เข้าสู่ระบบ';
-        document.getElementById('btnLogoutTop').classList.add('hidden');
-      }
-
-      document.getElementById('hdrWalletBalance').textContent = '฿' + (user ? Number(user.balance).toLocaleString() : '0.00');
-      document.getElementById('heroCommBalance').textContent = '฿' + (user ? Number(user.comm_balance).toLocaleString() : '0.00');
-      document.getElementById('heroWalletBalance').textContent = '฿' + (user ? Number(user.balance).toLocaleString() : '0.00');
-      document.getElementById('cartCount').textContent = state.cart.length;
-
-      document.getElementById('statTotalUsers').textContent = state.members.length;
-      document.getElementById('statApprovedAff').textContent = state.members.filter(m => m.status === 'approved').length;
-      document.getElementById('statPendingOrders').textContent = pendingOrdersCount;
-      document.getElementById('statPendingFinance').textContent = pendingFinCount;
-      document.getElementById('badgeFinanceCount').textContent = pendingFinCount;
-
-      document.getElementById('txTableBody').innerHTML = state.transactions.slice(0, 8).map(t => `
-        <tr class="border-b">
-          <td class="py-2"><span class="px-2 py-0.5 rounded ${t.sign === '-' ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-800'} font-bold">${t.type}</span></td>
-          <td class="py-2">${t.phone}</td>
-          <td class="py-2 font-bold ${t.sign === '-' ? 'text-red-600' : 'text-emerald-700'}">${t.sign}฿${Number(t.amount).toLocaleString()}</td>
-          <td class="py-2">${t.status}</td>
-        </tr>
-      `).join('');
-
-      document.getElementById('adminMemberList').innerHTML = state.members.map(m => `
-        <div class="border rounded-xl p-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-xs">
-          <div>
-            <p class="font-bold text-sm">${m.phone} ${m.name ? '('+m.name+')' : ''} - <span class="text-blue-600">${m.role}</span></p>
-            <p class="text-gray-500">กระเป๋า: ฿${Number(m.balance).toLocaleString()} | คอมมิชชัน: ฿${Number(m.comm_balance).toLocaleString()}</p>
-          </div>
-          <div class="flex flex-wrap items-center gap-2">
-            ${m.status === 'pending' ? `<button onclick="approveAffiliate(${m.id})" class="px-2.5 py-1.5 bg-tier-5 font-bold rounded text-white">อนุมัติ Affiliate</button>` : `<span class="px-2 py-1 bg-gray-100 rounded text-gray-600 font-semibold">${m.status}</span>`}
-            <button onclick="adminUpdateMemberPassword(${m.id})" class="px-2.5 py-1.5 bg-amber-600 text-white font-bold rounded hover:bg-amber-700 transition">แก้รหัสผ่าน</button>
-            <button onclick="adminDeleteMember(${m.id}, '${m.phone}')" class="px-2.5 py-1.5 bg-red-600 text-white font-bold rounded hover:bg-red-700 transition">ลบบัญชี</button>
-          </div>
-        </div>
-      `).join('');
-
-      document.getElementById('adminPendingFinanceList').innerHTML = state.financeRequests.map(f => `
-        <div class="border rounded-xl p-3 flex justify-between items-center text-xs">
-          <div>
-            <span class="font-bold ${f.req_type === 'deposit' ? 'text-emerald-700' : 'text-amber-700'}">${f.req_type === 'deposit' ? 'แจ้งฝากเงิน' : 'แจ้งถอนเงิน'}</span>
-            <p class="font-bold">${f.phone} — ฿${Number(f.amount).toLocaleString()}</p>
-            ${f.bank ? `<p class="text-gray-500 text-[10px]">บัญชีรับ: ${f.bank}</p>` : ''}
-          </div>
-          ${f.status !== 'สำเร็จ' ? `<button onclick="approveFinance(${f.id})" class="px-3 py-1.5 bg-tier-1 text-white font-bold rounded">อนุมัติ</button>` : `<span class="text-emerald-700 font-bold">สำเร็จ</span>`}
-        </div>
-      `).join('');
-
-      document.getElementById('adminOrderList').innerHTML = state.orders.map(o => `
-        <div class="border rounded-xl p-3 flex justify-between items-center text-xs">
-          <div>
-            <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold">${o.status}</span>
-            <p class="font-bold mt-1">${o.phone} — ยอด ฿${Number(o.total).toLocaleString()}</p>
-            <p class="text-gray-500">${o.address}</p>
-          </div>
-          ${o.status !== 'อนุมัติจัดส่งแล้ว' ? `<button onclick="approveOrder(${o.id})" class="px-3.5 py-2 bg-tier-1 text-white font-bold rounded">อนุมัติจัดส่ง</button>` : `<span class="text-emerald-700 font-bold">จัดส่งแล้ว</span>`}
-        </div>
-      `).join('');
-
-      document.getElementById('adminProductList').innerHTML = state.products.map(p => `
-        <div class="border rounded-xl p-3 flex justify-between items-center text-xs">
-          <div class="flex items-center gap-3"><img src="${p.image_url}" class="w-12 h-12 object-cover rounded" /><div><p class="font-bold">${p.name}</p><p class="text-gray-500">฿${Number(p.price).toLocaleString()} | ${p.is_sold ? 'ขายแล้ว' : 'พร้อมขาย'}</p></div></div>
-          <button onclick="deleteProduct(${p.id})" class="text-red-600 font-bold">ลบ</button>
-        </div>
-      `).join('');
-
-      renderStoreProducts();
-    }
-
-    loadDashboardData();
-    setInterval(loadDashboardData, 5000);
-  </script>
-</body>
-</html>
+      await fetch
