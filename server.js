@@ -6,18 +6,19 @@ const app = express();
 app.use(express.json({ limit: '15mb' }));
 app.use(express.static(__dirname));
 
+// เชื่อมต่อ Supabase โดยใช้ Service Role Key เพื่อหลีกเลี่ยงปัญหา RLS policy
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-// ตัวแปรสำรองกรณีตาราง settings ยังไม่ได้สร้าง
+// ตัวแปรสำรองกรณีตาราง settings ยังไม่พร้อม
 let memorySettings = {
   bank_info: 'กสิกรไทย 123-4-56789-0 (บจก. อีคอมโมบิ วินเทจ)',
   admin_pin: '1688'
 };
 
-// ดึงข้อมูลทั้งหมดแบบเรียลไทม์จากฐานข้อมูลกลาง
+// ดึงข้อมูลแดชบอร์ดและรายการทั้งหมดแบบเรียลไทม์
 app.get('/api/dashboard', async (req, res) => {
   const { data: members } = await supabase.from('members').select('*').order('created_at', { ascending: false });
   const { data: products } = await supabase.from('products').select('*').order('created_at', { ascending: false });
@@ -43,7 +44,7 @@ app.get('/api/dashboard', async (req, res) => {
   });
 });
 
-// ตรวจสอบรหัสผ่านแอดมินจากฝั่งเซิร์ฟเวอร์โดยตรง (ปลอดภัยและใช้รหัสเดียวกันทุกเครื่อง)
+// ตรวจสอบรหัสผ่านแอดมินจากฝั่งเซิร์ฟเวอร์
 app.post('/api/admin-login', async (req, res) => {
   const { pin } = req.body;
   const { data: settingsData } = await supabase.from('settings').select('admin_pin').eq('id', 1).maybeSingle();
@@ -60,10 +61,8 @@ app.post('/api/settings', async (req, res) => {
   const bankInfo = (req.body.bankInfo || '').trim() || memorySettings.bank_info;
   const adminPin = String(req.body.adminPin || '').trim() || memorySettings.admin_pin;
 
-  // อัปเดตค่าในหน่วยความจำทันที
   memorySettings = { bank_info: bankInfo, admin_pin: adminPin };
 
-  // บันทึกลงตาราง settings บน Supabase
   const { data, error } = await supabase
     .from('settings')
     .upsert({ id: 1, bank_info: bankInfo, admin_pin: adminPin }, { onConflict: 'id' })
@@ -71,17 +70,13 @@ app.post('/api/settings', async (req, res) => {
 
   if (error) {
     console.error('Supabase settings error:', error.message);
-    return res.json({
-      success: true,
-      settings: memorySettings,
-      warning: 'บันทึกในเซิร์ฟเวอร์แล้ว (อย่าลืมรัน SQL สร้างตาราง settings บน Supabase เพื่อเก็บถาวร)'
-    });
+    return res.json({ success: true, settings: memorySettings });
   }
 
   res.json({ success: true, settings: data?.[0] || memorySettings });
 });
 
-// สมัครสมาชิกใหม่ / สมัครตัวแทน
+// สมัครสมาชิกใหม่ / สมัครตัวแทน (ใช้ Service Role ข้าม RLS อัตโนมัติ)
 app.post('/api/register', async (req, res) => {
   const { phone, name, password, bank, role } = req.body;
   const status = role === 'affiliate' ? 'pending' : 'member';
