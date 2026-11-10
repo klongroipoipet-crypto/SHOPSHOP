@@ -89,15 +89,12 @@
 
     <main class="max-w-7xl w-full mx-auto px-4 lg:px-10 py-6 flex-1 space-y-6">
       
-      <!-- ส่วนสไลด์โปรโมชั่น (แสดงเฉพาะรูปภาพแบนเนอร์ ไม่มีข้อความทับ) -->
+      <!-- ส่วนสไลด์โปรโมชั่น (ดึงภาพจากแอดมินมาแสดงผล) -->
       <section class="relative rounded-3xl overflow-hidden shadow-md bg-[#2C3E35]">
         <div id="promoCarousel" class="relative h-56 sm:h-72 lg:h-80 w-full overflow-hidden">
-          <!-- สไลด์ที่ 1 (ภาพ Banner หลักที่คุณส่งมา) -->
-          <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-100 flex items-center justify-center bg-cover bg-center" style="background-image: url('https://i.ibb.co/6y404984/image-75e38c.jpg');"></div>
-          <!-- สไลด์ที่ 2 (โปรโมชั่นชุดผ้าไทย) -->
-          <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1583394838336-acd977736f90?w=1400');"></div>
-          <!-- สไลด์ที่ 3 (โปรโมชั่นเดรสออกงาน) -->
-          <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=1400');"></div>
+          <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-100 flex items-center justify-center bg-cover bg-center" id="slide1" style="background-image: url('https://i.ibb.co/6y404984/image-75e38c.jpg');"></div>
+          <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 flex items-center justify-center bg-cover bg-center" id="slide2" style="background-image: url('https://images.unsplash.com/photo-1583394838336-acd977736f90?w=1400');"></div>
+          <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 flex items-center justify-center bg-cover bg-center" id="slide3" style="background-image: url('https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=1400');"></div>
         </div>
 
         <button onclick="moveSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition z-20">
@@ -193,7 +190,7 @@
             <span class="flex items-center gap-3"><i class="fa-solid fa-shirt text-gold"></i> จัดการสินค้า</span>
           </button>
           <button onclick="switchAdminSection('secSettings')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#3F5E4F] text-gray-200 transition">
-            <span class="flex items-center gap-3"><i class="fa-solid fa-gear text-gold"></i> ตั้งค่าระบบ</span>
+            <span class="flex items-center gap-3"><i class="fa-solid fa-gear text-gold"></i> ตั้งค่าระบบ & แบนเนอร์</span>
           </button>
         </nav>
       </div>
@@ -279,12 +276,41 @@
         </div>
       </main>
 
+      <!-- ส่วนตั้งค่าระบบ & แก้ไขแบนเนอร์รูปภาพ -->
       <main id="secSettings" class="hidden p-6 space-y-4 flex-1">
-        <div class="bg-white rounded-xl p-5 border max-w-md space-y-3 text-xs">
-          <h3 class="font-bold text-base">ตั้งค่าระบบ</h3>
-          <input id="setBank" placeholder="บัญชีธนาคาร" class="w-full border rounded-lg px-3 py-2" />
-          <input id="setPin" type="text" placeholder="รหัสผ่านแอดมิน" class="w-full border rounded-lg px-3 py-2 font-bold" />
-          <button onclick="saveSettings()" class="w-full py-2.5 rounded-xl bg-tier-1 text-white font-bold">บันทึกตั้งค่า</button>
+        <div class="bg-white rounded-xl p-5 border max-w-lg space-y-3 text-xs">
+          <h3 class="font-bold text-base text-[#2C3E35]">ตั้งค่าระบบ & จัดการแบนเนอร์โปรโมชั่น</h3>
+          <p class="text-gray-500">แอดมินสามารถอัปโหลดรูปภาพหรือใส่ลิงก์รูปภาพแบนเนอร์ (สไลด์ 1, 2, 3) ได้ที่นี่</p>
+          
+          <div class="space-y-1">
+            <label class="font-bold">บัญชีธนาคารร้านค้า:</label>
+            <input id="setBank" placeholder="บัญชีธนาคาร" class="w-full border rounded-lg px-3 py-2" />
+          </div>
+
+          <div class="space-y-1">
+            <label class="font-bold">รหัสผ่านแอดมิน:</label>
+            <input id="setPin" type="text" placeholder="รหัสผ่านแอดมิน" class="w-full border rounded-lg px-3 py-2 font-bold" />
+          </div>
+
+          <div class="space-y-1 border-t pt-2">
+            <label class="font-bold">แบนเนอร์หลัก (สไลด์ที่ 1):</label>
+            <input id="setBanner1" placeholder="URL หรืออัปโหลดรูปแบนเนอร์ 1" class="w-full border rounded-lg px-3 py-2" />
+            <input id="fileBanner1" type="file" accept="image/*" class="w-full text-[10px] pt-1" onchange="uploadBannerFile(1)" />
+          </div>
+
+          <div class="space-y-1">
+            <label class="font-bold">แบนเนอร์โปรโมชั่น (สไลด์ที่ 2):</label>
+            <input id="setBanner2" placeholder="URL หรืออัปโหลดรูปแบนเนอร์ 2" class="w-full border rounded-lg px-3 py-2" />
+            <input id="fileBanner2" type="file" accept="image/*" class="w-full text-[10px] pt-1" onchange="uploadBannerFile(2)" />
+          </div>
+
+          <div class="space-y-1">
+            <label class="font-bold">แบนเนอร์โปรโมชั่น (สไลด์ที่ 3):</label>
+            <input id="setBanner3" placeholder="URL หรืออัปโหลดรูปแบนเนอร์ 3" class="w-full border rounded-lg px-3 py-2" />
+            <input id="fileBanner3" type="file" accept="image/*" class="w-full text-[10px] pt-1" onchange="uploadBannerFile(3)" />
+          </div>
+
+          <button onclick="saveSettings()" class="w-full py-2.5 rounded-xl bg-tier-1 text-white font-bold mt-2">บันทึกตั้งค่า & แบนเนอร์ทั้งหมด</button>
         </div>
       </main>
     </div>
@@ -378,7 +404,13 @@
       currentUserPhone: localStorage.getItem('ECOMMOBI_USER_PHONE') || null,
       selectedCategory: 'ทั้งหมด',
       members: [], products: [], transactions: [], financeRequests: [], orders: [], orderItems: [], cart: [],
-      settings: { bank_info: 'กสิกรไทย 123-4-56789-0 (กรีน พิกต์ ช๊อป)', admin_pin: '200822' }
+      settings: { 
+        bank_info: 'กสิกรไทย 123-4-56789-0 (กรีน พิกต์ ช๊อป)', 
+        admin_pin: '200822',
+        banner1: 'https://i.ibb.co/6y404984/image-75e38c.jpg',
+        banner2: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=1400',
+        banner3: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=1400'
+      }
     };
 
     let currentSlide = 0;
@@ -409,6 +441,15 @@
         reader.onload = () => resolve(reader.result);
         reader.readAsDataURL(file);
       });
+    }
+
+    // ฟังก์ชันช่วยอัปโหลดไฟล์แอดมินสำหรับช่องแบนเนอร์
+    async function uploadBannerFile(num) {
+      const file = document.getElementById(`fileBanner${num}`).files[0];
+      if (!file) return;
+      const base64 = await fileToBase64(file);
+      document.getElementById(`setBanner${num}`).value = base64;
+      alert(`อัปโหลดรูปแบนเนอร์ที่ ${num} เรียบร้อย! กดปุ่ม "บันทึกตั้งค่า" ด้านล่างเพื่อใช้งาน`);
     }
 
     function getCurrentUser() {
@@ -736,7 +777,7 @@
         <div class="space-y-2 border-b pb-2">${state.cart.map(i => `<div class="flex justify-between"><span>${i.name}</span><b>฿${Number(i.price).toLocaleString()}</b></div>`).join('')}</div>
         <input id="orderAddress" placeholder="ที่อยู่จัดส่งสินค้า" class="w-full border rounded-lg px-3 py-2" />
         <input id="orderAffPhone" placeholder="เบอร์ตัวแทน Affiliate (ถ้ามี)" class="w-full border rounded-lg px-3 py-2" />
-        <button onclick="submitCustomerOrder()" class="w-full py-2.5 rounded-xl bg-tier-5 text-[#2C3E35] font-bold">ชำระด้วยเครดิตกระเป๋าเงิน</button>
+        <button onclick="submitCustomerOrder()" class="w-full py-2.5 rounded-xl bg-tier-5 font-bold">ชำระด้วยเครดิตกระเป๋าเงิน</button>
       `;
     }
 
@@ -785,6 +826,9 @@
       if (secId === 'secSettings') {
         document.getElementById('setBank').value = state.settings.bank_info || '';
         document.getElementById('setPin').value = state.settings.admin_pin || '200822';
+        document.getElementById('setBanner1').value = state.settings.banner1 || '';
+        document.getElementById('setBanner2').value = state.settings.banner2 || '';
+        document.getElementById('setBanner3').value = state.settings.banner3 || '';
       }
     }
 
@@ -942,9 +986,28 @@
     async function saveSettings() {
       const bankInfo = document.getElementById('setBank').value.trim();
       const adminPin = document.getElementById('setPin').value.trim();
-      await fetch('/api/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ bankInfo, adminPin }) });
-      loadDashboardData();
-      alert('บันทึกตั้งค่าเรียบร้อย');
+      const banner1 = document.getElementById('setBanner1').value.trim();
+      const banner2 = document.getElementById('setBanner2').value.trim();
+      const banner3 = document.getElementById('setBanner3').value.trim();
+
+      const res = await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bankInfo, adminPin, banner1, banner2, banner3 })
+      });
+      const data = await res.json();
+      if (data.success) {
+        state.settings = data.settings;
+        updateBanners();
+        alert('บันทึกตั้งค่าและอัปเดตแบนเนอร์เรียบร้อยแล้ว');
+      }
+    }
+
+    // อัปเดตรูปแบนเนอร์บนหน้าเว็บแบบเรียลไทม์ตามค่าใน settings
+    function updateBanners() {
+      if (state.settings.banner1) document.getElementById('slide1').style.backgroundImage = `url('${state.settings.banner1}')`;
+      if (state.settings.banner2) document.getElementById('slide2').style.backgroundImage = `url('${state.settings.banner2}')`;
+      if (state.settings.banner3) document.getElementById('slide3').style.backgroundImage = `url('${state.settings.banner3}')`;
     }
 
     function renderAll() {
@@ -970,6 +1033,8 @@
       document.getElementById('statPendingOrders').textContent = pendingOrdersCount;
       document.getElementById('statPendingFinance').textContent = pendingFinCount;
       document.getElementById('badgeFinanceCount').textContent = pendingFinCount;
+
+      updateBanners();
 
       document.getElementById('txTableBody').innerHTML = state.transactions.slice(0, 8).map(t => `
         <tr class="border-b">

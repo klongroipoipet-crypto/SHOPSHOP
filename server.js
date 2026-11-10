@@ -12,8 +12,11 @@ const supabase = createClient(
 );
 
 let memorySettings = {
-  bank_info: 'กสิกรไทย 123-4-56789-0 (บจก. อีคอมโมบิ วินเทจ)',
-  admin_pin: '200822'
+  bank_info: 'กสิกรไทย 123-4-56789-0 (กรีน พิกต์ ช๊อป)',
+  admin_pin: '200822',
+  banner1: 'https://i.ibb.co/6y404984/image-75e38c.jpg',
+  banner2: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=1400',
+  banner3: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=1400'
 };
 
 app.get('/api/dashboard', async (req, res) => {
@@ -22,12 +25,16 @@ app.get('/api/dashboard', async (req, res) => {
   const { data: transactions } = await supabase.from('transactions').select('*').order('created_at', { ascending: false });
   const { data: financeRequests } = await supabase.from('finance_requests').select('*').order('created_at', { ascending: false });
   const { data: orders } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
+  const { data: orderItems } = await supabase.from('order_items').select('*');
   const { data: settingsData, error: settingsErr } = await supabase.from('settings').select('*').eq('id', 1).maybeSingle();
 
   if (settingsData && !settingsErr) {
     memorySettings = {
       bank_info: settingsData.bank_info || memorySettings.bank_info,
-      admin_pin: String(settingsData.admin_pin || memorySettings.admin_pin)
+      admin_pin: String(settingsData.admin_pin || memorySettings.admin_pin),
+      banner1: settingsData.banner1 || memorySettings.banner1,
+      banner2: settingsData.banner2 || memorySettings.banner2,
+      banner3: settingsData.banner3 || memorySettings.banner3
     };
   }
 
@@ -37,6 +44,7 @@ app.get('/api/dashboard', async (req, res) => {
     transactions: transactions || [],
     financeRequests: financeRequests || [],
     orders: orders || [],
+    orderItems: orderItems || [],
     settings: memorySettings
   });
 });
@@ -52,14 +60,19 @@ app.post('/api/admin-login', async (req, res) => {
   return res.status(401).json({ success: false, error: 'รหัสผ่านแอดมินไม่ถูกต้อง' });
 });
 
+// อัปเดตการตั้งค่าระบบ รวมถึงแบนเนอร์
 app.post('/api/settings', async (req, res) => {
   const bankInfo = (req.body.bankInfo || '').trim() || memorySettings.bank_info;
   const adminPin = String(req.body.adminPin || '').trim() || memorySettings.admin_pin;
-  memorySettings = { bank_info: bankInfo, admin_pin: adminPin };
+  const banner1 = req.body.banner1 !== undefined ? req.body.banner1 : memorySettings.banner1;
+  const banner2 = req.body.banner2 !== undefined ? req.body.banner2 : memorySettings.banner2;
+  const banner3 = req.body.banner3 !== undefined ? req.body.banner3 : memorySettings.banner3;
+
+  memorySettings = { bank_info: bankInfo, admin_pin: adminPin, banner1, banner2, banner3 };
 
   const { data, error } = await supabase
     .from('settings')
-    .upsert({ id: 1, bank_info: bankInfo, admin_pin: adminPin }, { onConflict: 'id' })
+    .upsert({ id: 1, bank_info: bankInfo, admin_pin: adminPin, banner1, banner2, banner3 }, { onConflict: 'id' })
     .select();
 
   if (error) return res.json({ success: true, settings: memorySettings });
@@ -89,11 +102,7 @@ app.post('/api/admin-update-member-password', async (req, res) => {
   const { memberId, newPassword } = req.body;
   if (!memberId || !newPassword) return res.status(400).json({ error: 'ข้อมูลไม่ครบถ้วน' });
 
-  const { error } = await supabase
-    .from('members')
-    .update({ password: newPassword })
-    .eq('id', memberId);
-
+  const { error } = await supabase.from('members').update({ password: newPassword }).eq('id', memberId);
   if (error) return res.status(400).json({ error: error.message });
   res.json({ success: true });
 });
@@ -106,68 +115,16 @@ app.delete('/api/admin-members/:id', async (req, res) => {
 
 app.post('/api/apply-affiliate', async (req, res) => {
   const { phone } = req.body;
-  const { data, error } = await supabase
-    .from('members')
-    .update({ role: 'affiliate', status: 'pending' })
-    .eq('phone', phone)
-    .select();
-
+  const { data, error } = await supabase.from('members').update({ role: 'affiliate', status: 'pending' }).eq('phone', phone).select();
   if (error) return res.status(400).json({ error: error.message });
   res.json({ success: true, user: data?.[0] });
 });
 
 app.post('/api/products', async (req, res) => {
   const { name, size_detail, condition_grade, price, commission, image_url } = req.body;
-  const { data, error } = await supabase
-    .from('products')
-    .insert([{ name, size_detail, condition_grade, price, commission, image_url, is_sold: false }])
-    .select();
-
+  const { data, error } = await supabase.from('products').insert([{ name, size_detail, condition_grade, price, commission, image_url, is_sold: false }]).select();
   if (error) return res.status(400).json({ error: error.message });
   res.json(data[0]);
-});
-
-app.post('/api/seed-vintage-products', async (req, res) => {
-  const sampleProducts = [
-    {
-      name: 'เสื้อยืดวินเทจ 90s กราฟิกร็อก USA ตะเข็บเดี่ยว บน-ล่าง',
-      size_detail: 'เสื้อยืดวินเทจ 90s||L (อก 44" ยาว 29")||เฟดสีดำถ่านสวยตามธรรมชาติ ไม่มีรูขาด||มีตัวเดียว||12',
-      condition_grade: 'สภาพ 95% วินเทจแท้',
-      price: 1890,
-      commission: 227,
-      image_url: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=700',
-      is_sold: false
-    },
-    {
-      name: 'สเวตเตอร์ฮู้ดดี้ Streetwear Oversize คัดหัวผ้าญี่ปุ่น',
-      size_detail: 'สเวตเตอร์ & ฮู้ดดี้||XL (อก 48" ยาว 30")||ไม่มีตำหนิ ผ้านุ่มฟู ซักอบฆ่าเชื้อแล้ว||เหลือ 2 ชิ้น||10',
-      condition_grade: 'สภาพ 98% นางฟ้า',
-      price: 790,
-      commission: 79,
-      image_url: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=700',
-      is_sold: false
-    },
-    {
-      name: 'กางเกงยีนส์วินเทจ Levi\'s 501 กระดุม 555 ทรงกระบอกตรง',
-      size_detail: 'กางเกงยีนส์ & คาร์โก้||W32 L40 (เอวจริง 32" ยาวทั้งตัว 40")||รอยเฟดหน้าขาและตะเข็บขึ้นสวย ปลายขาเดิม||มีตัวเดียว||10',
-      condition_grade: 'สภาพ 92% เฟดสวย',
-      price: 1450,
-      commission: 145,
-      image_url: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=700',
-      is_sold: false
-    },
-    {
-      name: 'แจ็คเก็ตยีนส์มือสอง Trucker Jacket ป้ายหนังวินเทจ',
-      size_detail: 'แจ็คเก็ตมือสอง||L (อก 46" ยาว 26")||ไม่มีตำหนิ กระดุมครบทุกเม็ด||มีตัวเดียว||12',
-      condition_grade: 'สภาพ 96% คัดเกรด A+',
-      price: 1290,
-      commission: 155,
-      image_url: 'https://images.unsplash.com/photo-1551537482-f2075a1d41f2?w=700',
-      is_sold: false
-    }
-  ];
-  await supabase.from('products').insert(sampleProducts);
-  res.json({ success: true });
 });
 
 app.delete('/api/products/:id', async (req, res) => {
@@ -205,7 +162,7 @@ app.post('/api/finance-request', async (req, res) => {
 app.post('/api/approve-finance', async (req, res) => {
   const { requestId } = req.body;
   const { data: reqData } = await supabase.from('finance_requests').select('*').eq('id', requestId).single();
-  if (!reqData || reqData.status === 'สำเร็จ' || reqData.status === 'ถูกปฏิเสธ') return res.status(400).json({ error: 'Invalid request' });
+  if (!reqData || reqData.status === 'สำเร็จ' || reqData.status.startsWith('ถูกปฏิเสธ')) return res.status(400).json({ error: 'Invalid request' });
 
   const { data: member } = await supabase.from('members').select('*').eq('phone', reqData.phone).maybeSingle();
 
@@ -220,18 +177,14 @@ app.post('/api/approve-finance', async (req, res) => {
   res.json({ success: true });
 });
 
-// [เพิ่มใหม่] แอดมินปฏิเสธคำขอการเงิน พร้อมคืนยอดเงินให้ลูกค้าและบันทึกหมายเหตุ
 app.post('/api/reject-finance', async (req, res) => {
   const { requestId, reason } = req.body;
   const { data: reqData } = await supabase.from('finance_requests').select('*').eq('id', requestId).single();
-  if (!reqData || reqData.status === 'สำเร็จ' || reqData.status === 'ถูกปฏิเสธ') return res.status(400).json({ error: 'Invalid request' });
+  if (!reqData || reqData.status === 'สำเร็จ' || reqData.status.startsWith('ถูกปฏิเสธ')) return res.status(400).json({ error: 'Invalid request' });
 
-  // ถ้าเป็นรายการถอนเงินที่ถูกปฏิเสธ ให้คืนยอดเงินกลับเข้ากระเป๋าหรือคอมมิชชันให้ลูกค้าตามเดิม
   if (reqData.req_type === 'withdraw') {
     const { data: member } = await supabase.from('members').select('*').eq('phone', reqData.phone).maybeSingle();
     if (member) {
-      // ตรวจสอบจาก source หรือคืนเข้า wallet / comm_balance ตามความเหมาะสม (ตัวอย่างคืนเข้า wallet หรือตามแหล่งที่หัก)
-      // สมมติคืนเข้า balance หลักหรือพิจารณาตาม source ถ้ามี
       await supabase.from('members').update({ balance: Number(member.balance) + Number(reqData.amount) }).eq('phone', reqData.phone);
     }
   }
