@@ -16,7 +16,7 @@ let memorySettings = {
   admin_pin: '200822'
 };
 
-// ดึงข้อมูลแดชบอร์ดและรายการทั้งหมด
+// ดึงข้อมูลแดชบอร์ดและรายการทั้งหมดแบบเรียลไทม์
 app.get('/api/dashboard', async (req, res) => {
   const { data: members } = await supabase.from('members').select('*').order('created_at', { ascending: false });
   const { data: products } = await supabase.from('products').select('*').order('created_at', { ascending: false });
@@ -54,7 +54,7 @@ app.post('/api/admin-login', async (req, res) => {
   return res.status(401).json({ success: false, error: 'รหัสผ่านแอดมินไม่ถูกต้อง' });
 });
 
-// บันทึกตั้งค่า
+// บันทึกตั้งค่าระบบ
 app.post('/api/settings', async (req, res) => {
   const bankInfo = (req.body.bankInfo || '').trim() || memorySettings.bank_info;
   const adminPin = String(req.body.adminPin || '').trim() || memorySettings.admin_pin;
@@ -69,15 +69,31 @@ app.post('/api/settings', async (req, res) => {
   res.json({ success: true, settings: data?.[0] || memorySettings });
 });
 
-// สมัครสมาชิก
+// สมัครสมาชิกใหม่ (ป้องกันเบอร์ซ้ำ 100%)
 app.post('/api/register', async (req, res) => {
   const { phone, name, password, bank, role } = req.body;
+  if (!phone || !password) return res.status(400).json({ error: 'กรุณากรอกเบอร์โทรและรหัสผ่าน' });
+
+  // ตรวจสอบว่าเบอร์โทรนี้มีอยู่ในระบบแล้วหรือยัง
+  const { data: existingUser } = await supabase.from('members').select('*').eq('phone', phone).maybeSingle();
+  if (existingUser) {
+    return res.status(400).json({ error: 'เบอร์โทรศัพท์นี้ถูกใช้งานสมัครสมาชิกแล้ว ไม่สามารถสมัครซ้ำได้' });
+  }
+
   const status = role === 'affiliate' ? 'pending' : 'member';
-  const displayPhone = name ? `${phone} (${name})` : phone;
 
   const { data, error } = await supabase
     .from('members')
-    .insert([{ phone: displayPhone, password: password || '1234', bank: bank || '', role: role || 'member', status, balance: 0, comm_balance: 0 }])
+    .insert([{ 
+      phone: phone, 
+      name: name || '', 
+      password: password, 
+      bank: bank || '', 
+      role: role || 'member', 
+      status, 
+      balance: 0, 
+      comm_balance: 0 
+    }])
     .select();
 
   if (error) return res.status(400).json({ error: error.message });
@@ -109,7 +125,7 @@ app.post('/api/products', async (req, res) => {
   res.json(data[0]);
 });
 
-// โหลดสินค้าตัวอย่าง
+// โหลดสินค้าตัวอย่าง 4 ชิ้นตามภาพ
 app.post('/api/seed-vintage-products', async (req, res) => {
   const sampleProducts = [
     {
@@ -211,8 +227,7 @@ app.post('/api/admin-adjust-balance', async (req, res) => {
   let { data: member } = await supabase.from('members').select('*').eq('phone', phone).maybeSingle();
 
   if (!member) {
-    const { data: newMem } = await supabase.from('members').insert([{ phone, password: '1234', role: 'member', status: 'member', balance: 0, comm_balance: 0 }]).select();
-    member = newMem[0];
+    return res.status(400).json({ error: 'ไม่พบเบอร์สมาชิกนี้ในระบบ' });
   }
 
   const newBalance = isDeduct ? Math.max(0, Number(member.balance) - Number(amount)) : Number(member.balance) + Number(amount);
