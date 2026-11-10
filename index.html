@@ -278,7 +278,7 @@
         <button onclick="handleCustomerLogin()" class="w-full py-2.5 rounded-xl bg-tier-1 text-white font-bold">เข้าสู่ระบบ</button>
       </div>
       <div id="formRegBox" class="hidden space-y-3 text-xs">
-        <input id="regPhone" placeholder="เบอร์โทรศัพท์" class="w-full border rounded-lg px-3 py-2" />
+        <input id="regPhone" placeholder="เบอร์โทรศัพท์ (ห้ามซ้ำ)" class="w-full border rounded-lg px-3 py-2" />
         <input id="regName" placeholder="ชื่อเล่น" class="w-full border rounded-lg px-3 py-2" />
         <input id="regPass" type="password" placeholder="รหัสผ่าน" class="w-full border rounded-lg px-3 py-2" />
         <select id="regRole" class="w-full border rounded-lg px-3 py-2"><option value="member">สมาชิกทั่วไป</option><option value="affiliate">ตัวแทน Affiliate</option></select>
@@ -449,21 +449,30 @@
       document.getElementById('formRegBox').classList.toggle('hidden', isLogin);
     }
 
+    // ฟังก์ชันสมัครสมาชิก แยกฟิลด์ phone และ name ป้องกันเบอร์ซ้ำ
     async function handleCustomerRegister() {
       const phone = document.getElementById('regPhone').value.trim();
       const name = document.getElementById('regName').value.trim();
       const password = document.getElementById('regPass').value.trim();
       const role = document.getElementById('regRole').value;
-      if (!phone || !password) return alert('กรอกข้อมูลไม่ครบ');
+      if (!phone || !password) return alert('กรุณากรอกเบอร์โทรและรหัสผ่าน');
 
-      const res = await fetch('/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone, name, password, role }) });
+      const res = await fetch('/api/register', { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify({ phone, name, password, role }) 
+      });
       const data = await res.json();
+      
       if (data.success) {
         state.currentUserPhone = data.user.phone;
         localStorage.setItem('ECOMMOBI_USER_PHONE', data.user.phone);
         closeModal('authModal');
         await loadDashboardData();
-      } else { alert(data.error); }
+        alert('สมัครสมาชิกสำเร็จ!');
+      } else { 
+        alert(data.error); 
+      }
     }
 
     function handleCustomerLogin() {
@@ -652,7 +661,9 @@
       const amount = Number(document.getElementById('adjustAmount').value);
       const isDeduct = document.getElementById('adjustType').value === 'deduct';
       if (!phone || amount <= 0) return alert('กรอกข้อมูลไม่ครบ');
-      await fetch('/api/admin-adjust-balance', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone, amount, isDeduct }) });
+      const res = await fetch('/api/admin-adjust-balance', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone, amount, isDeduct }) });
+      const data = await res.json();
+      if (data.error) return alert(data.error);
       loadDashboardData();
       alert('ปรับยอดสำเร็จ');
     }
@@ -685,7 +696,7 @@
       const pendingOrdersCount = state.orders.filter(o => o.status !== 'อนุมัติจัดส่งแล้ว').length;
       const pendingFinCount = state.financeRequests.filter(f => f.status !== 'สำเร็จ').length;
 
-      document.getElementById('hdrUserDisplay').textContent = user ? user.phone : 'เข้าสู่ระบบ';
+      document.getElementById('hdrUserDisplay').textContent = user ? `${user.phone}${user.name ? ' ('+user.name+')' : ''}` : 'เข้าสู่ระบบ';
       document.getElementById('hdrWalletBalance').textContent = '฿' + (user ? Number(user.balance).toLocaleString() : '0.00');
       document.getElementById('heroCommBalance').textContent = '฿' + (user ? Number(user.comm_balance).toLocaleString() : '0.00');
       document.getElementById('heroWalletBalance').textContent = '฿' + (user ? Number(user.balance).toLocaleString() : '0.00');
@@ -708,7 +719,7 @@
 
       document.getElementById('adminMemberList').innerHTML = state.members.map(m => `
         <div class="border rounded-xl p-3 flex justify-between items-center text-xs">
-          <div><p class="font-bold">${m.phone} (${m.role})</p><p class="text-gray-500">กระเป๋า: ฿${Number(m.balance).toLocaleString()} | คอมมิชชัน: ฿${Number(m.comm_balance).toLocaleString()}</p></div>
+          <div><p class="font-bold">${m.phone} ${m.name ? '('+m.name+')' : ''} - <span class="text-blue-600">${m.role}</span></p><p class="text-gray-500">กระเป๋า: ฿${Number(m.balance).toLocaleString()} | คอมมิชชัน: ฿${Number(m.comm_balance).toLocaleString()}</p></div>
           ${m.status === 'pending' ? `<button onclick="approveAffiliate(${m.id})" class="px-3 py-1.5 bg-tier-5 font-bold rounded">อนุมัติ Affiliate</button>` : `<span class="font-semibold text-gray-500">${m.status}</span>`}
         </div>
       `).join('');
