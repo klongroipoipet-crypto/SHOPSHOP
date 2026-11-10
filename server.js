@@ -6,19 +6,17 @@ const app = express();
 app.use(express.json({ limit: '15mb' }));
 app.use(express.static(__dirname));
 
-// เชื่อมต่อ Supabase โดยใช้ Service Role Key เพื่อหลีกเลี่ยงปัญหา RLS policy
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-// ตัวแปรสำรองกรณีตาราง settings ยังไม่พร้อม
 let memorySettings = {
   bank_info: 'กสิกรไทย 123-4-56789-0 (บจก. อีคอมโมบิ วินเทจ)',
   admin_pin: '1688'
 };
 
-// ดึงข้อมูลแดชบอร์ดและรายการทั้งหมดแบบเรียลไทม์
+// ดึงข้อมูลแดชบอร์ดและรายการทั้งหมด
 app.get('/api/dashboard', async (req, res) => {
   const { data: members } = await supabase.from('members').select('*').order('created_at', { ascending: false });
   const { data: products } = await supabase.from('products').select('*').order('created_at', { ascending: false });
@@ -44,7 +42,7 @@ app.get('/api/dashboard', async (req, res) => {
   });
 });
 
-// ตรวจสอบรหัสผ่านแอดมินจากฝั่งเซิร์ฟเวอร์
+// ตรวจสอบรหัสผ่านแอดมิน
 app.post('/api/admin-login', async (req, res) => {
   const { pin } = req.body;
   const { data: settingsData } = await supabase.from('settings').select('admin_pin').eq('id', 1).maybeSingle();
@@ -56,11 +54,10 @@ app.post('/api/admin-login', async (req, res) => {
   return res.status(401).json({ success: false, error: 'รหัสผ่านแอดมินไม่ถูกต้อง' });
 });
 
-// บันทึกการตั้งค่ารหัสผ่านแอดมินและเลขบัญชี
+// บันทึกตั้งค่า
 app.post('/api/settings', async (req, res) => {
   const bankInfo = (req.body.bankInfo || '').trim() || memorySettings.bank_info;
   const adminPin = String(req.body.adminPin || '').trim() || memorySettings.admin_pin;
-
   memorySettings = { bank_info: bankInfo, admin_pin: adminPin };
 
   const { data, error } = await supabase
@@ -68,15 +65,11 @@ app.post('/api/settings', async (req, res) => {
     .upsert({ id: 1, bank_info: bankInfo, admin_pin: adminPin }, { onConflict: 'id' })
     .select();
 
-  if (error) {
-    console.error('Supabase settings error:', error.message);
-    return res.json({ success: true, settings: memorySettings });
-  }
-
+  if (error) return res.json({ success: true, settings: memorySettings });
   res.json({ success: true, settings: data?.[0] || memorySettings });
 });
 
-// สมัครสมาชิกใหม่ / สมัครตัวแทน (ใช้ Service Role ข้าม RLS อัตโนมัติ)
+// สมัครสมาชิก
 app.post('/api/register', async (req, res) => {
   const { phone, name, password, bank, role } = req.body;
   const status = role === 'affiliate' ? 'pending' : 'member';
@@ -91,7 +84,7 @@ app.post('/api/register', async (req, res) => {
   res.json({ success: true, user: data[0] });
 });
 
-// ขอสมัครตัวแทน Affiliate สำหรับสมาชิกเดิม
+// สมัครตัวแทน Affiliate
 app.post('/api/apply-affiliate', async (req, res) => {
   const { phone } = req.body;
   const { data, error } = await supabase
@@ -104,7 +97,7 @@ app.post('/api/apply-affiliate', async (req, res) => {
   res.json({ success: true, user: data?.[0] });
 });
 
-// เพิ่มสินค้าเสื้อผ้ามือสอง
+// เพิ่มสินค้า
 app.post('/api/products', async (req, res) => {
   const { name, size_detail, condition_grade, price, commission, image_url } = req.body;
   const { data, error } = await supabase
@@ -116,7 +109,7 @@ app.post('/api/products', async (req, res) => {
   res.json(data[0]);
 });
 
-// โหลดสินค้าตัวอย่าง 4 ชิ้นตามภาพต้นฉบับ
+// โหลดสินค้าตัวอย่าง
 app.post('/api/seed-vintage-products', async (req, res) => {
   const sampleProducts = [
     {
@@ -160,13 +153,12 @@ app.post('/api/seed-vintage-products', async (req, res) => {
   res.json({ success: true });
 });
 
-// ลบสินค้า
 app.delete('/api/products/:id', async (req, res) => {
   await supabase.from('products').delete().eq('id', req.params.id);
   res.json({ success: true });
 });
 
-// ส่งคำขอฝากเงิน / ถอนค่าคอมมิชชัน
+// แจ้งฝากเงิน / แจ้งถอนเงิน
 app.post('/api/finance-request', async (req, res) => {
   const { reqType, phone, amount, slip, bank, source } = req.body;
   const { data: member } = await supabase.from('members').select('*').eq('phone', phone).maybeSingle();
@@ -176,8 +168,9 @@ app.post('/api/finance-request', async (req, res) => {
       return res.status(400).json({ error: 'ยอดค่าคอมมิชชันสะสมไม่เพียงพอ' });
     }
     if (source === 'wallet' && Number(member.balance) < Number(amount)) {
-      return res.status(400).json({ error: 'เครดิตคงเหลือไม่เพียงพอ' });
+      return res.status(400).json({ error: 'เครดิตคงเหลือในกระเป๋าไม่เพียงพอ' });
     }
+    // หักยอดทันทีที่แจ้งถอน เพื่อป้องกันการกดถอนซ้ำ
     if (source === 'commission') {
       await supabase.from('members').update({ comm_balance: Number(member.comm_balance) - Number(amount) }).eq('phone', phone);
     } else {
@@ -194,7 +187,7 @@ app.post('/api/finance-request', async (req, res) => {
   res.json(data[0]);
 });
 
-// แอดมินอนุมัติฝาก/ถอนเงิน
+// แอดมินอนุมัติฝาก / ถอนเงิน
 app.post('/api/approve-finance', async (req, res) => {
   const { requestId } = req.body;
   const { data: reqData } = await supabase.from('finance_requests').select('*').eq('id', requestId).single();
@@ -205,15 +198,15 @@ app.post('/api/approve-finance', async (req, res) => {
   if (reqData.req_type === 'deposit' && member) {
     await supabase.from('members').update({ balance: Number(member.balance) + Number(reqData.amount) }).eq('phone', reqData.phone);
     await supabase.from('transactions').insert([{ type: 'ฝากเงินเข้ากระเป๋า', phone: reqData.phone, amount: reqData.amount, sign: '+', status: 'สำเร็จ' }]);
-  } else {
-    await supabase.from('transactions').insert([{ type: 'ถอนค่าคอม/เครดิต', phone: reqData.phone, amount: reqData.amount, sign: '-', status: 'สำเร็จ' }]);
+  } else if (reqData.req_type === 'withdraw') {
+    await supabase.from('transactions').insert([{ type: 'ถอนเงินสำเร็จ', phone: reqData.phone, amount: reqData.amount, sign: '-', status: 'สำเร็จ' }]);
   }
 
   await supabase.from('finance_requests').update({ status: 'สำเร็จ' }).eq('id', requestId);
   res.json({ success: true });
 });
 
-// แอดมินเพิ่ม/หักเงินโดยตรง
+// แอดมินเพิ่ม/หักเครดิต
 app.post('/api/admin-adjust-balance', async (req, res) => {
   const { phone, amount, isDeduct } = req.body;
   let { data: member } = await supabase.from('members').select('*').eq('phone', phone).maybeSingle();
@@ -236,9 +229,9 @@ app.post('/api/admin-adjust-balance', async (req, res) => {
   res.json({ success: true });
 });
 
-// สร้างคำสั่งซื้อสินค้า
+// สร้างคำสั่งซื้อ
 app.post('/api/orders', async (req, res) => {
-  const { phone, address, affPhone, items, total, totalComm, slip, method } = req.body;
+  const { phone, address, affPhone, items, total, totalComm, method } = req.body;
 
   if (method === 'wallet') {
     const { data: member } = await supabase.from('members').select('*').eq('phone', phone).maybeSingle();
@@ -254,7 +247,7 @@ app.post('/api/orders', async (req, res) => {
     aff_phone: affPhone || '',
     total,
     total_comm: totalComm,
-    slip: slip || '',
+    slip: '',
     status: method === 'wallet' ? 'รอแอดมินตรวจจัดส่ง (ตัดเครดิตแล้ว)' : 'รอตรวจสอบสลิป'
   };
 
@@ -281,7 +274,6 @@ app.post('/api/orders', async (req, res) => {
   res.json({ success: true });
 });
 
-// แอดมินอนุมัติออเดอร์
 app.post('/api/approve-order', async (req, res) => {
   const { orderId } = req.body;
   const { data: order } = await supabase.from('orders').select('*').eq('id', orderId).single();
@@ -308,7 +300,6 @@ app.post('/api/approve-order', async (req, res) => {
   res.json({ success: true });
 });
 
-// แอดมินอนุมัติตัวแทน Affiliate
 app.post('/api/approve-affiliate', async (req, res) => {
   await supabase.from('members').update({ status: 'approved', role: 'affiliate' }).eq('id', req.body.memberId);
   res.json({ success: true });
