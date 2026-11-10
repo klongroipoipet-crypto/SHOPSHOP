@@ -3,81 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ระบบขายของออนไลน์และหลังบ้าน ecommobi.shop</title>
+  <title>GreenPicked Shop (กรีน พิกต์ ช๊อป) - ชุดทำงานผู้หญิง เดรสคุณครู ชุดผ้าไทย งานไอจีพรีเมียม</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     :root {
-      --tier-1: #12242A;
-      --tier-2: #0D3F46;
-      --tier-3: #0E5157;
-      --tier-4: #17636A;
-      --tier-5: #B49767;
+      --tier-1: #2C3E35;
+      --tier-2: #3F5E4F;
+      --tier-3: #527D68;
+      --tier-4: #6E9E86;
+      --tier-5: #D4AF37;
     }
-    body { font-family: 'Prompt', sans-serif; background-color: #F4F6F6; color: #12242A; }
-    .bg-tier-1 { background-color: #12242A; color: #FFFFFF; }
-    .bg-tier-2 { background-color: #0D3F46; color: #FFFFFF; }
-    .bg-tier-3 { background-color: #0E5157; color: #FFFFFF; }
-    .bg-tier-4 { background-color: #17636A; color: #FFFFFF; }
-    .bg-tier-5 { background-color: #B49767; color: #12242A; }
-    .text-gold { color: #B49767; }
+    body { font-family: 'Prompt', sans-serif; background-color: #F8F9FA; color: #2C3E35; }
+    .bg-tier-1 { background-color: #2C3E35; color: #FFFFFF; }
+    .bg-tier-2 { background-color: #3F5E4F; color: #FFFFFF; }
+    .bg-tier-3 { background-color: #527D68; color: #FFFFFF; }
+    .bg-tier-4 { background-color: #6E9E86; color: #FFFFFF; }
+    .bg-tier-5 { background-color: #D4AF37; color: #2C3E35; }
+    .text-gold { color: #D4AF37; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <!-- หน้าร้านค้า -->
+  <!-- หน้าร้านค้า GreenPicked Shop -->
   <div id="storeView" class="flex-1 flex flex-col min-h-screen">
-    <div class="bg-tier-1 px-4 lg:px-10 py-2 flex flex-wrap items-center justify-between gap-2 text-xs border-b border-[#0D3F46]">
+    <div class="bg-tier-1 px-4 lg:px-10 py-2 flex flex-wrap items-center justify-between gap-2 text-xs border-b border-[#3F5E4F]">
       <div class="flex items-center gap-2.5">
-        <span class="px-2 py-0.5 rounded bg-tier-5 text-[#12242A] font-bold text-[10px] tracking-wider uppercase">VINTAGE EXECUTIVE</span>
+        <span class="px-2 py-0.5 rounded bg-tier-5 text-[#2C3E35] font-bold text-[10px] tracking-wider uppercase">GREENPICKED PREMIUM</span>
         <span class="text-gray-200 text-[11px] sm:text-xs">
-          <i class="fa-solid fa-fire text-amber-400 mr-1"></i> เปิดกระสอบล็อตใหม่! เสื้อผ้ามือสองวินเทจ 90s & สตรีทแวร์คัดหัวผ้าเกรด A+
+          <i class="fa-solid fa-sparkles text-amber-300 mr-1"></i> ยินดีต้อนรับสู่ GreenPicked Shop ชุดทำงานผู้หญิง เดรสคุณครู ชุดผ้าไทย และแฟชั่นงานไอจีเกรดพรีเมียม[cite: 3]
         </span>
       </div>
-      <button onclick="openAdminLoginModal()" class="px-3 py-1 rounded-md bg-tier-5 text-[#12242A] font-bold text-[11px] hover:opacity-95 transition flex items-center gap-1.5 shadow-sm">
-        <i class="fa-solid fa-sliders"></i> กลับไปหน้าแอดมิน (Admin Panel)
+      <button onclick="openAdminLoginModal()" class="px-3 py-1 rounded-md bg-tier-5 text-[#2C3E35] font-bold text-[11px] hover:opacity-95 transition flex items-center gap-1.5 shadow-sm">
+        <i class="fa-solid fa-sliders"></i> จัดการร้านค้า (Admin Panel)
       </button>
     </div>
 
     <header class="bg-white border-b border-gray-200 px-4 lg:px-10 py-3 sticky top-0 z-30 shadow-sm">
       <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
         <div class="flex items-center gap-3 cursor-pointer" onclick="filterCategory('ทั้งหมด')">
-          <div class="w-10 h-10 rounded-xl bg-tier-1 flex items-center justify-center font-bold text-lg text-[#B49767]">e</div>
+          <div class="w-10 h-10 rounded-xl bg-tier-1 flex items-center justify-center font-bold text-lg text-[#D4AF37]">GP</div>
           <div>
-            <h1 class="font-bold text-base text-[#12242A] leading-tight">ecommobi.shop</h1>
-            <p class="text-[11px] text-gray-500">Curated Second-hand & Luxury Vintage</p>
+            <h1 class="font-bold text-base text-[#2C3E35] leading-tight">GreenPicked Shop</h1>
+            <p class="text-[11px] text-gray-500">กรีน พิกต์ ช๊อป • เดรสทำงาน & แฟชั่นพรีเมียม[cite: 3]</p>
           </div>
         </div>
 
         <div class="flex-1 max-w-md mx-2 hidden md:block">
           <div class="relative">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-            <input id="searchInput" oninput="renderStoreProducts()" type="text" placeholder="ค้นหาเสื้อยืด 90s, ฮู้ดดี้, กางเกงยีนส์..." class="w-full pl-9 pr-4 py-2 rounded-full bg-gray-100 border border-gray-200 text-xs focus:outline-none focus:border-[#0E5157] focus:bg-white transition" />
+            <input id="searchInput" oninput="renderStoreProducts()" type="text" placeholder="ค้นหาเดรสทำงาน, ชุดคุณครู, ชุดผ้าไทย, งานไอจี..." class="w-full pl-9 pr-4 py-2 rounded-full bg-gray-100 border border-gray-200 text-xs focus:outline-none focus:border-[#527D68] focus:bg-white transition" />
           </div>
         </div>
 
         <div class="flex items-center gap-2">
           <div id="userAccountSection" onclick="handleUserAccountClick()" class="bg-tier-2 text-white px-3.5 py-1.5 rounded-xl flex items-center gap-2.5 cursor-pointer hover:opacity-95 transition">
-            <i class="fa-solid fa-circle-user text-[#B49767] text-base"></i>
+            <i class="fa-solid fa-circle-user text-[#D4AF37] text-base"></i>
             <div class="text-left">
               <p class="text-[9px] text-gray-300 leading-none">บัญชีลูกค้า</p>
               <p id="hdrUserDisplay" class="text-[11px] font-bold text-white leading-tight mt-0.5">เข้าสู่ระบบ</p>
             </div>
           </div>
 
-          <div onclick="openWalletModal('deposit')" class="bg-tier-1 text-white px-3.5 py-1.5 rounded-xl flex items-center gap-2 cursor-pointer border border-[#B49767]/40 hover:opacity-95 transition">
+          <div onclick="openWalletModal('deposit')" class="bg-tier-1 text-white px-3.5 py-1.5 rounded-xl flex items-center gap-2 cursor-pointer border border-[#D4AF37]/40 hover:opacity-95 transition">
             <div>
               <p class="text-[9px] text-gray-300 leading-none">กระเป๋าเงิน (ยอดคงเหลือ)</p>
-              <p id="hdrWalletBalance" class="text-xs font-bold text-[#B49767] leading-tight mt-0.5">฿0.00</p>
+              <p id="hdrWalletBalance" class="text-xs font-bold text-[#D4AF37] leading-tight mt-0.5">฿0.00</p>
             </div>
-            <span class="w-5 h-5 rounded-md bg-tier-5 text-[#12242A] flex items-center justify-center font-bold text-xs" title="เติมเงิน">+</span>
+            <span class="w-5 h-5 rounded-md bg-tier-5 text-[#2C3E35] flex items-center justify-center font-bold text-xs" title="เติมเงิน">+</span>
           </div>
 
           <button onclick="openCartModal()" class="bg-tier-3 text-white px-3.5 py-2.5 rounded-xl flex items-center gap-2 text-xs font-bold hover:opacity-95 transition">
-            <i class="fa-solid fa-bag-shopping text-[#B49767]"></i>
+            <i class="fa-solid fa-bag-shopping text-[#D4AF37]"></i>
             <span>ตะกร้า</span>
-            <span id="cartCount" class="px-1.5 py-0.5 rounded bg-tier-5 text-[#12242A] text-[10px] font-extrabold">0</span>
+            <span id="cartCount" class="px-1.5 py-0.5 rounded bg-tier-5 text-[#2C3E35] text-[10px] font-extrabold">0</span>
           </button>
 
           <button id="btnLogoutTop" onclick="handleLogout()" class="hidden px-3 py-2.5 bg-red-600 text-white text-xs font-bold rounded-xl hover:bg-red-700 transition" title="ออกจากระบบ">
@@ -88,32 +88,74 @@
     </header>
 
     <main class="max-w-7xl w-full mx-auto px-4 lg:px-10 py-6 flex-1 space-y-6">
-      <section class="bg-tier-2 rounded-3xl p-6 lg:p-8 text-white shadow-md grid grid-cols-1 lg:grid-cols-12 gap-6 items-center border border-[#0E5157]">
+      
+      <!-- ส่วนสไลด์โปรโมชั่น (Promotion Banner Carousel) -->
+      <section class="relative rounded-3xl overflow-hidden shadow-md bg-[#2C3E35]">
+        <div id="promoCarousel" class="relative h-56 sm:h-72 lg:h-80 w-full overflow-hidden">
+          <!-- สไลด์ที่ 1 -->
+          <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-100 flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1400');">
+            <div class="absolute inset-0 bg-black/40"></div>
+            <div class="relative z-10 text-center px-4 space-y-3">
+              <span class="px-3 py-1 rounded-full bg-tier-5 text-[#2C3E35] text-xs font-bold uppercase tracking-wider">Welcome to GreenPicked Shop[cite: 3, 4]</span>
+              <h2 class="text-2xl sm:text-4xl font-bold text-white drop-shadow">ชุดทำงานผู้หญิง & เดรสคุณครูพรีเมียม[cite: 3]</h2>
+              <p class="text-xs sm:text-sm text-gray-200 max-w-xl mx-auto">คอลเลกชันใหม่ล่าสุด ดีไซน์เรียบร้อย สวยหรู สมาร์ททูเก็ตเตอร์</p>
+            </div>
+          </div>
+          <!-- สไลด์ที่ 2 -->
+          <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1583394838336-acd977736f90?w=1400');">
+            <div class="absolute inset-0 bg-black/40"></div>
+            <div class="relative z-10 text-center px-4 space-y-3">
+              <span class="px-3 py-1 rounded-full bg-tier-5 text-[#2C3E35] text-xs font-bold uppercase tracking-wider">Special Collection</span>
+              <h2 class="text-2xl sm:text-4xl font-bold text-white drop-shadow">ชุดผ้าไทย & ผ้าไหมพรีเมียม[cite: 3]</h2>
+              <p class="text-xs sm:text-sm text-gray-200 max-w-xl mx-auto">เอกลักษณ์ความเป็นไทย ตัดเย็บประณีต เหมาะกับทุกโอกาสพิเศษ</p>
+            </div>
+          </div>
+          <!-- สไลด์ที่ 3 -->
+          <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=1400');">
+            <div class="absolute inset-0 bg-black/40"></div>
+            <div class="relative z-10 text-center px-4 space-y-3">
+              <span class="px-3 py-1 rounded-full bg-tier-5 text-[#2C3E35] text-xs font-bold uppercase tracking-wider">IG Brand & Evening Dress</span>
+              <h2 class="text-2xl sm:text-4xl font-bold text-white drop-shadow">เดรสออกงาน & งานป้าย IG[cite: 3]</h2>
+              <p class="text-xs sm:text-sm text-gray-200 max-w-xl mx-auto">สวยโดดเด่นสะกดทุกสายตา งานแบรนด์คัดเกรดพรีเมียม</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ปุ่มกดเลื่อนสไลด์ ซ้าย-ขวา -->
+        <button onclick="moveSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition z-20">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button onclick="moveSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition z-20">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </section>
+
+      <section class="bg-tier-2 rounded-3xl p-6 lg:p-8 text-white shadow-md grid grid-cols-1 lg:grid-cols-12 gap-6 items-center border border-[#527D68]">
         <div class="lg:col-span-7 space-y-3.5">
-          <span class="px-3 py-1 rounded-full bg-tier-5 text-[#12242A] text-[11px] font-bold">
-            <i class="fa-solid fa-medal mr-1"></i> คัดหัวผ้ามือสองเกรดพรีเมียม & วินเทจแท้ 100%
+          <span class="px-3 py-1 rounded-full bg-tier-5 text-[#2C3E35] text-[11px] font-bold">
+            <i class="fa-solid fa-star mr-1"></i> GreenPicked Shop (กรีน พิกต์ ช๊อป) คอลเลกชันใหม่ล่าสุด[cite: 3]
           </span>
-          <h2 class="text-2xl lg:text-3xl font-bold leading-snug">แหล่งรวมเสื้อผ้ามือสองคัดเกรด วินเทจ 90s สตรีทแวร์ & ยกกระสอบ</h2>
-          <p class="text-xs text-gray-200 leading-relaxed max-w-2xl">วัดไซส์จริงทุกตัว ซักอบฆ่าเชื้อพร้อมใส่ ช้อปเองก็คุ้ม หรือกดแชร์ลิงก์เป็นตัวแทนจำหน่ายรับค่าคอมมิชชันทันที!</p>
+          <h2 class="text-2xl lg:text-3xl font-bold leading-snug">ชุดทำงานผู้หญิง เดรสคุณครู ชุดผ้าไทย ผ้าไหม และงานแฟชั่นไอจีพรีเมียม</h2>
+          <p class="text-xs text-gray-200 leading-relaxed max-w-2xl">คัดสรรงานตัดเย็บคุณภาพดีไซน์สุภาพ เรียบหรู และทันสมัย ตอบโจทย์ทุกโอกาสทั้งทำงาน ออกงาน และชุดผ้าไทยร่วมสมัย สมัครตัวแทน Affiliate สร้างรายได้ง่ายๆ กับเรา[cite: 3]</p>
           <div class="flex flex-wrap items-center gap-2.5 pt-1">
-            <button onclick="handlePartnerApplyClick()" class="px-4 py-2.5 rounded-xl bg-tier-5 text-[#12242A] font-bold text-xs hover:opacity-95 transition flex items-center gap-1.5 shadow">
+            <button onclick="handlePartnerApplyClick()" class="px-4 py-2.5 rounded-xl bg-tier-5 text-[#2C3E35] font-bold text-xs hover:opacity-95 transition flex items-center gap-1.5 shadow">
               <i class="fa-solid fa-handshake"></i> สมัครตัวแทน Affiliate
             </button>
             <button onclick="openWalletModal('withdraw')" class="px-4 py-2.5 rounded-xl bg-tier-4 text-white font-semibold text-xs hover:opacity-90 transition flex items-center gap-1.5">
-              <i class="fa-solid fa-money-bill-transfer text-[#B49767]"></i> แจ้งถอนเงิน / ถอนค่าคอม
+              <i class="fa-solid fa-money-bill-transfer text-[#D4AF37]"></i> แจ้งถอนเงิน / ถอนค่าคอม
             </button>
           </div>
         </div>
 
-        <div class="lg:col-span-5 bg-tier-3 rounded-2xl p-5 border border-[#17636A] space-y-4">
+        <div class="lg:col-span-5 bg-tier-3 rounded-2xl p-5 border border-[#6E9E86] space-y-4">
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-gray-100">กระเป๋าเงิน & ยอดคงเหลือของคุณ</span>
-            <span id="heroAffBadge" class="px-2.5 py-0.5 rounded-full bg-tier-4 text-[#B49767] border border-[#B49767]/40 text-[10px] font-bold">สถานะปกติ</span>
+            <span id="heroAffBadge" class="px-2.5 py-0.5 rounded-full bg-tier-4 text-[#D4AF37] border border-[#D4AF37]/40 text-[10px] font-bold">สถานะปกติ</span>
           </div>
           <div class="grid grid-cols-2 gap-3">
             <div class="bg-tier-4 rounded-xl p-3.5">
               <p class="text-[11px] text-gray-200">ค่าคอมสะสม</p>
-              <p id="heroCommBalance" class="text-xl font-bold text-[#B49767] mt-1">฿0.00</p>
+              <p id="heroCommBalance" class="text-xl font-bold text-[#D4AF37] mt-1">฿0.00</p>
             </div>
             <div class="bg-tier-4 rounded-xl p-3.5">
               <p class="text-[11px] text-gray-200">เครดิตกระเป๋า</p>
@@ -123,13 +165,15 @@
         </div>
       </section>
 
+      <!-- หมวดหมู่สินค้าหลักของ GreenPicked Shop -->
       <section class="flex flex-wrap items-center justify-between gap-3 pt-1">
         <div id="categoryTabs" class="flex flex-wrap items-center gap-2 text-xs">
           <button onclick="filterCategory('ทั้งหมด')" data-cat="ทั้งหมด" class="cat-btn px-4 py-2 rounded-full bg-tier-1 text-white font-bold shadow-sm">ทั้งหมด</button>
-          <button onclick="filterCategory('เสื้อยืดวินเทจ 90s')" data-cat="เสื้อยืดวินเทจ 90s" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">เสื้อยืดวินเทจ 90s</button>
-          <button onclick="filterCategory('สเวตเตอร์ & ฮู้ดดี้')" data-cat="สเวตเตอร์ & ฮู้ดดี้" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">สเวตเตอร์ & ฮู้ดดี้</button>
-          <button onclick="filterCategory('กางเกงยีนส์ & คาร์โก้')" data-cat="กางเกงยีนส์ & คาร์โก้" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">กางเกงยีนส์ & คาร์โก้</button>
-          <button onclick="filterCategory('แจ็คเก็ตมือสอง')" data-cat="แจ็คเก็ตมือสอง" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">แจ็คเก็ตมือสอง</button>
+          <button onclick="filterCategory('เดรสทำงาน & ชุดคุณครู')" data-cat="เดรสทำงาน & ชุดคุณครู" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">เดรสทำงาน & ชุดคุณครู[cite: 3]</button>
+          <button onclick="filterCategory('ชุดผ้าไทย & ผ้าไหม')" data-cat="ชุดผ้าไทย & ผ้าไหม" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">ชุดผ้าไทย & ผ้าไหม[cite: 3]</button>
+          <button onclick="filterCategory('เดรสออกงาน & งานป้าย IG')" data-cat="เดรสออกงาน & งานป้าย IG" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">เดรสออกงาน & งานป้าย IG[cite: 3]</button>
+          <button onclick="filterCategory('เสื้อผ้าชนเผ่า & พื้นเมือง')" data-cat="เสื้อผ้าชนเผ่า & พื้นเมือง" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">เสื้อผ้าชนเผ่า & พื้นเมือง[cite: 3]</button>
+          <button onclick="filterCategory('แฟชั่น Premium Brand')" data-cat="แฟชั่น Premium Brand" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">แฟชั่น Premium Brand[cite: 3]</button>
         </div>
       </section>
 
@@ -137,56 +181,56 @@
     </main>
 
     <div class="fixed bottom-5 right-5 z-40">
-      <button onclick="openAdminLoginModal()" class="px-4 py-2.5 rounded-full bg-tier-1 text-white text-xs font-bold shadow-lg border border-[#B49767] flex items-center gap-2 hover:bg-[#0D3F46] transition">
-        <span class="w-2.5 h-2.5 rounded-full bg-[#B49767]"></span>
-        <span>จัดการหลังบ้าน Admin Panel</span>
+      <button onclick="openAdminLoginModal()" class="px-4 py-2.5 rounded-full bg-tier-1 text-white text-xs font-bold shadow-lg border border-[#D4AF37] flex items-center gap-2 hover:bg-[#3F5E4F] transition">
+        <span class="w-2.5 h-2.5 rounded-full bg-[#D4AF37]"></span>
+        <span>จัดการหลังบ้าน GreenPicked Panel</span>
       </button>
     </div>
   </div>
 
   <!-- หลังบ้านแอดมิน -->
   <div id="adminView" class="hidden flex-1 min-h-screen flex">
-    <aside class="w-64 bg-tier-1 flex-shrink-0 flex flex-col justify-between border-r border-[#0D3F46]">
+    <aside class="w-64 bg-tier-1 flex-shrink-0 flex flex-col justify-between border-r border-[#3F5E4F]">
       <div>
-        <div class="h-16 flex items-center px-5 border-b border-[#0D3F46]">
-          <div class="w-9 h-9 rounded-lg bg-tier-5 flex items-center justify-center font-bold text-lg text-[#12242A]">e</div>
-          <span class="ml-2.5 font-bold text-sm tracking-wide text-white">ecommobi.shop</span>
+        <div class="h-16 flex items-center px-5 border-b border-[#3F5E4F]">
+          <div class="w-9 h-9 rounded-lg bg-tier-5 flex items-center justify-center font-bold text-lg text-[#2C3E35]">GP</div>
+          <span class="ml-2.5 font-bold text-sm tracking-wide text-white">GreenPicked Admin</span>
         </div>
 
         <nav class="p-3 space-y-1.5 text-xs">
-          <button onclick="switchAdminSection('secDashboard')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg bg-tier-2 text-white font-medium border-l-4 border-[#B49767]">
+          <button onclick="switchAdminSection('secDashboard')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg bg-tier-2 text-white font-medium border-l-4 border-[#D4AF37]">
             <span class="flex items-center gap-3"><i class="fa-solid fa-gauge-high text-gold"></i> หน้าหลัก</span>
           </button>
-          <button onclick="switchAdminSection('secMembers')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
+          <button onclick="switchAdminSection('secMembers')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#3F5E4F] text-gray-200 transition">
             <span class="flex items-center gap-3"><i class="fa-solid fa-users text-gold"></i> จัดการสมาชิก</span>
           </button>
-          <button onclick="switchAdminSection('secFinance')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
+          <button onclick="switchAdminSection('secFinance')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#3F5E4F] text-gray-200 transition">
             <span class="flex items-center gap-3"><i class="fa-solid fa-wallet text-gold"></i> การเงิน / ถอนเงิน</span>
-            <span id="badgeFinanceCount" class="px-1.5 py-0.5 rounded bg-tier-5 text-[#12242A] font-bold text-[10px]">0</span>
+            <span id="badgeFinanceCount" class="px-1.5 py-0.5 rounded bg-tier-5 text-[#2C3E35] font-bold text-[10px]">0</span>
           </button>
-          <button onclick="switchAdminSection('secOrders')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
+          <button onclick="switchAdminSection('secOrders')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#3F5E4F] text-gray-200 transition">
             <span class="flex items-center gap-3"><i class="fa-solid fa-box-open text-gold"></i> ออเดอร์สินค้า</span>
           </button>
-          <button onclick="switchAdminSection('secProducts')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
+          <button onclick="switchAdminSection('secProducts')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#3F5E4F] text-gray-200 transition">
             <span class="flex items-center gap-3"><i class="fa-solid fa-shirt text-gold"></i> จัดการสินค้า</span>
           </button>
-          <button onclick="switchAdminSection('secSettings')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
+          <button onclick="switchAdminSection('secSettings')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#3F5E4F] text-gray-200 transition">
             <span class="flex items-center gap-3"><i class="fa-solid fa-gear text-gold"></i> ตั้งค่าระบบ</span>
           </button>
         </nav>
       </div>
 
-      <div class="p-4 border-t border-[#0D3F46]">
-        <button onclick="exitAdminToStore()" class="w-full py-2.5 rounded-xl bg-tier-5 text-[#12242A] font-bold text-xs flex items-center justify-center gap-2">
+      <div class="p-4 border-t border-[#3F5E4F]">
+        <button onclick="exitAdminToStore()" class="w-full py-2.5 rounded-xl bg-tier-5 text-[#2C3E35] font-bold text-xs flex items-center justify-center gap-2">
           <i class="fa-solid fa-store"></i> กลับไปหน้าร้านค้า
         </button>
       </div>
     </aside>
 
     <div class="flex-1 flex flex-col min-w-0">
-      <header class="bg-tier-1 px-6 py-4 flex items-center justify-between border-b border-[#0D3F46]">
-        <h1 class="text-lg font-bold text-white">แผงควบคุมแอดมิน</h1>
-        <button onclick="openAddProductModal()" class="px-3.5 py-1.5 rounded-lg bg-tier-4 text-white text-xs font-bold">+ ลงสินค้า</button>
+      <header class="bg-tier-1 px-6 py-4 flex items-center justify-between border-b border-[#3F5E4F]">
+        <h1 class="text-lg font-bold text-white">แผงควบคุมแอดมิน GreenPicked Shop</h1>
+        <button onclick="openAddProductModal()" class="px-3.5 py-1.5 rounded-lg bg-tier-4 text-white text-xs font-bold">+ ลงสินค้าชุดใหม่</button>
       </header>
 
       <main id="secDashboard" class="p-6 space-y-6 flex-1">
@@ -216,16 +260,15 @@
 
       <main id="secMembers" class="hidden p-6 space-y-4 flex-1">
         <div class="bg-white rounded-xl p-5 border space-y-3">
-          <h3 class="font-bold text-base text-[#12242A]">จัดการสมาชิกทั้งหมด & สิทธิ์ผู้ดูแล</h3>
+          <h3 class="font-bold text-base text-[#2C3E35]">จัดการสมาชิกทั้งหมด & สิทธิ์ผู้ดูแล</h3>
           <div id="adminMemberList" class="space-y-3 pt-2"></div>
         </div>
       </main>
 
-      <!-- ส่วนการเงิน: เพิ่มปุ่มปฏิเสธพร้อมช่องใส่หมายเหตุ -->
       <main id="secFinance" class="hidden p-6 space-y-6 flex-1">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div class="bg-white rounded-xl p-5 border space-y-3 text-xs">
-            <h3 class="font-bold text-base text-[#12242A]">เพิ่ม / หัก เครดิตลูกค้า</h3>
+            <h3 class="font-bold text-base text-[#2C3E35]">เพิ่ม / หัก เครดิตลูกค้า</h3>
             <select id="adjustType" class="w-full border rounded-lg px-3 py-2">
               <option value="add">เพิ่มเครดิต (+)</option>
               <option value="deduct">หักเครดิต (-)</option>
@@ -235,7 +278,7 @@
             <button onclick="adminAdjustBalance()" class="w-full py-2.5 rounded-xl bg-tier-1 text-white font-bold">ยืนยันปรับยอด</button>
           </div>
           <div class="bg-white rounded-xl p-5 border space-y-3">
-            <h3 class="font-bold text-base text-[#12242A]">รายการแจ้งฝาก & แจ้งถอนเงินของลูกค้า</h3>
+            <h3 class="font-bold text-base text-[#2C3E35]">รายการแจ้งฝาก & แจ้งถอนเงินของลูกค้า</h3>
             <div id="adminPendingFinanceList" class="space-y-3"></div>
           </div>
         </div>
@@ -252,7 +295,7 @@
         <div class="bg-white rounded-xl p-5 border space-y-3">
           <div class="flex justify-between items-center">
             <h3 class="font-bold text-base">จัดการสินค้า</h3>
-            <button onclick="seedSampleProducts()" class="px-3 py-1.5 rounded bg-tier-3 text-white text-xs font-bold">+ โหลดตัวอย่าง 4 ชิ้น</button>
+            <button onclick="seedSampleProducts()" class="px-3 py-1.5 rounded bg-tier-3 text-white text-xs font-bold">+ โหลดสินค้าตัวอย่าง GreenPicked</button>
           </div>
           <div id="adminProductList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
         </div>
@@ -287,7 +330,7 @@
         <input id="regName" placeholder="ชื่อเล่น" class="w-full border rounded-lg px-3 py-2" />
         <input id="regPass" type="password" placeholder="รหัสผ่าน" class="w-full border rounded-lg px-3 py-2" />
         <select id="regRole" class="w-full border rounded-lg px-3 py-2"><option value="member">สมาชิกทั่วไป</option><option value="affiliate">ตัวแทน Affiliate</option></select>
-        <button onclick="handleCustomerRegister()" class="w-full py-2.5 rounded-xl bg-tier-5 text-[#12242A] font-bold">ยืนยันสมัคร</button>
+        <button onclick="handleCustomerRegister()" class="w-full py-2.5 rounded-xl bg-tier-5 text-[#2C3E35] font-bold">ยืนยันสมัคร</button>
       </div>
     </div>
   </div>
@@ -295,7 +338,7 @@
   <div id="profileModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 text-xs max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between border-b pb-2 items-center">
-        <h3 class="font-bold text-base text-[#12242A]"><i class="fa-solid fa-user-circle text-[#B49767] mr-1.5"></i> ข้อมูลสมาชิก & ประวัติการถอนเงิน</h3>
+        <h3 class="font-bold text-base text-[#2C3E35]"><i class="fa-solid fa-user-circle text-[#D4AF37] mr-1.5"></i> ข้อมูลสมาชิก & ประวัติการถอนเงิน</h3>
         <button onclick="closeModal('profileModal')"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
       <div id="profileModalBody" class="space-y-4"></div>
@@ -323,23 +366,24 @@
 
   <div id="productModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-3 text-xs">
-      <div class="flex justify-between border-b pb-2"><h3 class="font-bold text-base">ลงสินค้าใหม่</h3><button onclick="closeModal('productModal')"><i class="fa-solid fa-xmark"></i></button></div>
-      <input id="inpProdName" placeholder="ชื่อสินค้า" class="w-full border rounded-lg px-3 py-2" />
+      <div class="flex justify-between border-b pb-2"><h3 class="font-bold text-base">ลงสินค้าชุดใหม่</h3><button onclick="closeModal('productModal')"><i class="fa-solid fa-xmark"></i></button></div>
+      <input id="inpProdName" placeholder="ชื่อสินค้า เช่น เดรสทำงานผ้าไทยคอจีน" class="w-full border rounded-lg px-3 py-2" />
       <select id="inpProdCat" class="w-full border rounded-lg px-3 py-2">
-        <option value="เสื้อยืดวินเทจ 90s">เสื้อยืดวินเทจ 90s</option>
-        <option value="สเวตเตอร์ & ฮู้ดดี้">สเวตเตอร์ & ฮู้ดดี้</option>
-        <option value="กางเกงยีนส์ & คาร์โก้">กางเกงยีนส์ & คาร์โก้</option>
-        <option value="แจ็คเก็ตมือสอง">แจ็คเก็ตมือสอง</option>
+        <option value="เดรสทำงาน & ชุดคุณครู">เดรสทำงาน & ชุดคุณครู</option>
+        <option value="ชุดผ้าไทย & ผ้าไหม">ชุดผ้าไทย & ผ้าไหม</option>
+        <option value="เดรสออกงาน & งานป้าย IG">เดรสออกงาน & งานป้าย IG</option>
+        <option value="เสื้อผ้าชนเผ่า & พื้นเมือง">เสื้อผ้าชนเผ่า & พื้นเมือง</option>
+        <option value="แฟชั่น Premium Brand">แฟชั่น Premium Brand</option>
       </select>
-      <input id="inpProdCond" placeholder="สภาพสินค้า เช่น สภาพ 95%" class="w-full border rounded-lg px-3 py-2" />
-      <input id="inpProdSize" placeholder='ไซส์ เช่น L (อก 44" ยาว 29")' class="w-full border rounded-lg px-3 py-2" />
-      <input id="inpProdFlaw" placeholder="ตำหนิ/รายละเอียด" class="w-full border rounded-lg px-3 py-2" />
+      <input id="inpProdCond" placeholder="เกรด/สถานะ เช่น งานป้ายพรีเมียม / สินค้าพร้อมส่ง" class="w-full border rounded-lg px-3 py-2" />
+      <input id="inpProdSize" placeholder='ไซส์ เช่น S, M, L, XL (อก 36 ยาว 38)' class="w-full border rounded-lg px-3 py-2" />
+      <input id="inpProdFlaw" placeholder="รายละเอียดเนื้อผ้า เช่น ผ้าไหมอิตาลี ซับในทั้งชุด" class="w-full border rounded-lg px-3 py-2" />
       <div class="grid grid-cols-2 gap-2">
-        <input id="inpProdPrice" type="number" placeholder="ราคาขาย" class="w-full border rounded-lg px-3 py-2" />
-        <input id="inpProdCommPct" type="number" placeholder="% ค่าคอม" class="w-full border rounded-lg px-3 py-2" value="12" />
+        <input id="inpProdPrice" type="number" placeholder="ราคาขาย (บาท)" class="w-full border rounded-lg px-3 py-2" />
+        <input id="inpProdCommPct" type="number" placeholder="% ค่าคอม Affiliate" class="w-full border rounded-lg px-3 py-2" value="12" />
       </div>
       <input id="inpProdFile" type="file" accept="image/*" class="w-full border rounded-lg px-2 py-1.5" />
-      <button onclick="saveNewProduct()" class="w-full py-2.5 rounded-xl bg-tier-1 text-white font-bold">บันทึกสินค้า</button>
+      <button onclick="saveNewProduct()" class="w-full py-2.5 rounded-xl bg-tier-1 text-white font-bold">บันทึกสินค้าลงร้าน</button>
     </div>
   </div>
 
@@ -356,8 +400,31 @@
       currentUserPhone: localStorage.getItem('ECOMMOBI_USER_PHONE') || null,
       selectedCategory: 'ทั้งหมด',
       members: [], products: [], transactions: [], financeRequests: [], orders: [], cart: [],
-      settings: { bank_info: 'กสิกรไทย 123-4-56789-0', admin_pin: '200822' }
+      settings: { bank_info: 'กสิกรไทย 123-4-56789-0 (กรีน พิกต์ ช๊อป)', admin_pin: '200822' }
     };
+
+    // ฟังก์ชันควบคุมสไลด์โปรโมชั่น
+    let currentSlide = 0;
+    function showSlide(index) {
+      const slides = document.querySelectorAll('.carousel-item');
+      if (slides.length === 0) return;
+      if (index >= slides.length) currentSlide = 0;
+      else if (index < 0) currentSlide = slides.length - 1;
+      else currentSlide = index;
+
+      slides.forEach((slide, i) => {
+        slide.style.opacity = i === currentSlide ? '1' : '0';
+      });
+    }
+
+    function moveSlide(step) {
+      showSlide(currentSlide + step);
+    }
+
+    // เลื่อนสไลด์อัตโนมัติทุกๆ 4 วินาที
+    setInterval(() => {
+      moveSlide(1);
+    }, 4000);
 
     function fileToBase64(file) {
       return new Promise((resolve) => {
@@ -391,14 +458,14 @@
       const parts = (p.size_detail || '').split('||');
       if (parts.length >= 4) {
         return {
-          category: parts[0] || 'เสื้อยืดวินเทจ 90s',
+          category: parts[0] || 'เดรสทำงาน & ชุดคุณครู',
           sizeText: parts[1] || 'Free Size',
-          flawText: parts[2] || 'ไม่มีตำหนิ',
-          stockLabel: parts[3] || 'มีตัวเดียว',
+          flawText: parts[2] || 'ผ้าเนื้อดี ใส่สบาย',
+          stockLabel: parts[3] || 'พร้อมส่ง',
           commPct: Number(parts[4]) || 10
         };
       }
-      return { category: 'เสื้อยืดวินเทจ 90s', sizeText: p.size_detail || 'Free Size', flawText: 'สภาพดี', stockLabel: 'มีตัวเดียว', commPct: 10 };
+      return { category: 'เดรสทำงาน & ชุดคุณครู', sizeText: p.size_detail || 'Free Size', flawText: 'สินค้าคุณภาพ', stockLabel: 'พร้อมส่ง', commPct: 10 };
     }
 
     function filterCategory(cat) {
@@ -412,13 +479,17 @@
 
     function renderStoreProducts() {
       const grid = document.getElementById('storeProductGrid');
+      const keyword = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+
       const available = state.products.filter(p => !p.is_sold).filter(p => {
         const meta = parseProductMeta(p);
-        return state.selectedCategory === 'ทั้งหมด' || meta.category === state.selectedCategory;
+        const matchCat = state.selectedCategory === 'ทั้งหมด' || meta.category === state.selectedCategory;
+        const matchSearch = !keyword || p.name.toLowerCase().includes(keyword) || meta.sizeText.toLowerCase().includes(keyword) || meta.flawText.toLowerCase().includes(keyword);
+        return matchCat && matchSearch;
       });
 
       if (available.length === 0) {
-        grid.innerHTML = `<div class="col-span-full bg-white rounded-3xl p-12 text-center border">ยังไม่มีสินค้าในหมวดหมู่นี้</div>`;
+        grid.innerHTML = `<div class="col-span-full bg-white rounded-3xl p-12 text-center border">ยังไม่มีสินค้าในหมวดหมู่นี้ (แอดมินสามารถกดปุ่มโหลดสินค้าตัวอย่างในหลังบ้านได้เลยครับ)</div>`;
         return;
       }
 
@@ -429,17 +500,17 @@
           <div class="bg-white rounded-2xl overflow-hidden border shadow-sm flex flex-col justify-between">
             <div class="relative h-60 bg-gray-100">
               <img src="${p.image_url}" class="w-full h-full object-cover" />
-              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-tier-1 text-white text-[10px] font-bold">${p.condition_grade}</span>
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-tier-1 text-white text-[10px] font-bold">${p.condition_grade || 'งานพรีเมียม'}</span>
               <button onclick="shareAffiliateProduct(${p.id})" class="absolute bottom-3 right-3 px-2 py-1 rounded bg-tier-3 text-white text-[10px] font-bold">แชร์รับค่าคอม ฿${commAmt}</button>
             </div>
             <div class="p-4 space-y-2">
               <span class="px-2 py-0.5 rounded bg-tier-2 text-white text-[10px]">${meta.category}</span>
               <h3 class="font-bold text-xs line-clamp-2">${p.name}</h3>
-              <div class="bg-gray-50 p-2 rounded text-[11px] text-[#0E5157] font-medium"><i class="fa-solid fa-ruler-horizontal mr-1"></i>${meta.sizeText}</div>
+              <div class="bg-gray-50 p-2 rounded text-[11px] text-[#527D68] font-medium"><i class="fa-solid fa-shirt mr-1"></i>${meta.sizeText}</div>
             </div>
             <div class="px-4 pb-4 flex items-center justify-between border-t pt-2">
-              <span class="font-extrabold">฿${Number(p.price).toLocaleString()}</span>
-              <button onclick="addToCart(${p.id})" class="px-3 py-1.5 bg-tier-1 text-white text-xs font-bold rounded-lg">หยิบใส่ตะกร้า</button>
+              <span class="font-extrabold text-sm text-[#2C3E35]">฿${Number(p.price).toLocaleString()}</span>
+              <button onclick="addToCart(${p.id})" class="px-3 py-1.5 bg-tier-1 text-white text-xs font-bold rounded-lg hover:bg-tier-2">หยิบใส่ตะกร้า</button>
             </div>
           </div>
         `;
@@ -484,20 +555,20 @@
         <div class="bg-tier-1 text-white p-4 rounded-xl space-y-2">
           <div class="flex justify-between items-center">
             <span class="text-xs text-gray-300">เบอร์โทรศัพท์บัญชี</span>
-            <span class="font-bold text-sm text-[#B49767]">${user.phone}</span>
+            <span class="font-bold text-sm text-[#D4AF37]">${user.phone}</span>
           </div>
           <div class="flex justify-between items-center">
             <span class="text-xs text-gray-300">ชื่อเล่น / สิทธิ์</span>
             <span class="font-semibold">${user.name || '-'} (${user.role})</span>
           </div>
-          <div class="grid grid-cols-2 gap-2 pt-2 border-t border-[#0D3F46]">
-            <div><p class="text-[10px] text-gray-300">เครดิตกระเป๋า</p><p class="text-base font-bold text-[#B49767]">฿${Number(user.balance).toLocaleString()}</p></div>
+          <div class="grid grid-cols-2 gap-2 pt-2 border-t border-[#3F5E4F]">
+            <div><p class="text-[10px] text-gray-300">เครดิตกระเป๋า</p><p class="text-base font-bold text-[#D4AF37]">฿${Number(user.balance).toLocaleString()}</p></div>
             <div><p class="text-[10px] text-gray-300">ค่าคอมสะสม</p><p class="text-base font-bold text-white">฿${Number(user.comm_balance).toLocaleString()}</p></div>
           </div>
         </div>
 
         <div class="space-y-2">
-          <h4 class="font-bold text-sm text-[#12242A]">ประวัติการแจ้งถอนเงิน</h4>
+          <h4 class="font-bold text-sm text-[#2C3E35]">ประวัติการแจ้งถอนเงิน</h4>
           ${myWithdraws.length === 0 ? `
             <div class="bg-gray-50 border rounded-xl p-4 text-center text-gray-400">ยังไม่มีประวัติการถอนเงิน</div>
           ` : `
@@ -508,7 +579,7 @@
                 return `
                   <div class="border rounded-xl p-3 flex justify-between items-center bg-gray-50 text-xs">
                     <div>
-                      <p class="font-bold text-sm text-[#12242A]">ถอน ฿${Number(w.amount).toLocaleString()}</p>
+                      <p class="font-bold text-sm text-[#2C3E35]">ถอน ฿${Number(w.amount).toLocaleString()}</p>
                       <p class="text-[10px] text-gray-500">บัญชีรับ: ${w.bank || 'ไม่ระบุ'}</p>
                       ${isRejected ? `<p class="text-[10px] text-red-600 font-bold mt-0.5">หมายเหตุจากแอดมิน: ${w.status}</p>` : ''}
                     </div>
@@ -583,19 +654,19 @@
 
       body.innerHTML = `
         <div class="bg-tier-1 text-white p-4 rounded-xl grid grid-cols-2 gap-3">
-          <div><p class="text-[10px] text-gray-300">เครดิตกระเป๋า</p><p class="text-lg font-bold text-[#B49767]">฿${Number(user.balance).toLocaleString()}</p></div>
+          <div><p class="text-[10px] text-gray-300">เครดิตกระเป๋า</p><p class="text-lg font-bold text-[#D4AF37]">฿${Number(user.balance).toLocaleString()}</p></div>
           <div><p class="text-[10px] text-gray-300">ค่าคอมสะสม</p><p class="text-lg font-bold text-white">฿${Number(user.comm_balance).toLocaleString()}</p></div>
         </div>
         ${mode === 'deposit' ? `
           <div class="space-y-2 pt-2">
-            <p class="font-bold text-[#0E5157]">เติมเครดิต (โอนเข้าบัญชี: ${state.settings.bank_info})</p>
+            <p class="font-bold text-[#2C3E35]">เติมเครดิต (โอนเข้าบัญชี: ${state.settings.bank_info})</p>
             <input id="depAmount" type="number" placeholder="จำนวนเงิน" class="w-full border rounded-lg px-3 py-2" />
             <input id="depSlip" type="file" accept="image/*" class="w-full border rounded-lg px-2 py-1.5" />
-            <button onclick="submitCustomerDeposit()" class="w-full py-2.5 rounded-xl bg-tier-5 text-[#12242A] font-bold">แจ้งเติมเครดิต</button>
+            <button onclick="submitCustomerDeposit()" class="w-full py-2.5 rounded-xl bg-tier-5 text-[#2C3E35] font-bold">แจ้งเติมเครดิต</button>
           </div>
         ` : `
           <div class="space-y-2 pt-2">
-            <p class="font-bold text-[#0E5157]">แจ้งถอนเงิน / ถอนค่าคอมมิชชัน</p>
+            <p class="font-bold text-[#2C3E35]">แจ้งถอนเงิน / ถอนค่าคอมมิชชัน</p>
             <select id="withSource" class="w-full border rounded-lg px-3 py-2">
               <option value="commission">ถอนค่าคอมสะสม (มี ฿${Number(user.comm_balance).toLocaleString()})</option>
               <option value="wallet">ถอนเครดิตกระเป๋า (มี ฿${Number(user.balance).toLocaleString()})</option>
@@ -658,7 +729,7 @@
         <div class="space-y-2 border-b pb-2">${state.cart.map(i => `<div class="flex justify-between"><span>${i.name}</span><b>฿${Number(i.price).toLocaleString()}</b></div>`).join('')}</div>
         <input id="orderAddress" placeholder="ที่อยู่จัดส่งสินค้า" class="w-full border rounded-lg px-3 py-2" />
         <input id="orderAffPhone" placeholder="เบอร์ตัวแทน Affiliate (ถ้ามี)" class="w-full border rounded-lg px-3 py-2" />
-        <button onclick="submitCustomerOrder()" class="w-full py-2.5 rounded-xl bg-tier-5 font-bold">ชำระด้วยเครดิตกระเป๋าเงิน</button>
+        <button onclick="submitCustomerOrder()" class="w-full py-2.5 rounded-xl bg-tier-5 text-[#2C3E35] font-bold">ชำระด้วยเครดิตกระเป๋าเงิน</button>
       `;
     }
 
@@ -716,17 +787,17 @@
     async function saveNewProduct() {
       const name = document.getElementById('inpProdName').value.trim();
       const cat = document.getElementById('inpProdCat').value;
-      const cond = document.getElementById('inpProdCond').value.trim() || 'สภาพ 95% วินเทจแท้';
+      const cond = document.getElementById('inpProdCond').value.trim() || 'งานพรีเมียม';
       const size = document.getElementById('inpProdSize').value.trim() || 'Free Size';
-      const flaw = document.getElementById('inpProdFlaw').value.trim() || 'ไม่มีตำหนิ';
+      const flaw = document.getElementById('inpProdFlaw').value.trim() || 'ผ้าคุณภาพดี';
       const price = Number(document.getElementById('inpProdPrice').value) || 0;
       const commPct = Number(document.getElementById('inpProdCommPct').value) || 12;
       const file = document.getElementById('inpProdFile').files[0];
       const uploaded = await fileToBase64(file);
 
-      const image_url = uploaded || 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=700';
+      const image_url = uploaded || 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=700';
       const commission = Math.round(price * (commPct / 100));
-      const size_detail = `${cat}||${size}||${flaw}||มีตัวเดียว||${commPct}`;
+      const size_detail = `${cat}||${size}||${flaw}||พร้อมส่ง||${commPct}`;
 
       await fetch('/api/products', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, size_detail, condition_grade: cond, price, commission, image_url }) });
       closeModal('productModal');
@@ -734,9 +805,50 @@
     }
 
     async function seedSampleProducts() {
-      await fetch('/api/seed-vintage-products', { method: 'POST' });
+      const sampleGreenPicked = [
+        {
+          name: 'เดรสทำงานผู้หญิง คอปกสูทสุภาพ ดีไซน์เรียบหรู (สีกรม/สีครีม)',
+          size_detail: 'เดรสทำงาน & ชุดคุณครู||M (อก 34 เอว 28 ยาว 38)||ผ้าฮานาโกะเนื้อหนา มีซับในทั้งชุด ซิปหลัง||พร้อมส่ง||12',
+          condition_grade: 'สินค้าขายดี',
+          price: 890,
+          commission: 107,
+          image_url: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=700',
+          is_sold: false
+        },
+        {
+          name: 'ชุดผ้าไทยโมเดิร์น ผ้าไหมทอลายไทยประยุกต์ ทรงเอสุภาพ',
+          size_detail: 'ชุดผ้าไทย & ผ้าไหม||L (อก 36 เอว 30 ยาว 39)||ผ้าไทยพิมพ์ลายทอง ตัดเย็บเนี๊ยบ ทรงสวยมาก||พร้อมส่ง||15',
+          condition_grade: 'งานพรีเมียม',
+          price: 1290,
+          commission: 193,
+          image_url: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=700',
+          is_sold: false
+        },
+        {
+          name: 'เดรสออกงานหรู งานป้าย IG ผ้าซาตินพรีเมียม ไหล่เฉียง',
+          size_detail: 'เดรสออกงาน & งานป้าย IG||S (อก 32 เอว 25 ยาว 40)||งานแบรนด์ IG ป้ายหรู ผ่าข้างโชว์เรียวขาเล็กน้อย||พร้อมส่ง||15',
+          condition_grade: 'งานป้าย IG',
+          price: 1590,
+          commission: 238,
+          image_url: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=700',
+          is_sold: false
+        },
+        {
+          name: 'เสื้อผ้าชนเผ่าประยุกต์ ปักลายมือเอกลักษณ์สไตล์พื้นเมือง',
+          size_detail: 'เสื้อผ้าชนเผ่า & พื้นเมือง||Free Size (อก 40 ยาว 25)||ผ้าฝ้ายชินมัย ปักลวดลายชนเผ่าแน่นๆ สีสันสวยงาม||พร้อมส่ง||10',
+          condition_grade: 'งานแฮนด์เมด',
+          price: 690,
+          commission: 69,
+          image_url: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=700',
+          is_sold: false
+        }
+      ];
+
+      for (let prod of sampleGreenPicked) {
+        await fetch('/api/products', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(prod) });
+      }
       loadDashboardData();
-      alert('โหลดตัวอย่างสำเร็จ');
+      alert('โหลดสินค้าตัวอย่าง GreenPicked Shop สำเร็จ!');
     }
 
     async function deleteProduct(id) {
@@ -792,10 +904,9 @@
       loadDashboardData();
     }
 
-    // [เพิ่มใหม่] ฟังก์ชันแอดมินปฏิเสธคำขอ พร้อมรับหมายเหตุ
     async function rejectFinance(id) {
       const reason = prompt('กรุณาระบุหมายเหตุหรือเหตุผลในการปฏิเสธรายการนี้:');
-      if (reason === null) return; // กด Cancel
+      if (reason === null) return;
 
       const res = await fetch('/api/reject-finance', {
         method: 'POST',
@@ -869,21 +980,20 @@
             <p class="text-gray-500">กระเป๋า: ฿${Number(m.balance).toLocaleString()} | คอมมิชชัน: ฿${Number(m.comm_balance).toLocaleString()}</p>
           </div>
           <div class="flex flex-wrap items-center gap-2">
-            ${m.status === 'pending' ? `<button onclick="approveAffiliate(${m.id})" class="px-2.5 py-1.5 bg-tier-5 font-bold rounded text-white">อนุมัติ Affiliate</button>` : `<span class="px-2 py-1 bg-gray-100 rounded text-gray-600 font-semibold">${m.status}</span>`}
+            ${m.status === 'pending' ? `<button onclick="approveAffiliate(${m.id})" class="px-2.5 py-1.5 bg-tier-5 font-bold rounded text-[#2C3E35]">อนุมัติ Affiliate</button>` : `<span class="px-2 py-1 bg-gray-100 rounded text-gray-600 font-semibold">${m.status}</span>`}
             <button onclick="adminUpdateMemberPassword(${m.id})" class="px-2.5 py-1.5 bg-amber-600 text-white font-bold rounded hover:bg-amber-700 transition">แก้รหัสผ่าน</button>
             <button onclick="adminDeleteMember(${m.id}, '${m.phone}')" class="px-2.5 py-1.5 bg-red-600 text-white font-bold rounded hover:bg-red-700 transition">ลบบัญชี</button>
           </div>
         </div>
       `).join('');
 
-      // Render รายการฝาก/ถอนหลังบ้าน พร้อมปุ่มอนุมัติและปุ่มปฏิเสธพร้อมหมายเหตุ
       document.getElementById('adminPendingFinanceList').innerHTML = state.financeRequests.map(f => {
         const isPending = f.status === 'รอตรวจสอบ';
         return `
           <div class="border rounded-xl p-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs bg-gray-50">
             <div>
               <span class="font-bold ${f.req_type === 'deposit' ? 'text-emerald-700' : 'text-amber-700'}">${f.req_type === 'deposit' ? 'แจ้งฝากเงิน' : 'แจ้งถอนเงิน'}</span>
-              <p class="font-bold text-sm text-[#12242A]">${f.phone} — ฿${Number(f.amount).toLocaleString()}</p>
+              <p class="font-bold text-sm text-[#2C3E35]">${f.phone} — ฿${Number(f.amount).toLocaleString()}</p>
               ${f.bank ? `<p class="text-gray-500 text-[10px]">บัญชีรับ: ${f.bank}</p>` : ''}
               <p class="text-gray-400 text-[10px]">สถานะ: <span class="font-semibold">${f.status}</span></p>
             </div>
