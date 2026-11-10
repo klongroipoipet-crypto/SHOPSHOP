@@ -32,7 +32,7 @@
       <div class="flex items-center gap-2.5">
         <span class="px-2 py-0.5 rounded bg-tier-5 text-[#2C3E35] font-bold text-[10px] tracking-wider uppercase">GREENPICKED PREMIUM</span>
         <span class="text-gray-200 text-[11px] sm:text-xs">
-          <i class="fa-solid fa-sparkles text-amber-300 mr-1"></i> ยินดีต้อนรับสู่ GreenPicked Shop ชุดทำงานผู้หญิง เดรสคุณครู ชุดผ้าไทย และแฟชั่นงานไอจีเกรดพรีเมียม[cite: 3]
+          <i class="fa-solid fa-sparkles text-amber-300 mr-1"></i> ยินดีต้อนรับสู่ GreenPicked Shop ชุดทำงานผู้หญิง เดรสคุณครู ชุดผ้าไทย และแฟชั่นงานไอจีเกรดพรีเมียม
         </span>
       </div>
       <button onclick="openAdminLoginModal()" class="px-3 py-1 rounded-md bg-tier-5 text-[#2C3E35] font-bold text-[11px] hover:opacity-95 transition flex items-center gap-1.5 shadow-sm">
@@ -46,7 +46,7 @@
           <div class="w-10 h-10 rounded-xl bg-tier-1 flex items-center justify-center font-bold text-lg text-[#D4AF37]">GP</div>
           <div>
             <h1 class="font-bold text-base text-[#2C3E35] leading-tight">GreenPicked Shop</h1>
-            <p class="text-[11px] text-gray-500">กรีน พิกต์ ช๊อป • เดรสทำงาน & แฟชั่นพรีเมียม[cite: 3]</p>
+            <p class="text-[11px] text-gray-500">กรีน พิกต์ ช๊อป • เดรสทำงาน & แฟชั่นพรีเมียม</p>
           </div>
         </div>
 
@@ -89,36 +89,15 @@
 
     <main class="max-w-7xl w-full mx-auto px-4 lg:px-10 py-6 flex-1 space-y-6">
       
-      <!-- ส่วนสไลด์โปรโมชั่น (นำภาพที่คุณส่งมาตั้งเป็น Banner หลักสไลด์ที่ 1) -->
+      <!-- ส่วนสไลด์โปรโมชั่น (แสดงเฉพาะรูปภาพแบนเนอร์ ไม่มีข้อความทับ) -->
       <section class="relative rounded-3xl overflow-hidden shadow-md bg-[#2C3E35]">
         <div id="promoCarousel" class="relative h-56 sm:h-72 lg:h-80 w-full overflow-hidden">
           <!-- สไลด์ที่ 1 (ภาพ Banner หลักที่คุณส่งมา) -->
-          <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-100 flex items-center justify-center bg-cover bg-center" style="background-image: url('https://i.ibb.co/6y404984/image-75e38c.jpg');">
-            <div class="absolute inset-0 bg-black/30"></div>
-            <div class="relative z-10 text-center px-4 space-y-3">
-              <span class="px-3.5 py-1 rounded-full bg-tier-5 text-[#2C3E35] text-xs font-extrabold uppercase tracking-wider shadow">Welcome to GreenPicked Shop[cite: 3, 5]</span>
-              <h2 class="text-2xl sm:text-4xl font-bold text-white drop-shadow-md">ชุดทำงานผู้หญิง เดรสคุณครู & งานพรีเมียมไอจี[cite: 3]</h2>
-              <p class="text-xs sm:text-sm text-gray-100 max-w-xl mx-auto drop-shadow">คลิกดูสินค้าคอลเลกชันใหม่ล่าสุด ช้อปง่าย ส่งไว มั่นใจคุณภาพ</p>
-            </div>
-          </div>
+          <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-100 flex items-center justify-center bg-cover bg-center" style="background-image: url('https://i.ibb.co/6y404984/image-75e38c.jpg');"></div>
           <!-- สไลด์ที่ 2 (โปรโมชั่นชุดผ้าไทย) -->
-          <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1583394838336-acd977736f90?w=1400');">
-            <div class="absolute inset-0 bg-black/40"></div>
-            <div class="relative z-10 text-center px-4 space-y-3">
-              <span class="px-3.5 py-1 rounded-full bg-tier-5 text-[#2C3E35] text-xs font-extrabold uppercase tracking-wider">Promotion Special</span>
-              <h2 class="text-2xl sm:text-4xl font-bold text-white drop-shadow">ชุดผ้าไทย & ผ้าไหมโมเดิร์นพรีเมียม[cite: 3]</h2>
-              <p class="text-xs sm:text-sm text-gray-200 max-w-xl mx-auto">โปรโมชั่นพิเศษ ลดจัดหนักต้อนรับฤดูกาลใหม่</p>
-            </div>
-          </div>
+          <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1583394838336-acd977736f90?w=1400');"></div>
           <!-- สไลด์ที่ 3 (โปรโมชั่นเดรสออกงาน) -->
-          <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=1400');">
-            <div class="absolute inset-0 bg-black/40"></div>
-            <div class="relative z-10 text-center px-4 space-y-3">
-              <span class="px-3 py-1 rounded-full bg-tier-5 text-[#2C3E35] text-xs font-extrabold uppercase tracking-wider">IG Brand Exclusive</span>
-              <h2 class="text-2xl sm:text-4xl font-bold text-white drop-shadow">เดรสออกงาน & งานป้าย IG ยอดฮิต[cite: 3]</h2>
-              <p class="text-xs sm:text-sm text-gray-200 max-w-xl mx-auto">สวยโดดเด่นในทุกงานสำคัญ พร้อมส่งทุกไซส์</p>
-            </div>
-          </div>
+          <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=1400');"></div>
         </div>
 
         <button onclick="moveSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition z-20">
@@ -132,10 +111,10 @@
       <section class="bg-tier-2 rounded-3xl p-6 lg:p-8 text-white shadow-md grid grid-cols-1 lg:grid-cols-12 gap-6 items-center border border-[#527D68]">
         <div class="lg:col-span-7 space-y-3.5">
           <span class="px-3 py-1 rounded-full bg-tier-5 text-[#2C3E35] text-[11px] font-bold">
-            <i class="fa-solid fa-star mr-1"></i> GreenPicked Shop (กรีน พิกต์ ช๊อป) คอลเลกชันใหม่ล่าสุด[cite: 3]
+            <i class="fa-solid fa-star mr-1"></i> GreenPicked Shop (กรีน พิกต์ ช๊อป) คอลเลกชันใหม่ล่าสุด
           </span>
           <h2 class="text-2xl lg:text-3xl font-bold leading-snug">ชุดทำงานผู้หญิง เดรสคุณครู ชุดผ้าไทย ผ้าไหม และงานแฟชั่นไอจีพรีเมียม</h2>
-          <p class="text-xs text-gray-200 leading-relaxed max-w-2xl">คัดสรรงานตัดเย็บคุณภาพดีไซน์สุภาพ เรียบหรู และทันสมัย ตอบโจทย์ทุกโอกาสทั้งทำงาน ออกงาน และชุดผ้าไทยร่วมสมัย สมัครตัวแทน Affiliate สร้างรายได้ง่ายๆ กับเรา[cite: 3]</p>
+          <p class="text-xs text-gray-200 leading-relaxed max-w-2xl">คัดสรรงานตัดเย็บคุณภาพดีไซน์สุภาพ เรียบหรู และทันสมัย ตอบโจทย์ทุกโอกาสทั้งทำงาน ออกงาน และชุดผ้าไทยร่วมสมัย สมัครตัวแทน Affiliate สร้างรายได้ง่ายๆ กับเรา</p>
           <div class="flex flex-wrap items-center gap-2.5 pt-1">
             <button onclick="handlePartnerApplyClick()" class="px-4 py-2.5 rounded-xl bg-tier-5 text-[#2C3E35] font-bold text-xs hover:opacity-95 transition flex items-center gap-1.5 shadow">
               <i class="fa-solid fa-handshake"></i> สมัครตัวแทน Affiliate
@@ -168,11 +147,11 @@
       <section class="flex flex-wrap items-center justify-between gap-3 pt-1">
         <div id="categoryTabs" class="flex flex-wrap items-center gap-2 text-xs">
           <button onclick="filterCategory('ทั้งหมด')" data-cat="ทั้งหมด" class="cat-btn px-4 py-2 rounded-full bg-tier-1 text-white font-bold shadow-sm">ทั้งหมด</button>
-          <button onclick="filterCategory('เดรสทำงาน & ชุดคุณครู')" data-cat="เดรสทำงาน & ชุดคุณครู" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">เดรสทำงาน & ชุดคุณครู[cite: 3]</button>
-          <button onclick="filterCategory('ชุดผ้าไทย & ผ้าไหม')" data-cat="ชุดผ้าไทย & ผ้าไหม" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">ชุดผ้าไทย & ผ้าไหม[cite: 3]</button>
-          <button onclick="filterCategory('เดรสออกงาน & งานป้าย IG')" data-cat="เดรสออกงาน & งานป้าย IG" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">เดรสออกงาน & งานป้าย IG[cite: 3]</button>
-          <button onclick="filterCategory('เสื้อผ้าชนเผ่า & พื้นเมือง')" data-cat="เสื้อผ้าชนเผ่า & พื้นเมือง" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">เสื้อผ้าชนเผ่า & พื้นเมือง[cite: 3]</button>
-          <button onclick="filterCategory('แฟชั่น Premium Brand')" data-cat="แฟชั่น Premium Brand" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">แฟชั่น Premium Brand[cite: 3]</button>
+          <button onclick="filterCategory('เดรสทำงาน & ชุดคุณครู')" data-cat="เดรสทำงาน & ชุดคุณครู" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">เดรสทำงาน & ชุดคุณครู</button>
+          <button onclick="filterCategory('ชุดผ้าไทย & ผ้าไหม')" data-cat="ชุดผ้าไทย & ผ้าไหม" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">ชุดผ้าไทย & ผ้าไหม</button>
+          <button onclick="filterCategory('เดรสออกงาน & งานป้าย IG')" data-cat="เดรสออกงาน & งานป้าย IG" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">เดรสออกงาน & งานป้าย IG</button>
+          <button onclick="filterCategory('เสื้อผ้าชนเผ่า & พื้นเมือง')" data-cat="เสื้อผ้าชนเผ่า & พื้นเมือง" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">เสื้อผ้าชนเผ่า & พื้นเมือง</button>
+          <button onclick="filterCategory('แฟชั่น Premium Brand')" data-cat="แฟชั่น Premium Brand" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 font-medium hover:bg-gray-50">แฟชั่น Premium Brand</button>
         </div>
       </section>
 
@@ -334,7 +313,6 @@
     </div>
   </div>
 
-  <!-- Modal โปรไฟล์พร้อมประวัติการสั่งซื้อสินค้าและประวัติการถอนเงิน -->
   <div id="profileModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 text-xs max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between border-b pb-2 items-center">
@@ -541,7 +519,6 @@
       }
     }
 
-    // แสดงข้อมูลสมาชิก พร้อมประวัติการสั่งซื้อสินค้า (Order History) และประวัติการถอนเงิน
     function openProfileModal() {
       const user = getCurrentUser();
       if (!user) return;
@@ -568,7 +545,6 @@
           </div>
         </div>
 
-        <!-- ส่วนประวัติการสั่งซื้อสินค้า (Order History) -->
         <div class="space-y-2 pt-2">
           <h4 class="font-bold text-sm text-[#2C3E35]"><i class="fa-solid fa-box-open text-[#D4AF37] mr-1"></i> ประวัติการสั่งซื้อสินค้า</h4>
           ${myOrders.length === 0 ? `
@@ -598,7 +574,6 @@
           `}
         </div>
 
-        <!-- ส่วนประวัติการแจ้งถอนเงิน -->
         <div class="space-y-2 pt-2 border-t">
           <h4 class="font-bold text-sm text-[#2C3E35]"><i class="fa-solid fa-wallet text-[#D4AF37] mr-1"></i> ประวัติการแจ้งถอนเงิน</h4>
           ${myWithdraws.length === 0 ? `
