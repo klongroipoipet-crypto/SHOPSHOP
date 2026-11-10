@@ -9,12 +9,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     :root {
-      /* ชุดสีทึบเรียงจากบนลงล่างตามพาเลตต์หรูหรา */
-      --tier-1: #12242A; /* บนสุด */
-      --tier-2: #0D3F46; /* ลำดับ 2 */
-      --tier-3: #0E5157; /* ลำดับ 3 */
-      --tier-4: #17636A; /* ลำดับ 4 */
-      --tier-5: #B49767; /* ล่างสุด: ทองแชมเปญทึบ */
+      --tier-1: #12242A;
+      --tier-2: #0D3F46;
+      --tier-3: #0E5157;
+      --tier-4: #17636A;
+      --tier-5: #B49767;
     }
     body {
       font-family: 'Prompt', sans-serif;
@@ -33,7 +32,7 @@
 <body class="min-h-screen flex flex-col">
 
   <!-- =========================================================================
-       1. หน้าร้านค้าออนไลน์ (STOREFRONT - ถอดแบบตามภาพ image_d69555.jpg เป๊ะทุกจุด)
+       1. หน้าร้านค้าออนไลน์ (STOREFRONT)
   ========================================================================== -->
   <div id="storeView" class="flex-1 flex flex-col min-h-screen">
 
@@ -50,7 +49,7 @@
       </button>
     </div>
 
-    <!-- แถบ Header หลัก (สีขาว สะอาดตา เหมือนในภาพ) -->
+    <!-- แถบ Header หลัก -->
     <header class="bg-white border-b border-gray-200 px-4 lg:px-10 py-3 sticky top-0 z-30 shadow-sm">
       <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
         <!-- โลโก้ร้าน -->
@@ -80,7 +79,6 @@
 
         <!-- กล่องบัญชีลูกค้า + เครดิตคงเหลือ + ตะกร้า (ขวาบน) -->
         <div class="flex items-center gap-2">
-          <!-- กล่องแสดงยูสเซอร์ลูกค้าที่กำลังใช้งาน -->
           <div onclick="openAuthModal('login')" class="bg-tier-2 text-white px-3.5 py-1.5 rounded-xl flex items-center gap-2.5 cursor-pointer hover:opacity-95 transition">
             <i class="fa-solid fa-circle-user text-[#B49767] text-base"></i>
             <div class="text-left">
@@ -90,7 +88,6 @@
             <i class="fa-solid fa-chevron-down text-[9px] text-gray-300 ml-1"></i>
           </div>
 
-          <!-- กล่องแสดงเครดิตคงเหลือ + ปุ่มบวกเติมเงิน -->
           <div onclick="openWalletModal('deposit')" class="bg-tier-1 text-white px-3.5 py-1.5 rounded-xl flex items-center gap-2 cursor-pointer border border-[#B49767]/40 hover:opacity-95 transition">
             <div>
               <p class="text-[9px] text-gray-300 leading-none">เครดิตคงเหลือ</p>
@@ -99,7 +96,6 @@
             <span class="w-5 h-5 rounded-md bg-tier-5 text-[#12242A] flex items-center justify-center font-bold text-xs" title="เติมเครดิต">+</span>
           </div>
 
-          <!-- ปุ่มตะกร้าสินค้า -->
           <button onclick="openCartModal()" class="bg-tier-3 text-white px-3.5 py-2.5 rounded-xl flex items-center gap-2 text-xs font-bold hover:opacity-95 transition">
             <i class="fa-solid fa-bag-shopping text-[#B49767]"></i>
             <span>ตะกร้า</span>
@@ -112,9 +108,8 @@
     <!-- เนื้อหาหลักหน้าร้าน -->
     <main class="max-w-7xl w-full mx-auto px-4 lg:px-10 py-6 flex-1 space-y-6">
 
-      <!-- HERO BANNER คู่ (ตามภาพต้นฉบับ) -->
+      <!-- HERO BANNER คู่ -->
       <section class="bg-tier-2 rounded-3xl p-6 lg:p-8 text-white shadow-md grid grid-cols-1 lg:grid-cols-12 gap-6 items-center border border-[#0E5157]">
-        <!-- ฝั่งซ้าย (7 คอลัมน์) -->
         <div class="lg:col-span-7 space-y-3.5">
           <div class="flex flex-wrap items-center gap-2">
             <span class="px-3 py-1 rounded-full bg-tier-5 text-[#12242A] text-[11px] font-bold">
@@ -133,7 +128,6 @@
             วัดไซส์จริงทุกตัว ซักอบฆ่าเชื้อพร้อมใส่ ช้อปเองก็คุ้ม หรือกดแชร์ลิงก์เป็นตัวแทนจำหน่ายเสื้อผ้ามือสองรับค่าคอมมิชชันทันทีไม่ต้องสต็อกของ!
           </p>
 
-          <!-- 3 ปุ่มแอ็กชันใต้แบนเนอร์ -->
           <div class="flex flex-wrap items-center gap-2.5 pt-1">
             <button onclick="handlePartnerApplyClick()" class="px-4 py-2.5 rounded-xl bg-tier-5 text-[#12242A] font-bold text-xs hover:opacity-95 transition flex items-center gap-1.5 shadow">
               <i class="fa-solid fa-handshake"></i> สมัครตัวแทนขายเสื้อผ้ามือสอง (Affiliate)
@@ -147,7 +141,6 @@
           </div>
         </div>
 
-        <!-- ฝั่งขวา (5 คอลัมน์): กล่องสถานะพาร์ทเนอร์ร้านมือสอง (Live Sync) -->
         <div class="lg:col-span-5 bg-tier-3 rounded-2xl p-5 border border-[#17636A] space-y-4">
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-gray-100">สถานะพาร์ทเนอร์ร้านมือสอง (Live Sync)</span>
@@ -169,7 +162,7 @@
         </div>
       </section>
 
-      <!-- แถบเลือกหมวดหมู่สินค้า (Pills) + คำอธิบายด้านขวา -->
+      <!-- แถบเลือกหมวดหมู่สินค้า -->
       <section class="flex flex-wrap items-center justify-between gap-3 pt-1">
         <div id="categoryTabs" class="flex flex-wrap items-center gap-2 text-xs">
           <button onclick="filterCategory('ทั้งหมด')" data-cat="ทั้งหมด" class="cat-btn px-4 py-2 rounded-full bg-tier-1 text-white font-bold shadow-sm">ทั้งหมด</button>
@@ -184,14 +177,12 @@
         </p>
       </section>
 
-      <!-- กริดแสดงการ์ดสินค้า 4 คอลัมน์ (ตามภาพ image_d69555.jpg เป๊ะๆ) -->
-      <section id="storeProductGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <!-- การ์ดสินค้าจะถูก Render ที่นี่ -->
-      </section>
+      <!-- กริดแสดงการ์ดสินค้า 4 คอลัมน์ -->
+      <section id="storeProductGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></section>
 
     </main>
 
-    <!-- ปุ่มลอยมุมขวาล่างสำหรับสลับไปหน้าแอดมิน (เหมือนในภาพ) -->
+    <!-- ปุ่มลอยมุมขวาล่างสำหรับสลับไปหน้าแอดมิน -->
     <div class="fixed bottom-5 right-5 z-40">
       <button onclick="openAdminLoginModal()" class="px-4 py-2.5 rounded-full bg-tier-1 text-white text-xs font-bold shadow-lg border border-[#B49767] flex items-center gap-2 hover:bg-[#0D3F46] transition">
         <span class="w-2.5 h-2.5 rounded-full bg-[#B49767]"></span>
@@ -201,10 +192,9 @@
   </div>
 
   <!-- =========================================================================
-       2. ระบบหลังบ้านแอดมิน (ADMIN PANEL - ควบคุมข้อมูลลูกค้าทุกคนจากฐานข้อมูลกลาง)
+       2. ระบบหลังบ้านแอดมิน (ADMIN PANEL)
   ========================================================================== -->
   <div id="adminView" class="hidden flex-1 min-h-screen flex">
-    <!-- Sidebar ซ้ายสุด (#12242A) -->
     <aside class="w-64 bg-tier-1 flex-shrink-0 flex flex-col justify-between border-r border-[#0D3F46]">
       <div>
         <div class="h-16 flex items-center px-5 border-b border-[#0D3F46]">
@@ -233,7 +223,7 @@
             <i class="fa-solid fa-chevron-down text-[10px] opacity-60"></i>
           </button>
           <button onclick="switchAdminSection('secSettings')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
-            <span class="flex items-center gap-3"><i class="fa-solid fa-gear text-gold"></i> ตั้งค่า / ระบบ</span>
+            <span class="flex items-center gap-3"><i class="fa-solid fa-gear text-gold"></i> ตั้งค่า / เปลี่ยนรหัสแอดมิน</span>
             <i class="fa-solid fa-chevron-down text-[10px] opacity-60"></i>
           </button>
         </nav>
@@ -248,7 +238,6 @@
 
     <!-- พื้นที่เนื้อหาหลักหลังบ้าน -->
     <div class="flex-1 flex flex-col min-w-0">
-      <!-- แถวบนสุด (#12242A) -->
       <header class="bg-tier-1 px-6 py-4 flex items-center justify-between border-b border-[#0D3F46]">
         <div>
           <h1 class="text-lg font-bold text-white">หน้าหลักแผงควบคุม</h1>
@@ -263,14 +252,13 @@
         </div>
       </header>
 
-      <!-- แท็บที่ 1: หน้าหลักแผงควบคุม (เรียงชุดสีทึบจากบนลงล่างตามภาพ) -->
+      <!-- แท็บที่ 1: หน้าหลักแผงควบคุม -->
       <main id="secDashboard" class="p-6 space-y-6 flex-1">
-        <!-- แบนเนอร์ผู้ดูแลระบบ (#0D3F46 สีทึบ) -->
         <section class="bg-tier-2 rounded-2xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between shadow-sm">
           <div>
             <p class="text-xs font-medium text-[#B49767] mb-1">ภาพรวมระบบแบบเรียลไทม์</p>
             <h2 class="text-2xl font-bold text-white mb-1">แดชบอร์ดผู้ดูแลระบบ</h2>
-            <p class="text-xs text-gray-200">ข้อมูลสมาชิก, Affiliate, การเงิน และค่าคอมมิชชัน อัปเดตอัตโนมัติจากฐานข้อมูลกลาง</p>
+            <p class="text-xs text-gray-200">ข้อมูลสมาชิก, Affiliate, การเงิน และค่าคอมมิชชัน อัปเดตอัตโนมัติจากฐานข้อมูลกลาง Supabase</p>
           </div>
           <div class="mt-4 md:mt-0 bg-tier-1 px-5 py-3 rounded-xl border border-[#B49767]/40">
             <p class="text-[11px] text-gray-300">เวลาระบบ</p>
@@ -278,7 +266,6 @@
           </div>
         </section>
 
-        <!-- การ์ดสรุป 4 ใบ (#0E5157 สีทึบ) -->
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div onclick="switchAdminSection('secMembers')" class="bg-tier-3 rounded-xl p-5 flex items-center justify-between shadow-sm cursor-pointer">
             <div>
@@ -317,7 +304,6 @@
           </div>
         </section>
 
-        <!-- กล่องสถิติสมัครสมาชิกใหม่ & สมัคร Affiliate ใหม่ (#17636A สีทึบ) -->
         <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
             <div class="flex items-center justify-between mb-4">
@@ -346,7 +332,6 @@
           </div>
         </section>
 
-        <!-- แถวล่างสุด: ตารางรายการฝาก-ถอนล่าสุด & การ์ดค่าคอมมิชชันสีทองทึบ (#B49767) -->
         <section class="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div class="lg:col-span-2 bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
             <div class="flex items-center justify-between mb-4">
@@ -393,7 +378,7 @@
         </section>
       </main>
 
-      <!-- แท็บที่ 2: สมาชิกทั้งหมด & อนุมัติตัวแทน Affiliate -->
+      <!-- แท็บที่ 2: สมาชิกทั้งหมด -->
       <main id="secMembers" class="hidden p-6 space-y-4 flex-1">
         <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
           <h2 class="font-bold text-base text-[#12242A] mb-3">รายชื่อสมาชิกทั้งหมดจากฐานข้อมูลกลาง</h2>
@@ -401,7 +386,7 @@
         </div>
       </main>
 
-      <!-- แท็บที่ 3: การเงิน (เพิ่ม/หักเงินโดยแอดมิน & อนุมัติฝาก-ถอน) -->
+      <!-- แท็บที่ 3: การเงิน -->
       <main id="secFinance" class="hidden p-6 space-y-6 flex-1">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm space-y-3 text-xs">
@@ -451,26 +436,28 @@
       <!-- แท็บที่ 6: ตั้งค่ารหัสผ่านแอดมินและบัญชีธนาคาร -->
       <main id="secSettings" class="hidden p-6 space-y-4 flex-1">
         <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm max-w-md space-y-3 text-xs">
-          <h2 class="font-bold text-base text-[#12242A]">ตั้งค่ารหัสผ่านแอดมิน (ใช้ร่วมกันทุกเครื่อง)</h2>
+          <h2 class="font-bold text-base text-[#12242A]">ตั้งค่ารหัสผ่านแอดมิน (ซิงค์ตรงเข้า Supabase)</h2>
           <div>
             <label class="block font-medium mb-1">บัญชีธนาคารสำหรับรับโอนเงิน</label>
             <input id="setBank" class="w-full border rounded-lg px-3 py-2" />
           </div>
           <div>
-            <label class="block font-medium mb-1">รหัสผ่านเข้าหลังบ้านแอดมิน (ป้องกันลูกค้าเข้า)</label>
-            <input id="setPin" type="text" class="w-full border rounded-lg px-3 py-2 font-bold" />
+            <label class="block font-medium mb-1">รหัสผ่านเข้าหลังบ้านแอดมิน (ใช้รหัสนี้ร่วมกันทุกเครื่อง)</label>
+            <input id="setPin" type="text" class="w-full border rounded-lg px-3 py-2 font-bold text-[#0E5157]" />
           </div>
-          <button onclick="saveSettings()" class="w-full py-2.5 rounded-xl bg-tier-1 text-white font-bold">บันทึกการตั้งค่า</button>
+          <button onclick="saveSettings()" class="w-full py-2.5 rounded-xl bg-tier-1 text-white font-bold hover:opacity-95">
+            บันทึกการตั้งค่าถาวร
+          </button>
         </div>
       </main>
     </div>
   </div>
 
   <!-- =========================================================================
-       MODALS ทั้งหมด (ดูดีเทลสินค้า / ล็อกอินลูกค้า / กระเป๋าเงิน / ตะกร้า / แอดมิน)
+       MODALS ทั้งหมด
   ========================================================================== -->
 
-  <!-- Modal ดูขนาดวัดจริงและดีเทลสินค้าเสื้อผ้ามือสอง -->
+  <!-- Modal ดูขนาดวัดจริงและดีเทลสินค้า -->
   <div id="detailModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-xl">
       <div id="detailModalContent"></div>
@@ -491,7 +478,7 @@
       </div>
 
       <div id="formLoginBox" class="space-y-3 text-xs">
-        <label class="block font-medium">เลือกหรือกรอกเบอร์โทรศัพท์ของคุณ</label>
+        <label class="block font-medium">กรอกเบอร์โทรศัพท์ของคุณ</label>
         <input id="loginPhone" placeholder="เช่น 0852741963" class="w-full border rounded-lg px-3 py-2" />
         <input id="loginPass" type="password" placeholder="รหัสผ่าน" class="w-full border rounded-lg px-3 py-2" />
         <button onclick="handleCustomerLogin()" class="w-full py-2.5 rounded-xl bg-tier-1 text-white font-bold">เข้าสู่ระบบใช้งาน</button>
@@ -532,7 +519,7 @@
     </div>
   </div>
 
-  <!-- Modal ลงสินค้าเสื้อผ้ามือสองชิ้นใหม่ (พร้อมหมวดหมู่ ไซส์ ตำหนิ) -->
+  <!-- Modal ลงสินค้าเสื้อผ้ามือสองชิ้นใหม่ -->
   <div id="productModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-3 text-xs">
       <div class="flex items-center justify-between border-b pb-2">
@@ -567,14 +554,14 @@
     </div>
   </div>
 
-  <!-- Modal ล็อกอินแอดมิน (ป้องกันลูกค้าเข้าหลังบ้าน) -->
+  <!-- Modal ล็อกอินแอดมิน -->
   <div id="adminLoginModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-xs w-full p-6 space-y-3 text-xs">
       <div class="flex items-center justify-between border-b pb-2">
         <h3 class="font-bold text-base text-[#12242A]"><i class="fa-solid fa-lock text-[#0E5157] mr-1.5"></i> รหัสผ่านแอดมิน</h3>
         <button onclick="closeModal('adminLoginModal')" class="text-gray-400 hover:text-black"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <p class="text-gray-500">เฉพาะเจ้าของร้านและแอดมิน (รหัสเริ่มต้น: <b>1688</b>)</p>
+      <p class="text-gray-500">กรอกรหัสผ่านผู้ดูแลระบบเพื่อเข้าจัดการหลังบ้าน</p>
       <input id="inpAdminPass" type="password" placeholder="••••" class="w-full border rounded-lg py-2.5 text-center text-base font-bold tracking-widest" />
       <button onclick="verifyAdminLogin()" class="w-full py-2.5 rounded-xl bg-tier-1 text-white font-bold">เข้าสู่แผงควบคุม</button>
     </div>
@@ -627,14 +614,15 @@
         state.transactions = data.transactions || [];
         state.financeRequests = data.financeRequests || [];
         state.orders = data.orders || [];
-        if (data.settings) state.settings = data.settings;
+        if (data.settings) {
+          state.settings = data.settings;
+        }
         renderAll();
       } catch (e) {
         console.error(e);
       }
     }
 
-    // แยกข้อมูลไซส์ หมวดหมู่ และตำหนิที่เก็บในฟิลด์ size_detail
     function parseProductMeta(p) {
       const parts = (p.size_detail || '').split('||');
       if (parts.length >= 4) {
@@ -697,7 +685,6 @@
         return `
           <div class="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
             <div>
-              <!-- รูปสินค้า + ป้ายสภาพซ้ายบน + ป้ายแชร์รับค่าคอมขวาล่าง -->
               <div class="relative h-60 bg-gray-100 overflow-hidden">
                 <img src="${p.image_url}" alt="${p.name}" class="w-full h-full object-cover" />
                 <span class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-tier-1/90 text-white text-[10px] font-bold flex items-center gap-1 shadow">
@@ -708,7 +695,6 @@
                 </button>
               </div>
 
-              <!-- รายละเอียดการ์ดสินค้าตามภาพ image_d69555.jpg -->
               <div class="p-4 space-y-2.5">
                 <div class="flex items-center justify-between text-[10px]">
                   <span class="px-2 py-0.5 rounded bg-tier-2 text-white font-semibold">${meta.category}</span>
@@ -717,7 +703,6 @@
 
                 <h3 class="font-bold text-xs text-[#12242A] line-clamp-2 min-h-[2.25rem]">${p.name}</h3>
 
-                <!-- กล่องแสดงไซส์วัดจริงและรายละเอียดตำหนิ -->
                 <div class="bg-gray-50 rounded-xl p-2.5 border border-gray-100 space-y-1 text-[11px]">
                   <p class="font-bold text-[#0E5157] flex items-center gap-1.5">
                     <i class="fa-solid fa-ruler-horizontal text-[10px]"></i> ${meta.sizeText}
@@ -729,7 +714,6 @@
               </div>
             </div>
 
-            <!-- แถบราคา + ปุ่มดูขนาด/ดีเทล -->
             <div class="px-4 pb-4 pt-1 flex items-center justify-between border-t border-gray-50">
               <span class="text-base font-extrabold text-[#12242A]">฿${Number(p.price).toLocaleString('th-TH', { minimumFractionDigits: 2 })}</span>
               <button onclick="openProductDetailModal(${p.id})" class="px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-tier-1 hover:text-white text-[#12242A] text-[11px] font-bold transition">
@@ -970,20 +954,30 @@
       alert('สั่งซื้อสำเร็จ! ข้อมูลซิงค์เข้าหน้าแอดมินเรียบร้อยแล้ว');
     }
 
-    // แอดมินจัดการสินค้าและระบบ
     function openAdminLoginModal() {
       document.getElementById('inpAdminPass').value = '';
       document.getElementById('adminLoginModal').classList.remove('hidden');
     }
 
-    function verifyAdminLogin() {
-      if (document.getElementById('inpAdminPass').value.trim() === String(state.settings.admin_pin)) {
+    // ตรวจสอบรหัสผ่านแอดมินกับเซิร์ฟเวอร์โดยตรง
+    async function verifyAdminLogin() {
+      const pin = document.getElementById('inpAdminPass').value.trim();
+      if (!pin) return alert('กรุณากรอกรหัสผ่านแอดมิน');
+
+      const res = await fetch('/api/admin-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin })
+      });
+      const data = await res.json();
+
+      if (data.success) {
         closeModal('adminLoginModal');
         document.getElementById('storeView').classList.add('hidden');
         document.getElementById('adminView').classList.remove('hidden');
-        loadDashboardData();
+        await loadDashboardData();
       } else {
-        alert('รหัสผ่านแอดมินไม่ถูกต้อง!');
+        alert(data.error || 'รหัสผ่านแอดมินไม่ถูกต้อง!');
       }
     }
 
@@ -996,6 +990,10 @@
       ['secDashboard', 'secMembers', 'secFinance', 'secOrders', 'secProducts', 'secSettings'].forEach(id => {
         document.getElementById(id).classList.toggle('hidden', id !== secId);
       });
+      if (secId === 'secSettings') {
+        document.getElementById('setBank').value = state.settings.bank_info || '';
+        document.getElementById('setPin').value = state.settings.admin_pin || '';
+      }
     }
 
     function openAddProductModal() { document.getElementById('productModal').classList.remove('hidden'); }
@@ -1068,16 +1066,28 @@
       await loadDashboardData();
     }
 
+    // บันทึกการตั้งค่ารหัสผ่านแอดมินและคงค่ารหัสใหม่ไว้ทันที
     async function saveSettings() {
       const bankInfo = document.getElementById('setBank').value.trim();
       const adminPin = document.getElementById('setPin').value.trim();
-      await fetch('/api/settings', {
+      if (!adminPin) return alert('กรุณากำหนดรหัสผ่านแอดมิน');
+
+      const res = await fetch('/api/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ bankInfo, adminPin })
       });
-      await loadDashboardData();
-      alert('บันทึกการตั้งค่าเรียบร้อย');
+      const data = await res.json();
+
+      if (data.success) {
+        state.settings.bank_info = bankInfo;
+        state.settings.admin_pin = adminPin;
+        document.getElementById('setBank').value = bankInfo;
+        document.getElementById('setPin').value = adminPin;
+        alert(`เปลี่ยนรหัสผ่านแอดมินเป็น "${adminPin}" เรียบร้อยแล้ว!`);
+      } else {
+        alert('เกิดข้อผิดพลาดในการบันทึก');
+      }
     }
 
     function renderAll() {
@@ -1086,7 +1096,6 @@
       const pendingDepCount = state.financeRequests.filter(f => f.req_type === 'deposit' && f.status !== 'สำเร็จ').length;
       const pendingWithCount = state.financeRequests.filter(f => f.req_type === 'withdraw' && f.status !== 'สำเร็จ').length;
 
-      // อัปเดตแถบบนสุดของหน้าร้านและ Hero Live Sync
       document.getElementById('hdrUserDisplay').textContent = user ? user.phone : 'คลิกเพื่อเข้าสู่ระบบ / สมัคร';
       document.getElementById('hdrWalletBalance').textContent = '฿' + (user ? Number(user.balance).toLocaleString('th-TH', { minimumFractionDigits: 2 }) : '0.00');
       document.getElementById('heroCommBalance').textContent = '฿' + (user ? Number(user.comm_balance).toLocaleString('th-TH', { minimumFractionDigits: 2 }) : '0.00');
@@ -1097,7 +1106,6 @@
 
       document.getElementById('cartCount').textContent = state.cart.length;
 
-      // อัปเดตตัวเลขหน้าหลักแผงควบคุมแอดมิน
       const totalUsers = state.members.length;
       const approvedAff = state.members.filter(m => m.status === 'approved').length;
       const pendingAff = state.members.filter(m => m.status === 'pending').length;
@@ -1126,10 +1134,14 @@
       document.getElementById('badgeOrderCount').textContent = pendingOrdersCount;
       document.getElementById('badgeFinanceCount').textContent = pendingDepCount + pendingWithCount;
 
-      document.getElementById('setBank').value = state.settings.bank_info || '';
-      document.getElementById('setPin').value = state.settings.admin_pin || '1688';
+      // อัปเดตช่องตั้งค่าเฉพาะตอนที่ผู้ไม่ได้กำลังพิมพ์อยู่
+      if (document.activeElement?.id !== 'setBank') {
+        document.getElementById('setBank').value = state.settings.bank_info || '';
+      }
+      if (document.activeElement?.id !== 'setPin') {
+        document.getElementById('setPin').value = state.settings.admin_pin || '1688';
+      }
 
-      // ตารางฝาก-ถอนหน้าแรกแอดมิน
       const tbody = document.getElementById('txTableBody');
       if (state.transactions.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-gray-400">ยังไม่มีรายการธุรกรรม (เริ่มต้นเป็น 0)</td></tr>`;
@@ -1145,7 +1157,6 @@
         `).join('');
       }
 
-      // รายชื่อสมาชิก
       document.getElementById('adminMemberList').innerHTML = state.members.map(m => `
         <div class="border rounded-xl p-3 flex items-center justify-between text-xs">
           <div>
@@ -1156,7 +1167,6 @@
         </div>
       `).join('');
 
-      // รายการฝาก-ถอนรออนุมัติ
       document.getElementById('adminPendingFinanceList').innerHTML = state.financeRequests.map(f => `
         <div class="border rounded-xl p-3 flex items-center justify-between text-xs">
           <div>
@@ -1167,7 +1177,6 @@
         </div>
       `).join('');
 
-      // รายการออเดอร์
       document.getElementById('adminOrderList').innerHTML = state.orders.map(o => `
         <div class="border rounded-xl p-3.5 flex items-center justify-between text-xs">
           <div>
@@ -1179,7 +1188,6 @@
         </div>
       `).join('');
 
-      // รายการสินค้าในแอดมิน
       document.getElementById('adminProductList').innerHTML = state.products.map(p => `
         <div class="border rounded-xl p-3 flex items-center justify-between text-xs">
           <div class="flex items-center gap-3">
@@ -1197,6 +1205,8 @@
     }
 
     loadDashboardData();
+    // ดึงข้อมูลซิงค์อัตโนมัติทุก 5 วินาทีเพื่อให้ทุกเครื่องเห็นข้อมูลตรงกันแบบเรียลไทม์
+    setInterval(loadDashboardData, 5000);
   </script>
 </body>
 </html>
