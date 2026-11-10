@@ -16,7 +16,6 @@ let memorySettings = {
   admin_pin: '200822'
 };
 
-// ดึงข้อมูลแดชบอร์ดและรายการทั้งหมดแบบเรียลไทม์
 app.get('/api/dashboard', async (req, res) => {
   const { data: members } = await supabase.from('members').select('*').order('created_at', { ascending: false });
   const { data: products } = await supabase.from('products').select('*').order('created_at', { ascending: false });
@@ -42,7 +41,6 @@ app.get('/api/dashboard', async (req, res) => {
   });
 });
 
-// ตรวจสอบรหัสผ่านแอดมิน
 app.post('/api/admin-login', async (req, res) => {
   const { pin } = req.body;
   const { data: settingsData } = await supabase.from('settings').select('admin_pin').eq('id', 1).maybeSingle();
@@ -54,7 +52,6 @@ app.post('/api/admin-login', async (req, res) => {
   return res.status(401).json({ success: false, error: 'รหัสผ่านแอดมินไม่ถูกต้อง' });
 });
 
-// บันทึกตั้งค่าระบบ
 app.post('/api/settings', async (req, res) => {
   const bankInfo = (req.body.bankInfo || '').trim() || memorySettings.bank_info;
   const adminPin = String(req.body.adminPin || '').trim() || memorySettings.admin_pin;
@@ -69,38 +66,46 @@ app.post('/api/settings', async (req, res) => {
   res.json({ success: true, settings: data?.[0] || memorySettings });
 });
 
-// สมัครสมาชิกใหม่ (ป้องกันเบอร์ซ้ำ 100%)
 app.post('/api/register', async (req, res) => {
   const { phone, name, password, bank, role } = req.body;
   if (!phone || !password) return res.status(400).json({ error: 'กรุณากรอกเบอร์โทรและรหัสผ่าน' });
 
-  // ตรวจสอบว่าเบอร์โทรนี้มีอยู่ในระบบแล้วหรือยัง
   const { data: existingUser } = await supabase.from('members').select('*').eq('phone', phone).maybeSingle();
   if (existingUser) {
     return res.status(400).json({ error: 'เบอร์โทรศัพท์นี้ถูกใช้งานสมัครสมาชิกแล้ว ไม่สามารถสมัครซ้ำได้' });
   }
 
   const status = role === 'affiliate' ? 'pending' : 'member';
-
   const { data, error } = await supabase
     .from('members')
-    .insert([{ 
-      phone: phone, 
-      name: name || '', 
-      password: password, 
-      bank: bank || '', 
-      role: role || 'member', 
-      status, 
-      balance: 0, 
-      comm_balance: 0 
-    }])
+    .insert([{ phone, name: name || '', password, bank: bank || '', role: role || 'member', status, balance: 0, comm_balance: 0 }])
     .select();
 
   if (error) return res.status(400).json({ error: error.message });
   res.json({ success: true, user: data[0] });
 });
 
-// สมัครตัวแทน Affiliate
+// [เพิ่มใหม่] แอดมินแก้ไขรหัสผ่านสมาชิก
+app.post('/api/admin-update-member-password', async (req, res) => {
+  const { memberId, newPassword } = req.body;
+  if (!memberId || !newPassword) return res.status(400).json({ error: 'ข้อมูลไม่ครบถ้วน' });
+
+  const { error } = await supabase
+    .from('members')
+    .update({ password: newPassword })
+    .eq('id', memberId);
+
+  if (error) return res.status(400).json({ error: error.message });
+  res.json({ success: true });
+});
+
+// [เพิ่มใหม่] แอดมินลบบัญชีสมาชิก
+app.delete('/api/admin-members/:id', async (req, res) => {
+  const { error } = await supabase.from('members').delete().eq('id', req.params.id);
+  if (error) return res.status(400).json({ error: error.message });
+  res.json({ success: true });
+});
+
 app.post('/api/apply-affiliate', async (req, res) => {
   const { phone } = req.body;
   const { data, error } = await supabase
@@ -113,7 +118,6 @@ app.post('/api/apply-affiliate', async (req, res) => {
   res.json({ success: true, user: data?.[0] });
 });
 
-// เพิ่มสินค้า
 app.post('/api/products', async (req, res) => {
   const { name, size_detail, condition_grade, price, commission, image_url } = req.body;
   const { data, error } = await supabase
@@ -125,7 +129,6 @@ app.post('/api/products', async (req, res) => {
   res.json(data[0]);
 });
 
-// โหลดสินค้าตัวอย่าง 4 ชิ้นตามภาพ
 app.post('/api/seed-vintage-products', async (req, res) => {
   const sampleProducts = [
     {
@@ -174,7 +177,6 @@ app.delete('/api/products/:id', async (req, res) => {
   res.json({ success: true });
 });
 
-// แจ้งฝากเงิน / แจ้งถอนเงิน
 app.post('/api/finance-request', async (req, res) => {
   const { reqType, phone, amount, slip, bank, source } = req.body;
   const { data: member } = await supabase.from('members').select('*').eq('phone', phone).maybeSingle();
@@ -202,7 +204,6 @@ app.post('/api/finance-request', async (req, res) => {
   res.json(data[0]);
 });
 
-// แอดมินอนุมัติฝาก / ถอนเงิน
 app.post('/api/approve-finance', async (req, res) => {
   const { requestId } = req.body;
   const { data: reqData } = await supabase.from('finance_requests').select('*').eq('id', requestId).single();
@@ -221,7 +222,6 @@ app.post('/api/approve-finance', async (req, res) => {
   res.json({ success: true });
 });
 
-// แอดมินเพิ่ม/หักเครดิต
 app.post('/api/admin-adjust-balance', async (req, res) => {
   const { phone, amount, isDeduct } = req.body;
   let { data: member } = await supabase.from('members').select('*').eq('phone', phone).maybeSingle();
@@ -243,7 +243,6 @@ app.post('/api/admin-adjust-balance', async (req, res) => {
   res.json({ success: true });
 });
 
-// สร้างคำสั่งซื้อ
 app.post('/api/orders', async (req, res) => {
   const { phone, address, affPhone, items, total, totalComm, method } = req.body;
 

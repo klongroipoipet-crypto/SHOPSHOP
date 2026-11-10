@@ -58,7 +58,8 @@
         </div>
 
         <div class="flex items-center gap-2">
-          <div onclick="openAuthModal('login')" class="bg-tier-2 text-white px-3.5 py-1.5 rounded-xl flex items-center gap-2.5 cursor-pointer hover:opacity-95 transition">
+          <!-- บัญชีลูกค้า / ข้อมูลสมาชิก หรือปุ่มเข้าสู่ระบบ -->
+          <div id="userAccountSection" onclick="handleUserAccountClick()" class="bg-tier-2 text-white px-3.5 py-1.5 rounded-xl flex items-center gap-2.5 cursor-pointer hover:opacity-95 transition">
             <i class="fa-solid fa-circle-user text-[#B49767] text-base"></i>
             <div class="text-left">
               <p class="text-[9px] text-gray-300 leading-none">บัญชีลูกค้า</p>
@@ -78,6 +79,11 @@
             <i class="fa-solid fa-bag-shopping text-[#B49767]"></i>
             <span>ตะกร้า</span>
             <span id="cartCount" class="px-1.5 py-0.5 rounded bg-tier-5 text-[#12242A] text-[10px] font-extrabold">0</span>
+          </button>
+
+          <!-- ปุ่มออกจากระบบ (แสดงเฉพาะตอนเข้าสู่ระบบแล้ว) -->
+          <button id="btnLogoutTop" onclick="handleLogout()" class="hidden px-3 py-2.5 bg-red-600 text-white text-xs font-bold rounded-xl hover:bg-red-700 transition" title="ออกจากระบบ">
+            <i class="fa-solid fa-right-from-bracket"></i>
           </button>
         </div>
       </div>
@@ -154,7 +160,7 @@
             <span class="flex items-center gap-3"><i class="fa-solid fa-gauge-high text-gold"></i> หน้าหลัก</span>
           </button>
           <button onclick="switchAdminSection('secMembers')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
-            <span class="flex items-center gap-3"><i class="fa-solid fa-users text-gold"></i> สมาชิกทั้งหมด</span>
+            <span class="flex items-center gap-3"><i class="fa-solid fa-users text-gold"></i> จัดการสมาชิก</span>
           </button>
           <button onclick="switchAdminSection('secFinance')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#0D3F46] text-gray-200 transition">
             <span class="flex items-center gap-3"><i class="fa-solid fa-wallet text-gold"></i> การเงิน / ถอนเงิน</span>
@@ -211,9 +217,9 @@
       </main>
 
       <main id="secMembers" class="hidden p-6 space-y-4 flex-1">
-        <div class="bg-white rounded-xl p-5 border">
-          <h3 class="font-bold text-base mb-3">จัดการสมาชิก & อนุมัติ Affiliate</h3>
-          <div id="adminMemberList" class="space-y-2"></div>
+        <div class="bg-white rounded-xl p-5 border space-y-3">
+          <h3 class="font-bold text-base text-[#12242A]">จัดการสมาชิกทั้งหมด & สิทธิ์ผู้ดูแล</h3>
+          <div id="adminMemberList" class="space-y-3 pt-2"></div>
         </div>
       </main>
 
@@ -283,6 +289,26 @@
         <input id="regPass" type="password" placeholder="รหัสผ่าน" class="w-full border rounded-lg px-3 py-2" />
         <select id="regRole" class="w-full border rounded-lg px-3 py-2"><option value="member">สมาชิกทั่วไป</option><option value="affiliate">ตัวแทน Affiliate</option></select>
         <button onclick="handleCustomerRegister()" class="w-full py-2.5 rounded-xl bg-tier-5 text-[#12242A] font-bold">ยืนยันสมัคร</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal ข้อมูลสมาชิก / ประวัติการถอนเงิน และปุ่มออกจากระบบ -->
+  <div id="profileModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 text-xs max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between border-b pb-2 items-center">
+        <h3 class="font-bold text-base text-[#12242A]"><i class="fa-solid fa-user-circle text-[#B49767] mr-1.5"></i> ข้อมูลสมาชิก & ประวัติการถอนเงิน</h3>
+        <button onclick="closeModal('profileModal')"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div id="profileModalBody" class="space-y-4">
+        <!-- ข้อมูลโปรไฟล์จะถูกเรนเดอร์ที่นี่ -->
+      </div>
+
+      <div class="pt-2 border-t flex gap-2">
+        <button onclick="handleLogout()" class="w-full py-2.5 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ (Logout)
+        </button>
       </div>
     </div>
   </div>
@@ -442,6 +468,73 @@
       alert('ส่งคำขอสมัครตัวแทน Affiliate เรียบร้อย');
     }
 
+    // จัดการคลิกที่กล่องบัญชีลูกค้า (ถ้าล็อกอินแล้ว เปิดหน้าโปรไฟล์/ประวัติการถอน ถ้ายังให้เปิด Modal ล็อกอิน)
+    function handleUserAccountClick() {
+      const user = getCurrentUser();
+      if (!user) {
+        openAuthModal('login');
+      } else {
+        openProfileModal();
+      }
+    }
+
+    function openProfileModal() {
+      const user = getCurrentUser();
+      if (!user) return;
+      const modal = document.getElementById('profileModal');
+      const body = document.getElementById('profileModalBody');
+      modal.classList.remove('hidden');
+
+      // กรองประวัติการถอนเงินเฉพาะของยูสเซอร์นี้
+      const myWithdraws = state.financeRequests.filter(f => f.phone === user.phone && f.req_type === 'withdraw');
+
+      body.innerHTML = `
+        <div class="bg-tier-1 text-white p-4 rounded-xl space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-gray-300">เบอร์โทรศัพท์บัญชี</span>
+            <span class="font-bold text-sm text-[#B49767]">${user.phone}</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-gray-300">ชื่อเล่น / สิทธิ์</span>
+            <span class="font-semibold">${user.name || '-'} (${user.role})</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 pt-2 border-t border-[#0D3F46]">
+            <div><p class="text-[10px] text-gray-300">เครดิตกระเป๋า</p><p class="text-base font-bold text-[#B49767]">฿${Number(user.balance).toLocaleString()}</p></div>
+            <div><p class="text-[10px] text-gray-300">ค่าคอมสะสม</p><p class="text-base font-bold text-white">฿${Number(user.comm_balance).toLocaleString()}</p></div>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <h4 class="font-bold text-sm text-[#12242A]">ประวัติการแจ้งถอนเงิน</h4>
+          ${myWithdraws.length === 0 ? `
+            <div class="bg-gray-50 border rounded-xl p-4 text-center text-gray-400">ยังไม่มีประวัติการถอนเงิน</div>
+          ` : `
+            <div class="space-y-2 max-h-48 overflow-y-auto">
+              ${myWithdraws.map(w => `
+                <div class="border rounded-xl p-3 flex justify-between items-center bg-gray-50 text-xs">
+                  <div>
+                    <p class="font-bold text-sm text-[#12242A]">ถอน ฿${Number(w.amount).toLocaleString()}</p>
+                    <p class="text-[10px] text-gray-500">บัญชีรับ: ${w.bank || 'ไม่ระบุ'}</p>
+                  </div>
+                  <span class="px-2.5 py-1 rounded font-bold ${w.status === 'สำเร็จ' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${w.status}</span>
+                </div>
+              `).join('')}
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    // ฟังก์ชันออกจากระบบ (Logout)
+    function handleLogout() {
+      if (!confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) return;
+      state.currentUserPhone = null;
+      localStorage.removeItem('ECOMMOBI_USER_PHONE');
+      closeModal('profileModal');
+      renderAll();
+      alert('ออกจากระบบเรียบร้อยแล้ว');
+    }
+
     function openAuthModal(mode) {
       document.getElementById('authModal').classList.remove('hidden');
       const isLogin = mode === 'login';
@@ -449,7 +542,6 @@
       document.getElementById('formRegBox').classList.toggle('hidden', isLogin);
     }
 
-    // ฟังก์ชันสมัครสมาชิก แยกฟิลด์ phone และ name ป้องกันเบอร์ซ้ำ
     async function handleCustomerRegister() {
       const phone = document.getElementById('regPhone').value.trim();
       const name = document.getElementById('regName').value.trim();
@@ -656,6 +748,37 @@
       loadDashboardData();
     }
 
+    async function adminUpdateMemberPassword(memberId) {
+      const newPassword = prompt('กรอกรหัสผ่านใหม่สำหรับสมาชิกนี้:');
+      if (!newPassword) return;
+
+      const res = await fetch('/api/admin-update-member-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ memberId, newPassword })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('เปลี่ยนรหัสผ่านสมาชิกสำเร็จ!');
+        loadDashboardData();
+      } else {
+        alert(data.error || 'เกิดข้อผิดพลาด');
+      }
+    }
+
+    async function adminDeleteMember(memberId, phone) {
+      if (!confirm(`คุณต้องการลบบัญชีของเบอร์ ${phone} ใช่หรือไม่?`)) return;
+
+      const res = await fetch(`/api/admin-members/${memberId}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        alert('ลบบัญชีสมาชิกเรียบร้อยแล้ว');
+        loadDashboardData();
+      } else {
+        alert(data.error || 'เกิดข้อผิดพลาดในการลบบัญชี');
+      }
+    }
+
     async function adminAdjustBalance() {
       const phone = document.getElementById('adjustPhone').value.trim();
       const amount = Number(document.getElementById('adjustAmount').value);
@@ -696,7 +819,15 @@
       const pendingOrdersCount = state.orders.filter(o => o.status !== 'อนุมัติจัดส่งแล้ว').length;
       const pendingFinCount = state.financeRequests.filter(f => f.status !== 'สำเร็จ').length;
 
-      document.getElementById('hdrUserDisplay').textContent = user ? `${user.phone}${user.name ? ' ('+user.name+')' : ''}` : 'เข้าสู่ระบบ';
+      // จัดการแสดงผลข้อมูลสมาชิกเมื่อเข้าสู่ระบบแล้ว
+      if (user) {
+        document.getElementById('hdrUserDisplay').textContent = `${user.phone}${user.name ? ' ('+user.name+')' : ''}`;
+        document.getElementById('btnLogoutTop').classList.remove('hidden');
+      } else {
+        document.getElementById('hdrUserDisplay').textContent = 'เข้าสู่ระบบ';
+        document.getElementById('btnLogoutTop').classList.add('hidden');
+      }
+
       document.getElementById('hdrWalletBalance').textContent = '฿' + (user ? Number(user.balance).toLocaleString() : '0.00');
       document.getElementById('heroCommBalance').textContent = '฿' + (user ? Number(user.comm_balance).toLocaleString() : '0.00');
       document.getElementById('heroWalletBalance').textContent = '฿' + (user ? Number(user.balance).toLocaleString() : '0.00');
@@ -718,9 +849,16 @@
       `).join('');
 
       document.getElementById('adminMemberList').innerHTML = state.members.map(m => `
-        <div class="border rounded-xl p-3 flex justify-between items-center text-xs">
-          <div><p class="font-bold">${m.phone} ${m.name ? '('+m.name+')' : ''} - <span class="text-blue-600">${m.role}</span></p><p class="text-gray-500">กระเป๋า: ฿${Number(m.balance).toLocaleString()} | คอมมิชชัน: ฿${Number(m.comm_balance).toLocaleString()}</p></div>
-          ${m.status === 'pending' ? `<button onclick="approveAffiliate(${m.id})" class="px-3 py-1.5 bg-tier-5 font-bold rounded">อนุมัติ Affiliate</button>` : `<span class="font-semibold text-gray-500">${m.status}</span>`}
+        <div class="border rounded-xl p-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-xs">
+          <div>
+            <p class="font-bold text-sm">${m.phone} ${m.name ? '('+m.name+')' : ''} - <span class="text-blue-600">${m.role}</span></p>
+            <p class="text-gray-500">กระเป๋า: ฿${Number(m.balance).toLocaleString()} | คอมมิชชัน: ฿${Number(m.comm_balance).toLocaleString()}</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            ${m.status === 'pending' ? `<button onclick="approveAffiliate(${m.id})" class="px-2.5 py-1.5 bg-tier-5 font-bold rounded text-white">อนุมัติ Affiliate</button>` : `<span class="px-2 py-1 bg-gray-100 rounded text-gray-600 font-semibold">${m.status}</span>`}
+            <button onclick="adminUpdateMemberPassword(${m.id})" class="px-2.5 py-1.5 bg-amber-600 text-white font-bold rounded hover:bg-amber-700 transition">แก้รหัสผ่าน</button>
+            <button onclick="adminDeleteMember(${m.id}, '${m.phone}')" class="px-2.5 py-1.5 bg-red-600 text-white font-bold rounded hover:bg-red-700 transition">ลบบัญชี</button>
+          </div>
         </div>
       `).join('');
 
